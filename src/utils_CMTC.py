@@ -1,6 +1,6 @@
 """ Contiene las funciones necesarias para calcular el modelo de transición de estados de un equipo en un partido de futbol """
 
-from futbol_types import EventosLineup, Jugador, TransitionMatrix
+from src.futbol_types import EventosLineup, Jugador, TransitionMatrix
 
 # transition r_g(G,p_i): from the gain state to a player p_i as
 # r_g(G,p_i)= g_g(p_i)/t_g(p_i, p_i)                                                        (4)

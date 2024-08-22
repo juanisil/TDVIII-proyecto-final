@@ -1,7 +1,7 @@
 """ Módulo para extraer datos de los partidos """
 
 from typing import List
-from futbol_types import EventosLineup, Jugador
+from src.futbol_types import EventosLineup, Jugador
 
 
 def get_jugadores(lineup: EventosLineup) -> List[Jugador]:

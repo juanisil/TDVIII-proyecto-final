@@ -1,7 +1,10 @@
 """ Procesamiento de eventos de partidos de futbol del Excel """
 
 from typing import List, Tuple
-from futbol_types import Temporada, Partido, EventosLineup
+
+import pandas as pd
+from src.excel_xml_util import change_in_zip
+from src.futbol_types import Temporada, Partido, EventosLineup
 
 
 def leer_excel(path: str) -> Temporada:
@@ -12,8 +15,21 @@ def leer_excel(path: str) -> Temporada:
 
     Returns:
         Temporada: Eventos de todos los partidos de una temporada
+        Columns: ['season_id', 'match_id', 'home_team_id', 'home_team_name',
+                  'away_team_id', 'away_team_name', 'id', 'event_id', 'date', 'time',
+                  'period_id', 'min', 'sec', 'team_id', 'player_id', 'playerName',
+                  'playerPosition', 'x', 'y', 'type', 'description', 'outcome']
     """
-    pass
+
+    # Fix for the "synchVertical" property in the Excel files
+    # Pandas does not support reading this property
+    change_in_zip(
+        path,
+        name_filter="xl/worksheets/*.xml",  # the problematic property is found in the worksheet xml files
+        change=lambda d: d.replace(b' synchVertical="1"', b" "),
+    )
+
+    return pd.read_excel(path)
 
 
 def separar_partidos(df: Temporada) -> List[Partido]:
@@ -26,11 +42,14 @@ def separar_partidos(df: Temporada) -> List[Partido]:
         List[Partido]: Eventos de cada partido
     """
 
-    pass
+    # With groupby
+    # return [partido for _, partido in df.groupby('match_id')]
+
+    return [df[df["match_id"] == match_id] for match_id in df["match_id"].unique()]
 
 
-def separar_partido_en_equipo(df: Partido) -> Tuple[Partido, Partido]:
-    """ Separa los eventos de un partido en dos DataFrames, uno por equipo
+def separar_partido_en_equipo_pov(df: Partido) -> Tuple[Partido, Partido]:
+    """Separa los eventos de un partido en dos DataFrames, uno por equipo
 
     Args:
         df (Partido): Eventos de un partido
@@ -39,11 +58,13 @@ def separar_partido_en_equipo(df: Partido) -> Tuple[Partido, Partido]:
         Tuple[Partido, Partido]: Eventos de cada equipo
     """
 
-    pass
+    return [
+        df[df["team_id"] == team_id] for team_id in df["team_id"].unique()
+    ]
 
 
 def separar_partido_del_equipo_en_lineups(df: Partido) -> List[EventosLineup]:
-    """ Separa los eventos de un equipo en dos DataFrames, uno por lineup
+    """Separa los eventos de un equipo en dos DataFrames, uno por lineup
 
     Args:
         df (Partido): Eventos de un equipo en un partido
@@ -51,4 +72,4 @@ def separar_partido_del_equipo_en_lineups(df: Partido) -> List[EventosLineup]:
     Returns:
         List[EventosLineup]: Eventos de cada lineup
     """
-    pass
+    return

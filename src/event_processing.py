@@ -25,7 +25,8 @@ def leer_excel(path: str) -> Temporada:
     # Pandas does not support reading this property
     change_in_zip(
         path,
-        name_filter="xl/worksheets/*.xml",  # the problematic property is found in the worksheet xml files
+        # the problematic property is found in the worksheet xml files
+        name_filter="xl/worksheets/*.xml",
         change=lambda d: d.replace(b' synchVertical="1"', b" "),
     )
 
@@ -72,4 +73,5 @@ def separar_partido_del_equipo_en_lineups(df: Partido) -> List[EventosLineup]:
     Returns:
         List[EventosLineup]: Eventos de cada lineup
     """
-    return
+
+    return df

@@ -1,3 +1,5 @@
+# Backlog
+
 Separar el excel en partidos
 Separar los partidos en eventos de cada equipo (A y B)
 Separa los eventos en lineups
@@ -55,7 +57,7 @@ Para cada Lineup de un Equipo en un Partido
 
 psl_equipo_A = psl_equipo_A / tiempo total del partido
 
-# Para la parte predictiva
+## Para la parte predictiva
 
 En el caso que mantengamos el r(G, pi), r(pi, S) y r(pi, L) de cada jugador (nuevo) como intrinsecos al jugador y no es afectado por el equipo:
 
@@ -71,7 +73,7 @@ Si no:
     Previo a calcular el PSL del equipo
     Estimar r(G, pi), r(pi, S) y r(pi, L) para el nuevo jugador pi teniendo en cuenta el equipo.
 
-# Funciones a implementar
+## Funciones a implementar
 
 ```python
 

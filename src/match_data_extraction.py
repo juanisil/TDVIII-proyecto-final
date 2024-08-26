@@ -63,7 +63,7 @@ def get_loss(lineup: EventosLineup, jugador: Jugador) -> int:
     pass
 
 
-def get_shots(lineup: EventosLineup, jugador: Jugador) -> int:
+def get_shots(lineup: EventosLineup, jugador: Jugador, OffTarget : bool) -> int:
     """ Obtiene la cantidad de tiros de un jugador en un lineup
 
     Args:
@@ -73,8 +73,10 @@ def get_shots(lineup: EventosLineup, jugador: Jugador) -> int:
     Returns:
         int: Cantidad de tiros
     """
-    
-    shots = lineup[(lineup["player_id"] == jugador) & (lineup["type"].isin[13, 14,15,16])]
+    if OffTarget:
+        shots = lineup[(lineup["player_id"] == jugador) & (lineup["type"].isin[13,14,15,16])] # 13 and 14 are off target, 15 and 16 are on target 
+    else:
+        shots = lineup[(lineup["player_id"] == jugador) & (lineup["type"].isin[15,16])]
     return len(shots)
 
 

@@ -14,7 +14,7 @@ def get_jugadores(lineup: EventosLineup) -> List[Jugador]:
         List[Jugador]: Jugadores del lineup
     """
 
-    return [lineup["playerName"].unique()]
+    return [lineup["player_id"].unique()]
 
 
 def get_passes(lineup: EventosLineup, jugador: Jugador, jugador2: Jugador) -> int:

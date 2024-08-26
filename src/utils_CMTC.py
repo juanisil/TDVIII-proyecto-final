@@ -1,5 +1,7 @@
 """ Contiene las funciones necesarias para calcular el modelo de transición de estados de un equipo en un partido de futbol """
+# pylint: disable=W0613
 
+import numpy as np
 from src.futbol_types import EventosLineup, Jugador, TransitionMatrix
 
 # transition r_g(G,p_i): from the gain state to a player p_i as
@@ -26,7 +28,7 @@ def get_ratio_gains(lineup: EventosLineup, jugador: Jugador) -> float:
         r G p1 (float): Tasa de posesiones ganadas
     """
 
-    pass
+    return 0
 
 
 def get_ratio_loss(lineup: EventosLineup, jugador: Jugador) -> float:
@@ -40,7 +42,7 @@ def get_ratio_loss(lineup: EventosLineup, jugador: Jugador) -> float:
         r p1 L (float): Tasa de posesiones perdidas
     """
 
-    pass
+    return 0
 
 
 def get_ratio_shots(lineup: EventosLineup, jugador: Jugador) -> float:
@@ -54,13 +56,13 @@ def get_ratio_shots(lineup: EventosLineup, jugador: Jugador) -> float:
         r pi S (float): Tasa de tiros
     """
 
-    pass
+    return 0
 
 
 def get_ratio_passes(
     lineup: EventosLineup, jugador: Jugador, jugador2: Jugador
 ) -> float:
-    """ Calcula la tasa de pases de un jugador a otro en un lineup
+    """Calcula la tasa de pases de un jugador a otro en un lineup
 
     Args:
         lineup (EventosLineup): Eventos de un lineup
@@ -71,24 +73,51 @@ def get_ratio_passes(
         r pi, pj (float): Tasa de pases
     """
 
-    pass
+    return 0
 
 
 def build_R(lineup: EventosLineup) -> TransitionMatrix:
-    """ Construye la matriz de transición de estados R (Como Q pero sin Normalización) de un lineup
+    """Construye la matriz de transición de estados R (Como Q pero sin Normalización) de un lineup
 
     Args:
         lineup (EventosLineup): Eventos de un lineup
-    
+
     Returns:
         R (TransitionMatrix): Matriz de transición de estados sin normalizar
     """
 
-    pass
+    R: TransitionMatrix = np.zeros((14, 14))
+
+    # Loss to Loss
+    R[12, 12] = 1
+
+    # Shots to Shot
+    R[13, 13] = 1
+
+    # Col 1 is Every state to P1
+    # ...
+    # Col 11 is Every state to P11
+    # Col 12 is Every state to Loss
+    # Col 13 is Every state to Shot
+
+    # Players should be each player in the lineup
+    players = []
+    for i, player in enumerate(players):
+
+        R[0, i + 1] = get_ratio_gains(lineup, player)
+
+        for j, player2 in enumerate(players):
+
+            R[i + 1, j + 1] = get_ratio_passes(lineup, player, player2)
+
+        R[i + 1, 12] = get_ratio_loss(lineup, player)
+        R[i + 1, 13] = get_ratio_shots(lineup, player)
+
+    return R
 
 
 def build_Q(R: TransitionMatrix) -> TransitionMatrix:
-    """ Dada una matriz de transición de estados R, construye la matriz de transición de estados Q normalizando R
+    """Dada una matriz de transición de estados R, construye la matriz de transición de estados Q normalizando R
 
     Args:
         R (TransitionMatrix): Matriz de transición de estados sin normalizar
@@ -105,11 +134,12 @@ def build_Q(R: TransitionMatrix) -> TransitionMatrix:
     # q_g(U, V) =  -----------------------------------------------------------                  (8)
     #              r_g(U,G) + r_g(U,S) + r_g(U,L) + sum_{i=1}^{11}{r_g(U,p_i)}
 
-    pass
+    Q: TransitionMatrix = np.zeros((14, 14))
+    return Q
 
 
 def psl_estimator(Q: TransitionMatrix) -> float:
-    """ Calcula la probabilidad de perder la pelota antes de tirar al arco de un lineup a partir de la matriz de transición de estados Q
+    """Calcula la probabilidad de perder la pelota antes de tirar al arco de un lineup a partir de la matriz de transición de estados Q
 
     Args:
         Q (TransitionMatrix): Matriz de transición de estados normalizada
@@ -138,4 +168,4 @@ def psl_estimator(Q: TransitionMatrix) -> float:
     # The matrix (I_{12x12} - T)^{-1} is the inverse of the matrix I_{12x12} - T.
     # The inverse of a matrix is a matrix that when multiplied by the original matrix gives an identity matrix.
 
-    pass
+    return 0

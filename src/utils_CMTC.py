@@ -140,7 +140,13 @@ def build_Q(R: TransitionMatrix) -> TransitionMatrix:
     # q_g(U, V) =  -----------------------------------------------------------                  (8)
     #              r_g(U,G) + r_g(U,S) + r_g(U,L) + sum_{i=1}^{11}{r_g(U,p_i)}
 
-    Q: TransitionMatrix = np.zeros((14, 14))
+    Q: TransitionMatrix = R.copy()
+
+    for i in range(14):
+        if np.sum(Q[i, :]) != 0:
+            # Normalize each row
+            Q[i, :] = Q[i, :] / np.sum(Q[i, :])
+
     return Q
 
 

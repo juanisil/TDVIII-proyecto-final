@@ -32,7 +32,11 @@ def get_passes(lineup: EventosLineup, jugador: Jugador, jugador2: Jugador) -> in
     Returns:
         int: Cantidad de pases
     """
-    pass
+    pases = 0
+    for i in range(len(lineup)-1):
+        if lineup.iloc[i]["player_id"] == jugador and lineup.iloc[i+1]["player_id"] == jugador2 and lineup.iloc[i]["outcome"] == 1:
+            pases += 1
+    return pases
 
 
 def get_gains(lineup: EventosLineup, jugador: Jugador) -> int:

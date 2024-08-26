@@ -88,8 +88,10 @@ def get_time_played(lineup: EventosLineup, jugador: Jugador) -> int:
         int: Tiempo jugado en minutos
     """
 
-    # Propio del lineup
-    pass
+    if jugador not in get_jugadores(lineup):
+        return 0
+    
+    return get_lineup_duration(lineup)
 
 
 def get_shared_time(lineup: EventosLineup, jugador: Jugador, jugador2: Jugador) -> int:
@@ -105,7 +107,10 @@ def get_shared_time(lineup: EventosLineup, jugador: Jugador, jugador2: Jugador) 
     """
 
     # Propio del lineup
-    pass
+    if jugador not in get_jugadores(lineup) or jugador2 not in get_jugadores(lineup):
+        return 0
+    
+    return get_lineup_duration(lineup)
 
 
 def get_lineup_duration(lineup: EventosLineup) -> int:
@@ -118,4 +123,15 @@ def get_lineup_duration(lineup: EventosLineup) -> int:
         int: Duración en minutos
     """
 
-    pass
+    starting_id = lineup["min"].idxmin()
+    ending_id = lineup["min"].idxmax()
+
+    starting_min = float(lineup.loc[starting_id, "min"])
+    starting_sec = float(lineup.loc[starting_id, "sec"])
+
+    ending_min = float(lineup.loc[ending_id, "min"])
+    ending_sec = float(lineup.loc[ending_id, "sec"])
+
+    elapsed_mins = (ending_min + ending_sec / 60) - (starting_min + starting_sec / 60)
+
+    return elapsed_mins

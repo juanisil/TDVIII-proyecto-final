@@ -79,6 +79,20 @@ def get_shots(lineup: EventosLineup, jugador: Jugador, OffTarget : bool) -> int:
         shots = lineup[(lineup["player_id"] == jugador) & (lineup["type"].isin[15,16])]
     return len(shots)
 
+def get_goals(lineup: EventosLineup, jugador: Jugador) -> int:
+    """ Obtiene la cantidad de goles de un jugador en un lineup
+
+    Args:
+        lineup (EventosLineup): Eventos de un lineup
+        jugador (Jugador): Jugador que anota un gol
+
+    Returns:
+        int: Cantidad de goles
+    """
+
+    goals = lineup[(lineup["player_id"] == jugador) & (lineup["type"] == 16)]
+    return len(goals)
+
 
 def get_time_played(lineup: EventosLineup, jugador: Jugador) -> int:
     """ Obtiene el tiempo jugado por un jugador en un lineup

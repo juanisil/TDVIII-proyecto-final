@@ -1,5 +1,9 @@
-""" Contiene las funciones necesarias para calcular el modelo de transición de estados de un equipo en un partido de futbol """
+""" 
+    Contiene las funciones necesarias para calcular el modelo de transición de estados de un equipo en un partido de futbol 
+"""
 # pylint: disable=W0613
+# pylint: disable=C0103
+# pylint: disable=C0301
 
 import numpy as np
 from src.futbol_types import EventosLineup, Jugador, TransitionMatrix
@@ -117,7 +121,8 @@ def build_R(lineup: EventosLineup) -> TransitionMatrix:
 
 
 def build_Q(R: TransitionMatrix) -> TransitionMatrix:
-    """Dada una matriz de transición de estados R, construye la matriz de transición de estados Q normalizando R
+    """ Dada una matriz de transición de estados R,
+        construye la matriz de transición de estados Q normalizando R
 
     Args:
         R (TransitionMatrix): Matriz de transición de estados sin normalizar
@@ -139,7 +144,9 @@ def build_Q(R: TransitionMatrix) -> TransitionMatrix:
 
 
 def psl_estimator(Q: TransitionMatrix) -> float:
-    """Calcula la probabilidad de perder la pelota antes de tirar al arco de un lineup a partir de la matriz de transición de estados Q
+    """ Calcula la probabilidad de perder la pelota 
+        antes de tirar al arco de un lineup 
+        a partir de la matriz de transición de estados Q
 
     Args:
         Q (TransitionMatrix): Matriz de transición de estados normalizada

@@ -69,6 +69,7 @@ def get_shots(lineup: EventosLineup, jugador: Jugador, OffTarget : bool) -> int:
     Args:
         lineup (EventosLineup): Eventos de un lineup
         jugador (Jugador): Jugador que realiza el tiro
+        OffTarget (bool): Si se incluyen tiros fuera de puerta
 
     Returns:
         int: Cantidad de tiros

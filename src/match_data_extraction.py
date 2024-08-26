@@ -74,8 +74,7 @@ def get_shots(lineup: EventosLineup, jugador: Jugador) -> int:
         int: Cantidad de tiros
     """
     
-    shots = lineup[(lineup["player_id"] == jugador) & (lineup["type"].isin [13, 14,15,16])]
-
+    shots = lineup[(lineup["player_id"] == jugador) & (lineup["type"].isin[13, 14,15,16])]
     return len(shots)
 
 

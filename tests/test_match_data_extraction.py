@@ -25,6 +25,11 @@ class TestEventProcessing(unittest.TestCase):
     def test_get_jugadores(self):
         """ Get the players from a lineup """
         jugadores = get_jugadores(self.temporada)
+
+        # Type of jugadores is List of integers
+        self.assertIsInstance(jugadores, list)
+        self.assertTrue(all(isinstance(jugador, int) for jugador in jugadores))
+
         # Assert no duplicates
         self.assertEqual(len(jugadores), len(set(jugadores)))
 

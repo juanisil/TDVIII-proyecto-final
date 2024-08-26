@@ -90,13 +90,13 @@ def get_time_played(lineup: EventosLineup, jugador: Jugador) -> int:
 
     if jugador not in get_jugadores(lineup):
         return 0
-    
+
     return get_lineup_duration(lineup)
 
 
 def get_shared_time(lineup: EventosLineup, jugador: Jugador, jugador2: Jugador) -> int:
     """ Obtiene el tiempo jugado por dos jugadores en un lineup
-    
+
     Args:
         lineup (EventosLineup): Eventos de un lineup
         jugador (Jugador): Jugador
@@ -109,7 +109,7 @@ def get_shared_time(lineup: EventosLineup, jugador: Jugador, jugador2: Jugador) 
     # Propio del lineup
     if jugador not in get_jugadores(lineup) or jugador2 not in get_jugadores(lineup):
         return 0
-    
+
     return get_lineup_duration(lineup)
 
 

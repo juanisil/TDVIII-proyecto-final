@@ -8,6 +8,7 @@
 
 import numpy as np
 from src.futbol_types import EventosLineup, Jugador, TransitionMatrix
+from src.match_data_extraction import get_jugadores
 
 # transition r_g(G,p_i): from the gain state to a player p_i as
 # r_g(G,p_i)= g_g(p_i)/t_g(p_i, p_i)                                                        (4)
@@ -106,7 +107,7 @@ def build_R(lineup: EventosLineup) -> TransitionMatrix:
     # Col 13 is Every state to Shot
 
     # Players should be each player in the lineup
-    players = []
+    players = get_jugadores(lineup)
     for i, player in enumerate(players):
 
         R[0, i + 1] = get_ratio_gains(lineup, player)

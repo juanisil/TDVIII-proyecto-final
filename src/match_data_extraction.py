@@ -32,12 +32,8 @@ def get_passes(lineup: EventosLineup, jugador: Jugador, jugador2: Jugador) -> in
     Returns:
         int: Cantidad de pases
     """
-    pases = 0
-    for i in range(len(lineup)-1):
-        if lineup.iloc[i]["player_id"] == jugador and lineup.iloc[i+1]["player_id"] == jugador2 and lineup.iloc[i]["outcome"] == 1:
-            pases += 1
-    return pases
-
+    passes = lineup[(lineup["player_id"] == jugador) & (lineup["player_id"].shift(-1) == jugador2) & (lineup["type"] == 1) & (lineup["outcome"] == 1)]
+    return len(passes)
 
 def get_gains(lineup: EventosLineup, jugador: Jugador) -> int:
     """ Obtiene la cantidad de posesiones ganadas por un jugador en un lineup
@@ -77,8 +73,10 @@ def get_shots(lineup: EventosLineup, jugador: Jugador) -> int:
     Returns:
         int: Cantidad de tiros
     """
+    
+    shots = lineup[(lineup["player_id"] == jugador) & (lineup["type"].isin [13, 14,15,16])]
 
-    pass
+    return len(shots)
 
 
 def get_time_played(lineup: EventosLineup, jugador: Jugador) -> int:

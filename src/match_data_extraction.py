@@ -1,3 +1,7 @@
+# pylint: disable=W0613
+# pylint: disable=C0103
+# pylint: disable=C0301
+
 """ Módulo para extraer datos de los partidos """
 
 from typing import List
@@ -14,7 +18,7 @@ def get_jugadores(lineup: EventosLineup) -> List[Jugador]:
         List[Jugador]: Jugadores del lineup
     """
 
-    return [lineup["player_id"].unique()]
+    return lineup["player_id"].dropna().unique().tolist()
 
 
 def get_passes(lineup: EventosLineup, jugador: Jugador, jugador2: Jugador) -> int:

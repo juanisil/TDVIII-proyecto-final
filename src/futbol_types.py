@@ -1,3 +1,7 @@
+# pylint: disable=W0613
+# pylint: disable=C0103
+# pylint: disable=C0301
+
 """ Tipos de datos usados en el análisis de datos de fútbol """
 
 from typing import NewType

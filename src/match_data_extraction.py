@@ -1,4 +1,5 @@
 # pylint: disable=W0613
+# pylint: disable=W0107
 # pylint: disable=C0103
 # pylint: disable=C0301
 
@@ -35,6 +36,7 @@ def get_passes(lineup: EventosLineup, jugador: Jugador, jugador2: Jugador) -> in
     passes = lineup[(lineup["player_id"] == jugador) & (lineup["player_id"].shift(-1) == jugador2) & (lineup["type"] == 1) & (lineup["outcome"] == 1)]
     return len(passes)
 
+
 def get_gains(lineup: EventosLineup, jugador: Jugador) -> int:
     """ Obtiene la cantidad de posesiones ganadas por un jugador en un lineup
 
@@ -63,7 +65,7 @@ def get_loss(lineup: EventosLineup, jugador: Jugador) -> int:
     pass
 
 
-def get_shots(lineup: EventosLineup, jugador: Jugador, OffTarget : bool) -> int:
+def get_shots(lineup: EventosLineup, jugador: Jugador, OffTarget: bool) -> int:
     """ Obtiene la cantidad de tiros de un jugador en un lineup
 
     Args:
@@ -75,10 +77,11 @@ def get_shots(lineup: EventosLineup, jugador: Jugador, OffTarget : bool) -> int:
         int: Cantidad de tiros
     """
     if OffTarget:
-        shots = lineup[(lineup["player_id"] == jugador) & (lineup["type"].isin[13,14,15,16])] # 13 and 14 are off target, 15 and 16 are on target 
+        shots = lineup[(lineup["player_id"] == jugador) & (lineup["type"].isin[13, 14, 15, 16])]  # 13 and 14 are off target, 15 and 16 are on target
     else:
-        shots = lineup[(lineup["player_id"] == jugador) & (lineup["type"].isin[15,16])]
+        shots = lineup[(lineup["player_id"] == jugador) & (lineup["type"].isin[15, 16])]
     return len(shots)
+
 
 def get_goals(lineup: EventosLineup, jugador: Jugador) -> int:
     """ Obtiene la cantidad de goles de un jugador en un lineup

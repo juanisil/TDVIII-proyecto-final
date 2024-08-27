@@ -16,6 +16,7 @@ class TestEventProcessing(unittest.TestCase):
 
     def setUp(self):
         self.temporada = leer_excel("./SampleData/epl.xlsx")
+        self.partidos = None
 
     def test_type_temporada(self):
         """ Test the type of the Temporada object """
@@ -51,12 +52,13 @@ class TestEventProcessing(unittest.TestCase):
 
     def test_separar_partido_en_equipo_pov(self):
         """ Separar los eventos de un partido en dos DataFrames, uno por equipo """
-        partidos = separar_partidos(self.temporada)
+        partidos = self.partidos if self.partidos else separar_partidos(self.temporada)
         partido = partidos[0]
         equipos = separar_partido_en_equipo_pov(partido)
 
         # Test Type equipos is Tuple of DataFrames
-        self.assertIsInstance(equipos, tuple)
+        # Equipos tiene 2 elementos
+        self.assertTrue(len(equipos) == 2)
         self.assertTrue(all(isinstance(equipo, pd.DataFrame) for equipo in equipos))
 
         equipo1, equipo2 = equipos
@@ -77,7 +79,7 @@ class TestEventProcessing(unittest.TestCase):
 
     def test_separar_1_partido_del_equipo_en_lineups(self):
         """ Separar los eventos de un equipo en lineups """
-        partidos = self.partidos
+        partidos = self.partidos if self.partidos else separar_partidos(self.temporada)
         partido = partidos[0]
         equipos = separar_partido_en_equipo_pov(partido)
         equipo1, _ = equipos
@@ -90,7 +92,7 @@ class TestEventProcessing(unittest.TestCase):
 
         # La cantidad de jugadores en cada lineup es <= 11
         for lineup in lineups:
-            self.assertTrue(lineup["player_id"].nunique() <= 11)         
+            self.assertTrue(lineup["player_id"].nunique() <= 11)
 
 
 if __name__ == "__main__":

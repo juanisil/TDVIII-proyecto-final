@@ -25,43 +25,57 @@ class TestEventProcessing(unittest.TestCase):
     def setUp(self):
         self.temporada = leer_excel("./SampleData/epl.xlsx")
         self.partidos = separar_partidos(self.temporada)
+        self.jugadores = get_jugadores(self.temporada)
 
-    def test_get_jugadores(self):
-        """ Get the players from a lineup """
-        jugadores = get_jugadores(self.temporada)
-
-        # Type of jugadores is List of integers
+    def test_get_jugadores_type(self):
+        """ Type of jugadores is List of integers """
+        jugadores = self.jugadores
         self.assertIsInstance(jugadores, list)
         self.assertTrue(all(isinstance(jugador, int) for jugador in jugadores))
 
-        # Assert no duplicates
+    def test_no_duplicates_jugadores(self):
+        """ Check that there are no duplicate players in the data """
+        jugadores = self.jugadores
         self.assertEqual(len(jugadores), len(set(jugadores)))
 
-        # Assert all players are ids present int the data
+    def test_no_jugadores_not_in_data(self):
+        """ Assert all players are ids present int the data """
+        jugadores = self.jugadores
         self.assertTrue(all(jugador in self.temporada["player_id"].unique() for jugador in jugadores))
 
-        # Assert all players are integers
+    def test_jugadores_in_lineup(self):
+        """ Assert all players are integers """
+        jugadores = self.jugadores
         self.assertTrue(all(isinstance(jugador, int) for jugador in jugadores))
 
+    def test_lineup_length(self):
+        """ Check that the length of a lineup is less than or equal to 11 """
+        sample_partido = np.random.choice(self.partidos)
+        sample_equipo = np.random.choice(separar_partido_en_equipo_pov(sample_partido))
+        sample_lineup = np.random.choice(separar_partido_del_equipo_en_lineups(sample_equipo))
+        jugadores = get_jugadores(sample_lineup)
         # Assert len <= 11
         self.assertTrue(len(jugadores) <= 11)
 
     def test_lineup_duration(self):
-        """ Get the duration of a lineup """
+        """ Check that the duration of a lineup is not negative"""
 
-        # Check that the duration of a lineup is not negative
         for partido in self.partidos:
             for equipo in separar_partido_en_equipo_pov(partido):
                 for lineup in separar_partido_del_equipo_en_lineups(equipo):
                     self.assertTrue(get_lineup_duration(lineup) >= 0)
 
-        # Check that the duration of a lineup is not greater than the duration of the match
+    def test_lineup_duration_less_than_match_duration(self):
+        """ Check that the duration of a lineup is not greater than the duration of the match """
+
         for partido in self.partidos:
             for equipo in separar_partido_en_equipo_pov(partido):
                 for lineup in separar_partido_del_equipo_en_lineups(equipo):
                     self.assertTrue(get_lineup_duration(lineup) <= get_lineup_duration(equipo))
 
-        # Check that the time played for a player is not greater than the duration of the lineup in which he played
+    def test_player_time_played_less_than_lineup_duration(self):
+        """ Check that the time played for a player is not greater than the duration of the lineup in which he played """
+
         for partido in self.partidos:
             for equipo in separar_partido_en_equipo_pov(partido):
                 for lineup in separar_partido_del_equipo_en_lineups(equipo):
@@ -79,6 +93,9 @@ class TestEventProcessing(unittest.TestCase):
                     jugadores = get_jugadores(lineup)
                     for jugador in jugadores:
                         self.assertTrue(get_lineup_duration(lineup[lineup["player_id"] == jugador]) >= 0)
+
+    def test_player_10_players_not_in_lineup(self):
+        """ Get the time played by a player not in a lineup exactly 10 times expect 0 """
 
         # Check that for a player not in a lineup, the time played is 0, 10 times
         for _ in range(10):

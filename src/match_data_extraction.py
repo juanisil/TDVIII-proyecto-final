@@ -48,10 +48,10 @@ def get_gains(lineup: EventosLineup, jugador: Jugador) -> int:
         int: Cantidad de posesiones ganadas
     """
 
-    pass
+    return lineup.groupby("player_id")[["is_gain"]].sum().loc[jugador].values[0]
 
 
-def get_loss(lineup: EventosLineup, jugador: Jugador) -> int:
+def get_losses(lineup: EventosLineup, jugador: Jugador) -> int:
     """ Obtiene la cantidad de posesiones perdidas por un jugador en un lineup
 
     Args:
@@ -62,10 +62,10 @@ def get_loss(lineup: EventosLineup, jugador: Jugador) -> int:
         int: Cantidad de posesiones perdidas
     """
 
-    pass
+    return lineup.groupby("player_id")[["is_loss"]].sum().loc[jugador].values[0]
 
 
-def get_shots(lineup: EventosLineup, jugador: Jugador, OffTarget: bool) -> int:
+def get_shots(lineup: EventosLineup, jugador: Jugador, OffTarget: bool = False) -> int:
     """ Obtiene la cantidad de tiros de un jugador en un lineup
 
     Args:

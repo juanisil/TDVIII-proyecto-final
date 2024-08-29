@@ -74,4 +74,30 @@ def separar_partido_del_equipo_en_lineups(df: Partido) -> List[EventosLineup]:
         List[EventosLineup]: Eventos de cada lineup
     """
 
-    return df
+    # Reset index
+    df = df.reset_index(drop=True)
+
+    # Filtramos los eventos de cambios de alineación
+    changes_events_idx = (df[(df["type"] == 18) | (df["type"] == 19)]).index
+    print(changes_events_idx)
+    
+    # Crear una lista para almacenar los dataframes resultantes
+    lineups_events = []
+
+    # Recorrer los índices de los eventos separadores y crear los nuevos dataframes
+    start = 0
+    for i in range(0, len(changes_events_idx), 2):
+        end = changes_events_idx[i]  
+        print(start, end)
+        lineups_events.append(df.iloc[start:end])
+        start = end + 2
+
+    # Añadir el último lineup
+    if start < len(df):
+        lineups_events.append(df.iloc[start:])
+
+    # Si no hay cambios de alineación, añadir el dataframe completo
+    if len(lineups_events) == 0:
+        lineups_events.append(df)
+
+    return lineups_events

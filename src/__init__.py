@@ -23,7 +23,7 @@ from src.match_data_extraction import (
     get_jugadores,
     get_passes,
     get_gains,
-    get_loss,
+    get_losses,
     get_shots,
     get_time_played,
     get_shared_time,

@@ -8,7 +8,7 @@
 
 import numpy as np
 from src.futbol_types import EventosLineup, Jugador, TransitionMatrix
-from src.match_data_extraction import get_jugadores
+from src.match_data_extraction import get_gains, get_jugadores, get_lineup_duration, get_losses, get_passes, get_shots
 
 # transition r_g(G,p_i): from the gain state to a player p_i as
 # r_g(G,p_i)= g_g(p_i)/t_g(p_i, p_i)                                                        (4)
@@ -33,8 +33,12 @@ def get_ratio_gains(lineup: EventosLineup, jugador: Jugador) -> float:
     Returns:
         r G p1 (float): Tasa de posesiones ganadas
     """
+    gains = get_gains(lineup, jugador)
+    time = get_lineup_duration(lineup)
+    if time == 0:
+        return 0
 
-    return 0
+    return gains / time
 
 
 def get_ratio_loss(lineup: EventosLineup, jugador: Jugador) -> float:
@@ -48,7 +52,13 @@ def get_ratio_loss(lineup: EventosLineup, jugador: Jugador) -> float:
         r p1 L (float): Tasa de posesiones perdidas
     """
 
-    return 0
+    losses = get_losses(lineup, jugador)
+    time = get_lineup_duration(lineup)
+
+    if time == 0:
+        return 0
+
+    return losses / time
 
 
 def get_ratio_shots(lineup: EventosLineup, jugador: Jugador) -> float:
@@ -62,7 +72,13 @@ def get_ratio_shots(lineup: EventosLineup, jugador: Jugador) -> float:
         r pi S (float): Tasa de tiros
     """
 
-    return 0
+    shots = get_shots(lineup, jugador)
+    time = get_lineup_duration(lineup)
+
+    if time == 0:
+        return 0
+
+    return shots / time
 
 
 def get_ratio_passes(
@@ -79,7 +95,13 @@ def get_ratio_passes(
         r pi, pj (float): Tasa de pases
     """
 
-    return 0
+    passes = get_passes(lineup, jugador, jugador2)
+    time = get_lineup_duration(lineup)
+
+    if time == 0:
+        return 0
+
+    return passes / time
 
 
 def build_R(lineup: EventosLineup) -> TransitionMatrix:

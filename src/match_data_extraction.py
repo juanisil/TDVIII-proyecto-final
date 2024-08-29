@@ -80,7 +80,7 @@ def get_shots(lineup: EventosLineup, jugador: Jugador, OffTarget: bool = False) 
         shots = lineup[(lineup["player_id"] == jugador) & (lineup["type"].isin([13, 14, 15, 16]))]  # 13 and 14 are off target, 15 and 16 are on target
     else:
         shots = lineup[(lineup["player_id"] == jugador) & (lineup["type"].isin([15, 16]))]
-    return len(shots)
+    return shots.shape[0]
 
 
 def get_goals(lineup: EventosLineup, jugador: Jugador) -> int:
@@ -143,6 +143,9 @@ def get_lineup_duration(lineup: EventosLineup) -> int:
     Returns:
         int: Duración en minutos
     """
+
+    if lineup.empty:
+        return 0
 
     starting_id = lineup["min"].idxmin()
     ending_id = lineup["min"].idxmax()

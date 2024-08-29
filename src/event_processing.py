@@ -49,6 +49,21 @@ def separar_partidos(df: Temporada) -> List[Partido]:
     return [df[df["match_id"] == match_id] for match_id in df["match_id"].unique()]
 
 
+def add_gains_loss_col(df: Partido) -> Partido:
+    """ Añade columnas para indicar si un evento es una ganancia o pérdida de posesión """
+
+    df = df.copy()
+    df.loc[:, "prev_team"] = df["team_id"].shift(1)
+    df.loc[:, "is_gain"] = df["team_id"] != df["prev_team"]
+
+    df.loc[:, "next_team"] = df["team_id"].shift(-1)
+    df.loc[:, "is_loss"] = df["team_id"] != df["next_team"]
+
+    df.loc[:, "is_gain"] = df["is_gain"].fillna(False)
+    df.loc[:, "is_loss"] = df["is_loss"].fillna(False)
+    return df
+
+
 def separar_partido_en_equipo_pov(df: Partido) -> Tuple[Partido, Partido]:
     """Separa los eventos de un partido en dos DataFrames, uno por equipo
 
@@ -58,6 +73,8 @@ def separar_partido_en_equipo_pov(df: Partido) -> Tuple[Partido, Partido]:
     Returns:
         Tuple[Partido, Partido]: Eventos de cada equipo
     """
+
+    df = add_gains_loss_col(df)
 
     return [
         df[df["team_id"] == team_id] for team_id in df["team_id"].unique()
@@ -79,16 +96,16 @@ def separar_partido_del_equipo_en_lineups(df: Partido) -> List[EventosLineup]:
 
     # Filtramos los eventos de cambios de alineación
     changes_events_idx = (df[(df["type"] == 18) | (df["type"] == 19)]).index
-    print(changes_events_idx)
-    
+    # print(changes_events_idx)
+
     # Crear una lista para almacenar los dataframes resultantes
     lineups_events = []
 
     # Recorrer los índices de los eventos separadores y crear los nuevos dataframes
     start = 0
     for i in range(0, len(changes_events_idx), 2):
-        end = changes_events_idx[i]  
-        print(start, end)
+        end = changes_events_idx[i]
+        # print(start, end)
         lineups_events.append(df.iloc[start:end])
         start = end + 2
 

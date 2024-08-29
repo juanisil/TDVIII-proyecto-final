@@ -6,6 +6,7 @@
 
 from typing import Dict
 import numpy as np
+import pandas as pd
 # import os
 # import pandas as pd
 
@@ -58,8 +59,15 @@ class Dataset:
                                     ]
                                 )
 
+        self.columns = ["player_1", "player_2"]
         self.features = np.array(self.features)
         self.target = np.array(self.target)
+
+    def to_DataFrame(self) -> pd.DataFrame:
+        """ Retorna un DataFrame con los datos del dataset """
+        return pd.DataFrame(
+            np.concatenate([self.features, self.target], axis=1), columns=self.columns + ["target"]
+        )
 
     def get_data(self) -> Dict[str, np.array]:
         """ Get the features and target arrays

@@ -7,7 +7,8 @@
 """
 
 import numpy as np
-from src.futbol_types import EventosLineup, Jugador, TransitionMatrix
+from src.event_processing import separar_partido_del_equipo_en_lineups
+from src.futbol_types import EventosLineup, Jugador, Partido, TransitionMatrix
 from src.match_data_extraction import get_gains, get_jugadores, get_lineup_duration, get_losses, get_passes, get_shots
 
 # transition r_g(G,p_i): from the gain state to a player p_i as
@@ -163,7 +164,7 @@ def build_Q(R: TransitionMatrix) -> TransitionMatrix:
     # q_g(U, V) =  -----------------------------------------------------------                  (8)
     #              r_g(U,G) + r_g(U,S) + r_g(U,L) + sum_{i=1}^{11}{r_g(U,p_i)}
 
-    Q: TransitionMatrix = R.copy()
+    Q: TransitionMatrix = np.array(R.copy())
 
     for i in range(14):
         if np.sum(Q[i, :]) != 0:
@@ -205,4 +206,38 @@ def psl_estimator(Q: TransitionMatrix) -> float:
     # The matrix (I_{12x12} - T)^{-1} is the inverse of the matrix I_{12x12} - T.
     # The inverse of a matrix is a matrix that when multiplied by the original matrix gives an identity matrix.
 
-    return 0
+    T: np.ndarray = Q[:12, :12]
+    R: np.ndarray = Q[:12, 12:]
+
+    M = np.eye(12) - T
+
+    psl = 0
+
+    try:
+        M_inv = np.linalg.inv(M)
+        psl = np.dot(np.dot(np.array([1] + [0] * 11), M_inv), R).dot(np.array([0, 1]).T)
+    except np.linalg.LinAlgError as e:
+        print("Error: La matriz es singular y no se puede invertir.")
+        print(e)
+
+    return psl
+
+
+def team_psl(equipo: Partido) -> float:
+    """
+        Calcula la probabilidad de perder la pelota antes de tirar al arco de un equipo en un partido
+        A partir del psl de cada lineup del equipo
+        Devuelve el promedio de psl ponderado por la duración de cada lineup
+
+    Args:
+        equipo (Partido): Eventos de un equipo en un partido
+
+    Returns:
+        float: Probabilidad de perder la pelota antes de tirar al arco
+    """
+
+    lineups = separar_partido_del_equipo_en_lineups(equipo)
+    psls = np.array([psl_estimator(build_Q(build_R(lineup))) for lineup in lineups])
+    lineup_durations = np.array([get_lineup_duration(lineup) for lineup in lineups])
+
+    return np.average(psls, weights=lineup_durations)

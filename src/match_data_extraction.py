@@ -77,9 +77,9 @@ def get_shots(lineup: EventosLineup, jugador: Jugador, OffTarget: bool = False) 
         int: Cantidad de tiros
     """
     if OffTarget:
-        shots = lineup[(lineup["player_id"] == jugador) & (lineup["type"].isin[13, 14, 15, 16])]  # 13 and 14 are off target, 15 and 16 are on target
+        shots = lineup[(lineup["player_id"] == jugador) & (lineup["type"].isin([13, 14, 15, 16]))]  # 13 and 14 are off target, 15 and 16 are on target
     else:
-        shots = lineup[(lineup["player_id"] == jugador) & (lineup["type"].isin[15, 16])]
+        shots = lineup[(lineup["player_id"] == jugador) & (lineup["type"].isin([15, 16]))]
     return len(shots)
 
 

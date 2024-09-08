@@ -30,7 +30,9 @@ def leer_excel(path: str) -> Temporada:
         change=lambda d: d.replace(b' synchVertical="1"', b" "),
     )
 
-    return pd.read_excel(path)
+    df = pd.read_excel(path)
+    df["date"] = pd.to_datetime(df["date"], format="%d%b%Y")
+    return df
 
 
 def separar_partidos(df: Temporada) -> List[Partido]:

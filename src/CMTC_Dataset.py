@@ -47,10 +47,10 @@ class Dataset:
                             if player_1 != player_2:
                                 self.features.append(
                                     [
-                                        player_1
-                                        ** make_features(player_1),
-                                        player_2
-                                        ** make_features(player_2),
+                                        player_1,
+                                        **make_features(player_1),
+                                        player_2,
+                                        **make_features(player_2),
                                     ]
                                 )
                                 self.target.append(

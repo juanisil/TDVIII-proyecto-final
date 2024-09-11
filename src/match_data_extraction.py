@@ -16,7 +16,7 @@ def get_jugadores(lineup: EventosLineup) -> List[Jugador]:
         lineup (EventosLineup): Eventos de un lineup
 
     Returns:
-        List[Jugador]: Jugadores del lineup
+        List[Jugador]: player_id de los jugadores del lineup
     """
 
     return lineup["player_id"].dropna().unique().tolist()
@@ -48,7 +48,17 @@ def get_gains(lineup: EventosLineup, jugador: Jugador) -> int:
         int: Cantidad de posesiones ganadas
     """
 
-    return lineup.groupby("player_id")[["is_gain"]].sum().loc[jugador].values[0]
+    # Filter player
+    player_events = lineup[lineup['player_id'] == jugador]
+
+    # Filter events
+    gain_events_description = ["Out", "Aerial", "Ball recovery", "Claim", "Keeper pick-up", "Foul", "Corner Awarded", "Offside proboked"]
+    gain_outcomes = [[1], [1], [0, 1], [0, 1], [0, 1], [1], [1], [0,1]]
+    event_outcome_map = dict(zip(gain_events_description, gain_outcomes))
+
+    gain_events = player_events[player_events.apply(lambda row: row['description'] in gain_events_description and row['outcome'] in event_outcome_map[row['description']], axis=1)]
+
+    return len(gain_events)
 
 
 def get_losses(lineup: EventosLineup, jugador: Jugador) -> int:
@@ -62,7 +72,19 @@ def get_losses(lineup: EventosLineup, jugador: Jugador) -> int:
         int: Cantidad de posesiones perdidas
     """
 
-    return lineup.groupby("player_id")[["is_loss"]].sum().loc[jugador].values[0]
+    # Filter player
+    player_events = lineup[lineup['player_id'] == jugador]
+
+    # Filter ball touch event (prev_team must be the same as team_id)
+    ball_touch_filter = player_events[(player_events['description'] == "Ball touch") & (player_events["prev_team"] == player_events["team_id"])]
+
+    # Filter remaining events
+    loss_events_description = ["Out", "Aerial", "Dispossessed", "Foul", "Corner Awarded", "Offside Pass"]
+    loss_outcomes = [[0], [0], [0, 1], [0], [0], [0, 1]]
+    event_outcome_map = dict(zip(loss_events_description, loss_outcomes))
+    loss_events = player_events[player_events.apply(lambda row: row['description'] in loss_events_description and row['outcome'] in event_outcome_map[row['description']], axis=1)]
+
+    return len(loss_events) + len(ball_touch_filter)
 
 
 def get_shots(lineup: EventosLineup, jugador: Jugador, OffTarget: bool = False) -> int:

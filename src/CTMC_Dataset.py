@@ -12,7 +12,7 @@ import pandas as pd
 
 from src.event_processing import leer_excel, separar_partido_del_equipo_en_lineups, separar_partido_en_equipo_pov, separar_partidos
 from src.match_data_extraction import get_jugadores
-from src.utils_CMTC import get_ratio_passes
+from src.utils_CTMC import get_ratio_passes
 
 
 def make_features(player) -> np.array:

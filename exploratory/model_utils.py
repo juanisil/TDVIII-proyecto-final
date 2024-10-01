@@ -26,8 +26,8 @@ from src.event_processing import (
     separar_partidos,
 )
 from src.match_data_extraction import get_jugadores, get_lineup_duration
-from src.utils_CMTC import psl_estimator, build_Q, build_R
-from src.utils_CMTC import get_ratio_gains, get_ratio_loss, get_ratio_shots
+from src.utils_CTMC import psl_estimator, build_Q, build_R
+from src.utils_CTMC import get_ratio_gains, get_ratio_loss, get_ratio_shots
 
 from src.futbol_types import TransitionMatrix
 from typing import List

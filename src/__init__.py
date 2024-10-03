@@ -30,7 +30,7 @@ from src.match_data_extraction import (
     get_lineup_duration,
 )
 
-from src.utils_CMTC import (
+from src.utils_CTMC import (
     get_ratio_gains,
     get_ratio_loss,
     get_ratio_shots,

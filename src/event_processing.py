@@ -98,7 +98,6 @@ def separar_partido_del_equipo_en_lineups(df: Partido) -> List[EventosLineup]:
 
     # Filtramos los eventos de cambios de alineación
     changes_events_idx = (df[(df["type"] == 18) | (df["type"] == 19)]).index
-    # print(changes_events_idx)
 
     # Crear una lista para almacenar los dataframes resultantes
     lineups_events = []

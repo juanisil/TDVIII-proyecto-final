@@ -1,6 +1,7 @@
 # pylint: disable=W0613
 # pylint: disable=C0103
 # pylint: disable=C0301
+# pylint: disable=E0401
 
 """
     Contiene las funciones necesarias para calcular el modelo de transición de estados de un equipo en un partido de futbol

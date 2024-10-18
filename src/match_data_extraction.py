@@ -53,7 +53,7 @@ def get_gains(lineup: EventosLineup, jugador: Jugador) -> int:
 
     # Filter events
     gain_events_description = ["Out", "Aerial", "Ball recovery", "Claim", "Keeper pick-up", "Foul", "Corner Awarded", "Offside proboked"]
-    gain_outcomes = [[1], [1], [0, 1], [0, 1], [0, 1], [1], [1], [0,1]]
+    gain_outcomes = [[1], [1], [0, 1], [0, 1], [0, 1], [1], [1], [0, 1]]
     event_outcome_map = dict(zip(gain_events_description, gain_outcomes))
 
     gain_events = player_events[player_events.apply(lambda row: row['description'] in gain_events_description and row['outcome'] in event_outcome_map[row['description']], axis=1)]

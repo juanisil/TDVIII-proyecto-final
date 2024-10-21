@@ -1,4 +1,5 @@
 """ Module to load and access EPL player data from a JSON file. """
+# pylint: disable=C0103
 
 import json
 
@@ -116,6 +117,62 @@ class EPLPlayerData:
                 if player["name"]["last"].lower() == lastname.lower():
                     return int(player["altIds"]["opta"][1:])
         return None
+
+    def get_player_id_by_name(self, name):
+        """ Get player OPTA ID by player name.
+
+        Args:
+            name (str): Player name.
+
+        Returns:
+            int: Player OPTA ID.
+        """
+        for page in self.data:
+            for player in page["content"]:
+                if player["name"]["display"].lower() == name.lower():
+                    return int(player["altIds"]["opta"][1:])
+
+    def get_positionInfo(self, player_opta_id):
+        """ Get player positionInfo by OPTA ID.
+
+        Args:
+            player_opta_id (int): Player OPTA ID.
+
+        Returns:
+            str: Player positionInfo.
+        """
+        player_info = self.get_player_info(player_opta_id)
+        return player_info["info"]["positionInfo"] if player_info else None
+
+    def get_country(self, player_opta_id):
+        """ Get player country by OPTA ID.
+
+        Args:
+            player_opta_id (int): Player OPTA ID.
+
+        Returns:
+            str: Player country.
+        """
+        player_info = self.get_player_info(player_opta_id)
+        return (
+            player_info["birth"]["country"]["isoCode"]
+            if player_info
+            and "birth" in player_info
+            and "country" in player_info["birth"]
+            else None
+        )
+
+    def get_year_of_birth(self, player_opta_id):
+        """ Get player year of birth by OPTA ID.
+
+        Args:
+            player_opta_id (int): Player OPTA ID.
+
+        Returns:
+            int: Player year of birth.
+        """
+        player_info = self.get_player_info(player_opta_id)
+        return player_info["birth"]["date"]["label"][-4:] if player_info else None
 
     def __len__(self):
         return sum(len(page["content"]) for page in self.data)

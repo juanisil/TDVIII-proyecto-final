@@ -74,7 +74,7 @@ class EPLPlayerData:
         """
         for page in self.data:
             for player in page["content"]:
-                if player["altIds"]["opta"] == f"p{player_opta_id}":
+                if player["altIds"]["opta"] == f"p{int(player_opta_id)}":
                     return player
         return None
 

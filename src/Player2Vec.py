@@ -9,6 +9,7 @@
 import numpy as np
 import pickle
 import networkx as nx
+from tqdm import tqdm
 
 from src.bayesian_PSL import EPL_Data
 from src.event_processing import separar_partido_en_equipo_pov
@@ -34,6 +35,8 @@ class Player2Vec:
         dimensions=3,
         walk_length=16,
         num_walks=200,
+        p=1,
+        q=1,
         workers=4,
         window=12,
         min_count=1,
@@ -61,6 +64,8 @@ class Player2Vec:
             walk_length=walk_length,
             num_walks=num_walks,
             workers=workers,
+            p=p,
+            q=q,
         )
         self.model = node2vec.fit(
             window=window, min_count=min_count, batch_words=batch_words
@@ -83,6 +88,15 @@ class Player2Vec:
         """
         self.model.save(model_path)
 
+    def get_ids(self):
+        """ Get the node IDs from the model
+
+        Returns:
+            List[int]: List of node ids
+        """
+
+        return self.model.wv.index_to_key
+
     def get_similar_players(self, player_name, topn=10, same_position=True):
         """ Get the most similar players to a player
 
@@ -99,14 +113,19 @@ class Player2Vec:
         sample_team = self.get_team_name(player_id)
         sample_position = self.get_player_position(player_id)
 
-        most_similar = self.model.wv.most_similar(f"{player_id}___", topn=100)
+        total = len([x for x in self.get_ids() if "___" in x])
+
+        most_similar = self.model.wv.most_similar(f"{player_id}___", topn=total)
         count = 0
         results = []
         for player_id, similarity in most_similar:
-            if player_id.split("_")[0] in ["Gain", "Loss", "Shot"]:
-                continue
             if count == topn:
                 break
+            if player_id.split("_")[0] in ["Gain", "Loss", "Shot"]:
+                continue
+            # if "_" in player_id and "___" not in player_id:
+                # continue
+
             player_id = self.rework_id(player_id)
             player_name = self.epl_player_data.get_player_name(player_id)
             team = self.get_team_name(player_id)
@@ -129,7 +148,7 @@ class Player2Vec:
             int: Player ID
         """
 
-        return self.epl_data.get_player_id_by_name(player_name)
+        return self.epl_player_data.get_player_id_by_name(player_name)
 
     def get_team_name(self, player_id):
         """ Get the team name of a player
@@ -175,6 +194,8 @@ class Player2Vec:
 
 
 class EPL_Graph:
+    """ Class to build the EPL player graph """
+
     def __init__(self, epl_data: EPL_Data):
         self.epl_data = epl_data
         self.epl_player_data = epl_data.get_epl_player_data()
@@ -185,6 +206,11 @@ class EPL_Graph:
         self.player_total_duration = 0
 
         self.graph = nx.Graph()
+        self.sub_graphs = {}
+        self.players_sub_nodes = {}
+
+        self.durations = {}
+        self.total_duration = 0
 
     def R_to_Graph(self, R: TransitionMatrix, names: list[str]):
         """
@@ -226,7 +252,7 @@ class EPL_Graph:
 
         return G
 
-    def R_to_full_graph(self, R: TransitionMatrix, names: list[str], ti="", pi="", li=""):
+    def R_to_full_graph(self, R: TransitionMatrix, names: list[str], ti="", pi="", li="", use_weighted_edges=False):
         """
         Convert a Transition Matrix to a Directed Graph
 
@@ -265,20 +291,28 @@ class EPL_Graph:
             )
 
             # Add edge to the Gain state, the weight is the probability of the player gaining possession
-            # W = R[1 + i, 0]
-            # Check if its finite
-            if np.isfinite(R[2 + i, 1]) and R[2 + i, 1] > 0:
-                G.add_edge(gain_state, player_i_state, weight=R[2 + i, 1])
+            gain_w = R[1, 2 + i]
+            if gain_w < 0 or not np.isfinite(gain_w):
+                gain_w = 0
 
             # Add edge to the Loss state, the weight is the probability of the player losing possession
-            # W = R[2 + i, 13]
-            if np.isfinite(R[2 + i, 13]) and R[2 + i, 13] > 0:
-                G.add_edge(player_i_state, loss_state, weight=R[2 + i, 13])
+            loss_w = R[2 + i, 13]
+            if loss_w < 0 or not np.isfinite(loss_w):
+                loss_w = 0
 
             # Add edge to the Shot state, the weight is the probability of the player taking a shot
-            # W = R[2 + i, 14]
-            if np.isfinite(R[2 + i, 14]) and R[2 + i, 14] > 0:
-                G.add_edge(player_i_state, shot_state, weight=R[2 + i, 14])
+            shot_w = R[2 + i, 14]
+            if shot_w < 0 or not np.isfinite(shot_w):
+                shot_w = 0
+
+            if use_weighted_edges:
+                G.add_edge(gain_state, player_i_state, weight=gain_w)
+                G.add_edge(player_i_state, loss_state, weight=loss_w)
+                G.add_edge(player_i_state, shot_state, weight=shot_w)
+            else:
+                G.add_edge(gain_state, player_i_state)
+                G.add_edge(player_i_state, loss_state)
+                G.add_edge(player_i_state, shot_state)
 
         for i, name in enumerate(names):
             player_i_state = f"{name}_{ti}_{pi}_{li}"
@@ -292,23 +326,37 @@ class EPL_Graph:
                     continue
                 player_j_state = f"{name2}_{ti}_{pi}_{li}"
 
-                if R[2 + i, 2 + j] > 0:
+                w = R[2 + i, 2 + j]
+
+                if w < 0 or not np.isfinite(w):
+                    w = 0
+
+                if use_weighted_edges:
                     G.add_edge(
                         player_i_state,
                         player_j_state,
-                        weight=R[2 + i, 2 + j]
+                        weight=w
+                    )
+                else:
+                    G.add_edge(
+                        player_i_state,
+                        player_j_state
                     )
 
         return G
 
-    def calculate_player_total_duration(self):
+    def precalculate_durations(self):
         """ Calculate the total duration of each player in the EPL """
+        self.durations = {}
+        self.total_duration = 0
 
         self.player_total_duration = {}
         for pi, ti, li, lineup, match_id, team_id in self.epl_data:
             R = self.R_storage[pi, ti, li]
             ids = [int(x) for x in list(R[1:, 0][1:-2])]
             duration = get_lineup_duration(lineup)
+            self.durations[(pi, ti, li)] = duration
+            self.total_duration += duration
             for id_ in ids:
                 if id_ not in self.player_total_duration:
                     self.player_total_duration[id_] = 0
@@ -327,7 +375,7 @@ class EPL_Graph:
             Dict[int, List[str]]: Dictionary of player subnodes
         """
 
-        self.calculate_player_total_duration()
+        self.precalculate_durations()
 
         graph = nx.DiGraph()
 
@@ -335,7 +383,11 @@ class EPL_Graph:
         for player_id in self.epl_data.get_player_ids():
             if player_id == 0:
                 continue
-            graph.add_node(player_id, position=self.epl_player_data.get_player_position(id))
+            graph.add_node(
+                int(player_id),
+                position=self.epl_player_data.get_player_position(player_id),
+                duration=self.epl_data.get_player_total_duration(float(player_id)),
+            )
 
         # Add nodes for special states
         graph.add_node("Gain", position="Gain")
@@ -347,17 +399,17 @@ class EPL_Graph:
         graphs = {}
         players_sub_nodes = {}
 
-        for pi, ti, li, _, _, _ in self.epl_data:
+        for pi, ti, li, lineup, _, _ in tqdm(self.epl_data, desc="Building Graph", total=len(self.epl_data)):
             Q = self.Q_storage[pi, ti, li]
             R = self.R_storage[pi, ti, li]
-            duration = R[0, 0]
+            duration = self.durations[(pi, ti, li)]
             names = [int(x) for x in list(R[1:, 0][1:-2])]
 
             # G = R_to_full_graph(R, names)
             if use_Q:
-                G = self.R_to_full_graph(Q, names)
+                G = self.R_to_full_graph(Q, names, ti, pi, li, use_weighted_edges=weight_player_to_state)
             else:
-                G = self.R_to_full_graph(R, names)
+                G = self.R_to_full_graph(R, names, ti, pi, li, use_weighted_edges=weight_player_to_state)
 
             graphs[(pi, ti, li)] = G
 
@@ -378,16 +430,36 @@ class EPL_Graph:
                 # Add node from name to player_i_state
 
                 if weight_player_to_state:
-                    weight = duration / self.player_total_duration[name]
+                    if self.player_total_duration[name] > 0:
+                        weight = duration / self.player_total_duration[name]
+                    else:
+                        weight = 0
+
+                    if not np.isfinite(weight):
+                        weight = 0
+
+                    graph.add_edge(name, player_i_state, weight=weight)
                 else:
-                    weight = None
-                graph.add_edge(name, player_i_state, weight=weight)
+                    graph.add_edge(name, player_i_state)
 
             # Add edge from Gain to Gain_{ti}_{pi}_{li}
-            graph.add_edge("Gain", f"Gain_{ti}_{pi}_{li}")
-            graph.add_edge(f"Loss_{ti}_{pi}_{li}", "Loss")
-            graph.add_edge(f"Shot_{ti}_{pi}_{li}", "Shot")
+            if weight_player_to_state:
+                graph.add_edge("Gain", f"Gain_{ti}_{pi}_{li}", weight=1)
+                graph.add_edge(f"Loss_{ti}_{pi}_{li}", "Loss", weight=1)
+                graph.add_edge(f"Shot_{ti}_{pi}_{li}", "Shot", weight=1)
+            else:
+                graph.add_edge("Gain", f"Gain_{ti}_{pi}_{li}")
+                graph.add_edge(f"Loss_{ti}_{pi}_{li}", "Loss")
+                graph.add_edge(f"Shot_{ti}_{pi}_{li}", "Shot")
 
+            # if any existing edge is infinite print the nodes
+            for u, v, d in G.edges(data=True):
+                if not np.isfinite(d["weight"]):
+                    print(u, v, d)
+
+        self.graph = graph
+        self.sub_graphs = graphs
+        self.players_sub_nodes = players_sub_nodes
         return graph, graphs, players_sub_nodes
 
     def get_graph(self):

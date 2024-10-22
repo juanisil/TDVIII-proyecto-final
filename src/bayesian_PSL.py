@@ -59,6 +59,10 @@ class EPL_Data:
             self.tp_ds, self.player_ids
         )
 
+        self.size = 0
+
+        self.calculate_size()
+
     def get_epl(self):
         """Getter for the EPL DataFrame
 
@@ -136,6 +140,18 @@ class EPL_Data:
 
         return self.tp_ds
 
+    def get_player_total_duration(self, player_id):
+        """Getter for the Player Total Duration
+
+        Args:
+            player_id (int): Player ID
+
+        Returns:
+            float: Player Total Duration
+        """
+
+        return self.tp_ds[self.tp_ds["player_id"] == player_id]["duration"].sum()
+
     def get_player_ids(self):
         """Getter for the Player IDs
 
@@ -144,6 +160,70 @@ class EPL_Data:
         """
 
         return self.player_ids
+
+    def get_all_player_names(self):
+        """Getter for all the player names in the EPL
+
+        Returns:
+            List[str]: List of Player Names
+        """
+
+        return filter(
+            lambda x: x is not None,
+            [
+                self.epl_player_data.get_player_name(int(player_id))
+                for player_id in self.player_ids
+            ]
+        )
+
+    def get_player_names_for_team(self, team_name):
+        """Getter for all the player names in the EPL
+
+        Returns:
+            List[str]: List of Player Names
+        """
+        team_id = self.epl[self.epl["home_team_name"] == team_name][
+            "home_team_id"
+        ].values[0]
+        team_players_ids = (
+            self.epl[self.epl["team_id"] == team_id]["player_id"].dropna().unique()
+        )
+
+        return filter(
+            lambda x: x is not None,
+            [
+                self.epl_player_data.get_player_name(int(player_id))
+                for player_id in team_players_ids
+            ]
+        )
+
+    def get_all_teams(self):
+        """Getter for all the teams in the EPL
+
+        Returns:
+            List[str]: List of Team Names
+        """
+
+        return self.epl["home_team_name"].unique()
+
+    def get_player_team(self, player_id):
+        """Get the team of a player
+
+        Args:
+            player_id (int): Player ID
+
+        Returns:
+            str: Team Name
+        """
+
+        for pi, partido in enumerate(self.partidos):
+            for ti, equipo in enumerate(separar_partido_en_equipo_pov(partido)):
+                if player_id in equipo["player_id"].unique():
+                    team_id = equipo["team_id"].values[0]
+                    return self.epl[self.epl["home_team_id"] == team_id][
+                        "home_team_name"
+                    ].values[0]
+        return None
 
     def get_player_kdes(self):
         """Getter for the Player KDEs
@@ -178,6 +258,7 @@ class EPL_Data:
                             "match_id": match_id,
                             "match_num": pi,
                             "lineup_id": li,
+                            "duration": get_lineup_duration(lineup),
                             "gains_prob": Q[player_pos, 1],
                             "losses_prob": Q[player_pos, 12],
                             "shots_prob": Q[player_pos, 13],
@@ -205,6 +286,16 @@ class EPL_Data:
                     separar_partido_del_equipo_en_lineups(equipo)
                 ):
                     yield pi, ti, li, lineup, match_id, team_id
+
+    def calculate_size(self):
+        """Calculate the Size of the Dataset"""
+
+        self.size = 0
+        for _ in self:
+            self.size += 1
+
+    def __len__(self):
+        return self.size
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.epl_path}, {self.players_path}, {self.r_storage_path}) \n{len(self.partidos)} Partidos \n{len(self.player_ids)} Jugadores"
@@ -327,6 +418,8 @@ class RandomVariablePSL:
 
         ax.set_title(f"PSL KDE Distributions Comparison \n P(PSL_KDE_{names[1]} > PSL_KDE_{names[0]}) $\\approx$ {p_greater}")
 
+        return p_greater
+
 
 class TeamPSL:
     """Class to Create the Bayesian Transition Matrix for a Team"""
@@ -402,7 +495,7 @@ class TeamPSL:
                     self.team_player_appearances[player_id][1] + duration,
                 )
 
-    def replace_player(self, old_player_name, new_player_name):
+    def replace_player(self, old_player_name, new_player_name, list_players=None):
         """Replace a Player
 
         Args:
@@ -412,14 +505,51 @@ class TeamPSL:
         Returns:
             List[int]: List of player IDs
         """
+        if list_players is None:
+            list_players = self.calculate_top_11_players()
 
-        list_players = self.calculate_top_11_players()
-        pos_old = list_players.index(
-            self.epl_player_data.get_player_id_by_name(old_player_name)
-        )
+        pos_old = None
+
+        if old_player_name not in list_players:
+            # Find a player in team with same position
+            old_player_id = self.epl_player_data.get_player_id_by_name(old_player_name)
+            old_player_pos = self.epl_player_data.get_player_position(old_player_id)
+            print("Finding replacement for player with same position")
+
+            print(f"Old Player: {old_player_name} - {old_player_id}")
+            print(f"Old Player Position: {old_player_pos}")
+
+            print(list_players)
+            print(
+                [
+                    self.epl_player_data.get_player_position(player_id)
+                    for player_id in list_players
+                ]
+            )
+
+            for player_id in list_players:
+                if (
+                    self.epl_player_data.get_player_position(int(player_id)) == old_player_pos
+                ):
+                    pos_old = list_players.index(player_id)
+                    break
+        else:
+            pos_old = list_players.index(
+                self.epl_player_data.get_player_id_by_name(old_player_name)
+            )
+
+        if pos_old is None:
+            raise ValueError("Unable to find a player to replace")
+
         list_players[pos_old] = self.epl_player_data.get_player_id_by_name(
             new_player_name
         )
+
+        list_players = [
+            float(player_id)
+            for player_id in list_players
+        ]
+
         return list_players
 
     def create_dist_TM(self, list_players):
@@ -577,12 +707,18 @@ class TeamPSL:
         for i, player_id in enumerate(list_players):
             R.loc["G", player_id] = nonnegative(
                 matrix.loc["G", player_id].resample(1)[0][0]
+                if isinstance(matrix.loc["G", player_id], gaussian_kde)
+                else 0
             )
             R.loc[player_id, "L"] = nonnegative(
                 matrix.loc[player_id, "L"].resample(1)[0][0]
+                if isinstance(matrix.loc[player_id, "L"], gaussian_kde)
+                else 0
             )
             R.loc[player_id, "S"] = nonnegative(
                 matrix.loc[player_id, "S"].resample(1)[0][0]
+                if isinstance(matrix.loc[player_id, "S"], gaussian_kde)
+                else 0
             )
 
             for j, player_id_2 in enumerate(list_players):
@@ -590,7 +726,11 @@ class TeamPSL:
                     R.loc[player_id, player_id_2] = nonnegative(
                         np.mean(
                             [
-                                dist.resample(1)[0][0]
+                                ( 
+                                    dist.resample(1)[0][0] 
+                                    if isinstance(dist, gaussian_kde) 
+                                    else 0
+                                )
                                 for dist in dists_cache[(player_id, player_id_2)]
                             ]
                         )
@@ -598,7 +738,11 @@ class TeamPSL:
                     R.loc[player_id_2, player_id] = nonnegative(
                         np.mean(
                             [
-                                dist.resample(1)[0][0]
+                                (
+                                    dist.resample(1)[0][0]
+                                    if isinstance(dist, gaussian_kde)
+                                    else 0
+                                )
                                 for dist in dists_cache[(player_id_2, player_id)]
                             ]
                         )
@@ -653,7 +797,24 @@ class PlayerComparison:
             base_player_name
         )
         list_players = self.team_psl.calculate_top_11_players()
+        list_players = [
+            int(player_id) for player_id in list_players
+        ]
+
+        if base_player_id not in list_players:
+
+            # Si el jugador base no está en la lista de los 11 jugadores más utilizados
+            # Replace the player with the player with the highest appearance and in the same position with the base player
+
+            base_player_pos = self.team_psl.epl_player_data.get_player_position(base_player_id)
+            for player_id in list_players:
+                if self.team_psl.epl_player_data.get_player_position(player_id) == base_player_pos:
+                    list_players[list_players.index(player_id)] = base_player_id
+                    break
+
         pos_base = list_players.index(base_player_id)
+
+        list_players = [float(player_id) for player_id in list_players]
 
         # Estimar la distribución PSL para el jugador base
         psls_base = self.team_psl.estimate_psl_distribution(

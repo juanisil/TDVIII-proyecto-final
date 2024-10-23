@@ -5,6 +5,7 @@ title: |
 author: "Tomás Glauberman, Ignacio Pardo, Juan Ignacio Silvestri"
 date: ""
 output: pdf_document
+bibliography: recursos_pdf/bibliografia.bib
 abstract:
 ---
 
@@ -93,14 +94,14 @@ $$
 
 Donde $A$ es el equipo, $P(A)$ es la posesión del balón, $PSL(A)$ es la probabilidad patear al arco antes de perder el balón y $SA(A)$ es la probabilidad de que un disparo al arco se convierta en gol. A diferencia de la posesión del balón y la probabilidad de convertir un disparo en gol, $PSL(A)$ no es una métrica comúnmente utilizada en el análisis de fútbol ni existen modelos que la calculen. El paper plantea un modelo de red de jugadores que permite calcular $PSL(A)$ para cada equipo.
 
-Utilizando Cadenas de Markov de Tiempo Continuo (CTMC) se puede calcular la probabilidad de que un equipo pierda el balón antes de patear al arco. A partir de la matriz de ratio de acción sobre tiempo jugado $R$ (ganancias, pases a otro jugador, disparos o pérdidas) se puede obtener la matriz de transición de estados $Q$ y calcular $PSL(A)$.
+Utilizando Cadenas de Markov de Tiempo Continuo (CTMC) se puede calcular la probabilidad de que un equipo pierda el balón antes de patear al arco. En este modelo de red de jugadores se plantea un modelo de 14 estados: 11 jugadores ($J_{1} \dots J_{11}), Ganancia, Pérdida y Disparo. A partir de la matriz de ratio de acción sobre tiempo jugado $R$ (ganancias, pases a otro jugador, disparos o pérdidas) se puede obtener la matriz de transición de estados $Q$ y calcular $PSL(A)$.
 
 $$
 R = \begin{pmatrix}
-    0 & r(G, 1) & \dots & r(G, 11) & 0 & 0 \\
-    0 & 0 & \dots & r(1, 11) & r(1, L) & r(1, S) \\
+    0 & r(G, J_{1}) & \dots & r(G, J_{11}) & 0 & 0 \\
+    0 & 0 & \dots & r(J_{1}, J_{11}) & r(J_{1}, L) & r(J_{1}, S) \\
     \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
-    0 & r(11, 1) & \dots & 0 & r(11, L) & r(11, S) \\
+    0 & r(J_{11}, J_{1}) & \dots & 0 & r(J_{11}, L) & r(J_{11}, S) \\
     0 & 0 & \dots & 0 & 1 & 0 \\
     0 & 0 & \dots & 0 & 0 & 1 \\
 \end{pmatrix}
@@ -112,10 +113,10 @@ Para cada par de estados $U$ y $V$ se define $q(U, V) = \frac{r(U, V)}{\sum_{i=1
 
 $$
 Q = \begin{pmatrix}
-    0 & q(G, 1) & \dots & q(G, 11) & 0 & 0 \\
-    0 & 0 & \dots & q(1, 11) & q(1, L) & q(1, S) \\
+    0 & q(G, J_{1}) & \dots & q(G, J_{11}) & 0 & 0 \\
+    0 & 0 & \dots & q(J_{1}, J_{11}) & q(J_{1}, L) & q(J_{1}, S) \\
     \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
-    0 & q(11, 1) & \dots & 0 & q(11, L) & q(11, S) \\
+    0 & q(J_{11}, J_{1}) & \dots & 0 & q(J_{11}, L) & q(J_{11}, S) \\
     0 & 0 & \dots & 0 & 1 & 0 \\
     0 & 0 & \dots & 0 & 0 & 1 \\
 \end{pmatrix}
@@ -143,19 +144,72 @@ $$
     \hat{r}(U, V) = f(U, V, \theta)
 $$
 
-Comenzamos armando un modelo para predecir unicamente los ratios de pases $r(J_i, J_j)$ entre un jugador $J_i$ y otro jugador $J_j$. Para poder utilizar un modelo de machine learning tradicional necestiamos de poder representar a cada jugador $J$ de forma vectorial. Armamos un vector de métricas agregadas para un jugador al momento del partido a predecir. Estas métricas incluyen la cantidad de pases, disparos, goles, pérdidas, etc. sobre el total de tiempo jugado. Luego utilizamos un modelo de regresión lineal para predecir los ratios de pases entre jugadores.
+Comenzamos armando un modelo para predecir unicamente los ratios de pases $r(J_i, J_j)$ entre un jugador $J_i$ y otro jugador $J_j$. Lo que correspondereia a los siguientes valores de la matriz $R$:
+
+$$
+R = \begin{pmatrix}
+    0 & r(G, J_1) & \dots & r(G, J_{11}) & 0 & 0 \\
+    0 &  \colorbox{yellow}{$0$} & \colorbox{yellow}{$\dots$} & \colorbox{yellow}{$r(J_1, J_{11})$} & r(J_1, L) & r(J_1, S) \\
+    \vdots & \colorbox{yellow}{$\vdots$} & \colorbox{yellow}{$\ddots$} & \colorbox{yellow}{$\vdots$} & \vdots & \vdots \\
+    0 & \colorbox{yellow}{$r(J_{11}, J_1)$} & \colorbox{yellow}{$\dots$} & \colorbox{yellow}{$0$} & r(J_{11}, L) & r(J_{11}, S) \\
+    0 & 0 & \dots & 0 & 1 & 0 \\
+    0 & 0 & \dots & 0 & 0 & 1 \\
+\end{pmatrix}
+$$
+
+
+Para poder utilizar un modelo de machine learning tradicional necestiamos de poder representar a cada jugador $J$ de forma vectorial. Armamos un vector de métricas agregadas para un jugador al momento del partido a predecir. Estas métricas incluyen la cantidad de pases, disparos, goles, pérdidas, etc. sobre el total de tiempo jugado, ademas de el equipo en el que juega.
+
+$$
+    J = [\text{Passes/90}, \text{Shots/90}, \text{Goals/90}, \text{Losses/90}, \text{Time Played}, \text{Team ID}]
+$$
+
+Para el modelo predictivo comenzamos utilizando un modelo de XGBoost para la regresión pero rápidamente observamos que por la naturelza de arbol al predecir con la media de las observaciones por hoja las predicciones resultaban casi discretas, por lo que viramos a explorar un modelo de regresión lineal para predecir los ratios de pases entre jugadores.
+
+Para validar elegimos separar de forma temporal los 380 partidos de la temporada 2012/13 de la EPL: los primeros 269 partidos de entrenamiento; los últimos 111 de test ($\mu + 2/3 \sigma$). Ademas para construir el dataset, elegimos agarrar parejas de jugadores de los partidos de Train y removerlos de los mismos para poder en Test predecir ratios de transición entre jugadores que no se vieron en Train.
+
+Luego de entrenar el modelo, para cada instancia de test obtuvimos la matriz de ratios de transición $R$ y calculamos el PSL real, para luego predecir la matriz de transición $\hat{R}$ y calcular el PSL predicho. Finalmente calculamos el coeficiente de correlación de Pearson entre el PSL real y el PSL predicho. 
+
+En el siguiente gráfico podemos observar como a pesar de predecir muy pobre los ratios de transición al resultar en un coeficiente de correlación de Pearson entre los $r(J_i, J_j)$ y los $\hat{r}(J_i, J_j)$ de $0.12$, sin embargo al comparar el PSL real del PSL calculado a partir de $\hat{R}$ se obtiene un coeficiente de correlación de Pearson de $0.85$.
 
 ![Modelo de Regresión Lineal](recursos_pdf/graficos/regresion_lineal_r_p.png)
 
-El modelo planteado no es capaz de predecir los ratios de transición, y a pesar de que desarrollamos otros modelos como XGBoost para regressión, Redes Neuronales y Redes Neuronales Probabilisticas (PNNs) no es posible predecir los ratios de transición entre los estados a partir de las métricas de los jugadores. Esto se debe principalmente a la cantidad de datos y la poca relación entre ellos. Sin embargo este revés nos trajo a la luz una particularidad sobre la métrica PSL que no estabamos considerando.
-
-
+El modelo planteado no es capaz de predecir los ratios de transición, y a pesar de que desarrollamos otros modelos como XGBoost para regressión, Redes Neuronales y Redes Neuronales Probabilisticas (PNNs) no es posible predecir los ratios de transición entre los estados a partir de las métricas de los jugadores. Esto se debe principalmente a la cantidad de datos y la poca relación entre ellos. Al evaluar como resolver la predicción de los $r(J_i, J_j)$ decidimos observar como cada ratio de transición afecta al PSL.
 
 #### Test de Sensibilidad sobre PSL
 
-#### Modelo Predictivo sobre r(J, S)
+#### Modelo Predictivo sobre $r(J, S)$
 
-### Player2Vec
+Luego de lo observado con el Test de Sensibilidad sobre PSL, decidimos cambiar el enfoque de la predicción de los ratios de transición entre jugadores a la predicción de los ratios de transición entre jugadores y el estado de disparo al arco. Esto se debe a que al observar la matriz de ratios de transición $R$ se observa que los ratios de transición entre jugadores y el estado de disparo al arco son los que más afectan al PSL.
+
+El nuevo modelo se enfoca en la siguiente sección de la matriz $R$:
+
+$$
+R = \begin{pmatrix}
+    0 & r(G, J_{1}) & \dots & r(G, J_{11}) & 0 & 0 \\
+    0 & 0 & \dots & r(J_{1}, J_{11}) & r(J_{1}, L) & \colorbox{yellow}{$r(J_{1}, S)$} \\
+    \vdots & \vdots & \ddots & \vdots & \vdots & \colorbox{yellow}{$\vdots$} \\
+    0 & r(J_{11}, J_{1}) & \dots & 0 & r(J_{11}, L) & \colorbox{yellow}{$r(J_{11}, S)$} \\
+    0 & 0 & \dots & 0 & 1 & 0 \\
+    0 & 0 & \dots & 0 & 0 & 1 \\
+\end{pmatrix}
+$$
+
+Para el vector de los jugadores $J$ se agregó tambien la posición en la que juega (Arquero, Defensor, Mediocampista, Delantero) one-hot-encoded.
+
+Luego se entrenó un modelo de XGBoost para Regresión con el mismo split de Train y Test. Se logró obtener un mejor resultado sobre la predicciones de Train en comparación al modelo anterior, sin embargo al evaluar en Test. Se obtuvo un coeficiente de correlación de Pearson de $0.95$ entre los $r(J_i, S)$ y los $\hat{r}(J_i, S)$ en Train, pero de $0.08$ en Test.
+
+![Modelo de XGBoost](recursos_pdf/graficos/xgb_shots.png)
+
+Este resultado junto al del modelo de predicción de ratios de pases nos llevó a buscar una mejor representación vectorial de los jugadores. En la sección de Player2Vec se explica el modelo utilizado para obtener un vector de representación (embedding $E$) de cada jugador. Con este embedding por construimos una red neuronal, el modelo resultante $f(E_{J}, \text{partido})$ dado el embedding de los jugadores y el partido predice los ratios de transición entre jugadores y el estado de disparo al arco. 
+
+## Player2Vec
+
+Para poder representar a cada jugador de forma vectorial, se utilizó un modelo de Player2Vec. Este modelo hace uso de Node2Vec, que es en sí una adaptación de Word2Vec, una técnica de NLP que permite representar palabras en un espacio vectorial. 
+
+Un embedding es una representación numérica de objetos en un espacio de $n$ dimensiones, donde propiedades o relaciones similares se preservan. En el contexto de jugadores, un embedding transforma las características de cada jugador en un vector de números, de tal manera que jugadores con comportamientos o atributos similares estén más cerca en este espacio vectorial. Esto facilita que modelos como redes neuronales aprendan patrones complejos a partir de estas representaciones compactas.
+
+
 
 ### **Hipótesis** {#hipótesis}
 

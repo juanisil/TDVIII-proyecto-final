@@ -212,15 +212,15 @@ Para poder representar a cada jugador de forma vectorial, se utilizó un modelo 
 
 Un embedding es una representación numérica de objetos en un espacio de $n$ dimensiones, donde propiedades o relaciones similares se preservan. En el contexto de jugadores, un embedding transforma las características de cada jugador en un vector de números, de tal manera que jugadores con comportamientos o atributos similares estén más cerca en este espacio vectorial. Esto facilita que modelos como redes neuronales aprendan patrones complejos a partir de estas representaciones compactas.
 
-### Node2Vec
+#### Node2Vec
 
 Node2Vec es un algoritmo que aprende representaciones vectoriales (embeddings) para nodos en un grafo, preservando tanto las relaciones locales como las globales entre ellos. Utiliza técnicas de random walks para capturar el contexto de cada nodo, balanceando entre explorar nodos cercanos y lejanos. Estos embeddings son útiles para tareas de machine learning sobre grafos, ya que capturan de forma eficiente las interacciones entre nodos en el grafo.
 
-### Player2Vec
+#### Player2Vec
 
 Player2Vec es una adaptación de Node2Vec para representar jugadores de fútbol en un espacio vectorial. En este caso, los nodos del grafo representan jugadores, y las aristas entre ellos reflejan la interacción entre los jugadores en partidos de fútbol. A partir de los datos de eventos de partidos (pases, disparos, goles, etc.), se construye un grafo donde los nodos son jugadores y las aristas representan la frecuencia de interacción entre ellos.
 
-#### Modelado de la EPL 2012/13 como Grafo
+### Modelado de la EPL 2012/13 como Grafo
 
 A partir de una formación de 11 (Lineup), para un equipo (Team), en un partido (Match), se construye el grafo de la red de jugadores. Llamemos a estos $G_{L, T, M}$ Grafo de Lineup.
 
@@ -286,7 +286,7 @@ El grafo resultante de la composición de todos los grafos de lineup $G_{\text{F
 
 Donde al igual que en la figura anterior, los nodos de jugadores reales se encuentran representados por los nodos de los lineups en los que participaron.
 
-#### Implementación
+### Implementación
 
 A partir de calcular las matrices de ratios $R^{L, T, M}$ para cada lineup $L$ del equipo $T$ en el partido $M$ generamos el grafo dirigido $G^{L, T, M}$ haciendo uso de la librería `NetworkX` en Python para luego componerlos en $G_{\text{Full}}$, el grafo resultante contiene 37521 nodos y 47338 aristas.
 
@@ -305,6 +305,8 @@ En el paper de *Soccer Networks* donde se plantea el PSL definen una serie de co
 ### Exploración de los Embeddings
 
 ### Analisis de las distribuciones de los $r(J, S)$
+
+
 
 ## **Hipótesis** {#hipótesis}
 

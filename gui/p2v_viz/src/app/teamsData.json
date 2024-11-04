@@ -1,0 +1,107 @@
+[
+  {
+    "fullName": "Manchester United",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t1.png",
+    "color": "#DA291C"
+  },
+  {
+    "fullName": "Manchester City",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t43.png",
+    "color": "#6CABDD"
+  },
+  {
+    "fullName": "Chelsea",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t8.png",
+    "color": "#034694"
+  },
+  {
+    "fullName": "Arsenal",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t3.png",
+    "color": "#EF0107"
+  },
+  {
+    "fullName": "Spurs",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t6.png",
+    "color": "#132257"
+  },
+  {
+    "fullName": "Everton",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t11.png",
+    "color": "#003399"
+  },
+  {
+    "fullName": "Liverpool",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t14.png",
+    "color": "#AA001B"
+  },
+  {
+    "fullName": "West Bromwich Albion",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t35.png",
+    "color": "#091453"
+  },
+  {
+    "fullName": "Swansea City",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t80.png",
+    "color": "#000000"
+  },
+  {
+    "fullName": "West Ham United",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t21.png",
+    "color": "#7A263A"
+  },
+  {
+    "fullName": "Norwich City",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t45.png",
+    "color": "#00A650"
+  },
+  {
+    "fullName": "Fulham",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t54.png",
+    "color": "#000000"
+  },
+  {
+    "fullName": "Tottenham Hotspur",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/50/t6.png",
+    "color": "#132257"
+  },
+  {
+    "fullName": "Stoke City",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t110.png",
+    "color": "#D71E28"
+  },
+  {
+    "fullName": "Southampton",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t20.png",
+    "color": "#ED1A3B"
+  },
+  {
+    "fullName": "Aston Villa",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t7.png",
+    "color": "#95B212"
+  },
+  {
+    "fullName": "Newcastle United",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t4.png",
+    "color": "#000000"
+  },
+  {
+    "fullName": "Sunderland",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t56.png",
+    "color": "#EB172B"
+  },
+  {
+    "fullName": "Wigan Athletic",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t111.png",
+    "color": "#001C58"
+  },
+  {
+    "fullName": "Reading",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t108.png",
+    "color": "#ED1A3B"
+  },
+  {
+    "fullName": "Queens Park Rangers",
+    "web_image": "https://resources.premierleague.com/premierleague/badges/25/t52.png",
+    "color": "#0053A0"
+  }
+]

@@ -5,10 +5,13 @@
 # pylint: disable=C0413
 # pylint: disable=C0411
 # pylint: disable=C0103
+# pylint: disable=C0301
+# pylint: disable=W0612
 
 import numpy as np
 import pickle
 import networkx as nx
+import pandas as pd
 from tqdm import tqdm
 
 from src.bayesian_PSL import EPL_Data
@@ -17,6 +20,26 @@ from src.futbol_types import TransitionMatrix
 from src.match_data_extraction import get_lineup_duration
 from gensim.models import Word2Vec
 from node2vec import Node2Vec
+from sklearn.manifold import TSNE
+from sklearn.decomposition import PCA
+
+
+def isPlayerId(x):
+    if "_" in x:
+        return False
+    if "Loss" in x:
+        return False
+    if "Gain" in x:
+        return False
+    if "Shot" in x:
+        return False
+    try:
+        int(x)
+        return True
+    except ValueError:
+        # print(f"Player {player_id} not in model")
+        return False
+    return False
 
 
 class Player2Vec:
@@ -28,6 +51,9 @@ class Player2Vec:
         self.epl_player_data = epl_data.get_epl_player_data()
         if model_path:
             self.load_model(model_path)
+
+        self.dims = 0
+        self.dim_red_embs = None
 
     def train(
         self,
@@ -58,6 +84,7 @@ class Player2Vec:
         if not graph:
             graph, _, _ = EPL_Graph(self.epl_data).build_graph()
 
+        self.dims = dimensions
         node2vec = Node2Vec(
             graph,
             dimensions=dimensions,
@@ -70,6 +97,8 @@ class Player2Vec:
         self.model = node2vec.fit(
             window=window, min_count=min_count, batch_words=batch_words
         )
+
+        self.dim_red_embs = self.dim_reduce(n_components=3)
 
     def load_model(self, model_path):
         """ Load a Node2Vec model from a file
@@ -124,7 +153,7 @@ class Player2Vec:
             if player_id.split("_")[0] in ["Gain", "Loss", "Shot"]:
                 continue
             # if "_" in player_id and "___" not in player_id:
-                # continue
+            # continue
 
             player_id = self.rework_id(player_id)
             player_name = self.epl_player_data.get_player_name(player_id)
@@ -191,6 +220,101 @@ class Player2Vec:
         """
 
         return int(x.split("_")[0])
+
+    def get_embedding(self, player_id):
+        """ Get the embedding of a player
+
+        Args:
+            player_id (int): Player ID
+
+        Returns:
+            np.array: Player embedding
+        """
+
+        id_ = player_id if "___" in str(player_id) else f"{player_id}___"
+
+        if id_ in self.model.wv:
+            return self.model.wv[id_]
+
+        return None
+
+    def dim_reduce(self, n_components=3, method="PCA"):
+        """ Reduce the dimensions of the player embedding
+
+        Args:
+            player_id (int): Player ID
+            n_components (int): Number of components
+
+        Returns:
+            np.array: Reduced dimensions
+        """
+
+        # Using TSNE, reduce the dimensions of all the embeddings
+
+        ids = self.get_ids()
+        # ids = list(filter(lambda x: "_" not in x, ids))
+        # emb = np.array([self.get_embedding(int(x)) for x in ids])
+        emb = np.array([self.model.wv[x] for x in ids])
+
+        dim_reducer = PCA(n_components=n_components) if method == "PCA" else TSNE(n_components=n_components)
+        dim_red_embs = dim_reducer.fit_transform(emb)
+        self.dim_red_embs = {
+            ids[i]: dim_red_embs[i]
+            for i in range(len(ids))
+            if isPlayerId(ids[i])
+        }
+        return self.dim_red_embs
+
+    def get_reduced_embeddings(self, player_id):
+        return self.dim_red_embs[player_id]
+
+    def export_embeddings_json(self, output_path, emb_dims=3):
+
+        if self.dims != emb_dims and self.dim_red_embs is None:
+            self.dim_red_embs = self.dim_reduce(n_components=emb_dims)
+
+        shots_prob_emb_dict = {}
+        ids = self.get_ids()
+        ids = list(filter(lambda x: "_" not in x, ids))
+        iterator = tqdm(ids, desc="Exporting Embeddings", total=len(ids))
+        for player_id in iterator:
+            if str(player_id) not in self.model.wv.index_to_key:
+                # print(f"Player {player_id} not in model")
+                continue
+            # if player_id is not int castable
+            try:
+                int(player_id)
+            except ValueError:
+                # print(f"Player {player_id} not in model")
+                continue
+
+            # print("Player ID", player_id)
+
+            iterator.set_postfix_str(f"Player {player_id}")
+
+            # emb = self.model.wv.get_vector(str(player_id))
+            if self.dims == emb_dims:
+                emb = self.get_embedding(player_id)
+            else:
+                emb = self.get_TSNE_embeddings(player_id)
+
+            # kde = player_kdes_df.loc[player_id, "shots_prob"]
+            # if kde != 0:
+            p_data = {
+                **{f"emb_{i}": emb[i] for i in range(len(emb))},
+                # **{f"shots_prob_{i}": kde.pdf(x) for i, x in enumerate(x_space)},
+                # "shots_prob": kde,
+                "name": self.epl_data.epl_player_data.get_player_name(int(player_id)),
+                "position": self.epl_data.epl_player_data.get_player_position(int(player_id)),
+                "team": self.epl_data.get_player_team(int(player_id)),
+                "id": player_id,
+            }
+
+            shots_prob_emb_dict[player_id] = p_data
+
+        shots_prob_emb_ds = pd.DataFrame(shots_prob_emb_dict).T
+
+        shots_prob_emb_ds.T.to_json(output_path)
 
 
 class EPL_Graph:

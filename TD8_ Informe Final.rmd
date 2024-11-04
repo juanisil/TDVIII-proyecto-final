@@ -208,13 +208,8 @@ Este resultado junto al del modelo de predicción de ratios de pases nos llevó 
 
 ## Player2Vec: Embeddings de Jugadores
 
-Para poder representar a cada jugador de forma vectorial, se utilizó un modelo de Player2Vec. Este modelo hace uso de Node2Vec, que es en sí una adaptación de Word2Vec, una técnica de NLP que permite representar palabras en un espacio vectorial [@grover_2016_node2vec; @mikolov_2013_word2vec]. 
-
+Para poder representar a cada jugador de forma vectorial, se desarrolló el modelo de Player2Vec que permite obtener un embedding de cada jugador en un espacio de $n$ dimensiones.
 Un embedding es una representación numérica de objetos en un espacio de $n$ dimensiones, donde propiedades o relaciones similares se preservan. En el contexto de jugadores, un embedding transforma las características de cada jugador en un vector de números, de tal manera que jugadores con comportamientos o atributos similares estén más cerca en este espacio vectorial. Esto facilita que modelos como redes neuronales aprendan patrones complejos a partir de estas representaciones compactas.
-
-#### Node2Vec
-
-Node2Vec es un algoritmo que aprende representaciones vectoriales (embeddings) para nodos en un grafo, preservando tanto las relaciones locales como las globales entre ellos. Utiliza técnicas de random walks para capturar el contexto de cada nodo, balanceando entre explorar nodos cercanos y lejanos. Estos embeddings son útiles para tareas de machine learning sobre grafos, ya que capturan de forma eficiente las interacciones entre nodos en el grafo.
 
 #### Player2Vec
 
@@ -293,6 +288,25 @@ A partir de calcular las matrices de ratios $R^{L, T, M}$ para cada lineup $L$ d
 Para obtener los embeddings de los jugadores, se utilizó la librería `node2vec` en Python, que implementa el algoritmo homónimo. Se configuró el modelo con  una longitud de caminata de 16 nodos, 200 caminatas y un tamaño de ventana de 12 nodos. Se entrenaron 2 modelos de embeddings, uno con 64 dimensiones para utilizar en modelos de Deep Learning y otro con 3 dimensiones.
 
 Para cada uno de los 37521 nodos se obtuvo un embedding, de los cuales nos quedamos solo con los 522 embeddings de los jugadores reales, estos finalmente son la representación vectorial de cada jugador en el espacio de embeddings.
+
+Este modelo hace uso de Node2Vec, que es en sí una adaptación de Word2Vec, una técnica de NLP que permite representar palabras en un espacio vectorial [@grover_2016_node2vec; @mikolov_2013_word2vec]. 
+
+Node2Vec es un algoritmo que aprende representaciones vectoriales (embeddings) para nodos en un grafo, preservando tanto las relaciones locales como las globales entre ellos. Utiliza técnicas de random walks para capturar el contexto de cada nodo, balanceando entre explorar nodos cercanos y lejanos. Estos embeddings son útiles para tareas de machine learning sobre grafos, ya que capturan de forma eficiente las interacciones entre nodos en el grafo.
+
+En el caso de Player2Vec, los $k$ random walks resultantes son una secuencia de jugadores y/o estados de juego en un partido de fútbol (Ganancia, Pérdida, Disparo). A modo ilustrativo los siguientes son posibles random walks obtenidos del grafo de la EPL 2012/13:
+
+$$
+\begin{aligned}
+    & \text{Random Walk 1:} \text{ Gain} \rightarrow \text{Gain}^{L, T, M} \rightarrow J_1^{L, T, M} \rightarrow J_7^{L, T, M} \rightarrow \dots \rightarrow \text{Shot}^{L, T, M} \rightarrow \text{Shot} \\
+    & \text{Random Walk 2:} \text{ } J_{93} \rightarrow J_{93}^{L, T, M} \rightarrow J_{15}^{L, T, M} \rightarrow J_{21}^{L, T, M} \rightarrow \text{Loss}^{L, T, M} \rightarrow \text{Loss} \\
+    \vdots \\
+    & \text{Random Walk} \text{ } k: \text{ } J_{12} \rightarrow J_{12}^{L, T, M} \rightarrow J_{13}^{L, T, M} \rightarrow J_{33}^{L, T, M} \rightarrow \text{Shot}^{L, T, M} \rightarrow \text{Shot} \\
+\end{aligned}
+$$
+
+La cantidad de random walks $k$ asi como los otros hiperparametros del modelo de Node2Vec fueron seleccionados de forma empírica observando el resultado de los embeddings obtenidos.
+
+### Visualización de los Embeddings
 
 ### Potencial de Player2Vec
 

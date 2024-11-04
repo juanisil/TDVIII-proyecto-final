@@ -29,3 +29,5 @@ exploratory/PSL_Dist Wolfram.md
 exploratory/psl_lite.ipynb
 exploratory/subgraphs_R_Weighted.pkl
 .vscode/settings.json
+/gui/p2v_viz/public/player_images
+/gui/p2v_viz/public/team_images

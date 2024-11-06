@@ -355,7 +355,7 @@ Para comparar el PSL de dos jugadores en una formación, se propone un análisis
 \SetAlgoLined
 \KwIn{Formación $L_A$ = $\{J_1, J_2, \dots, J_{11}\}$, Donde algún $J_i$ es el jugador a "original"}
 \KwIn{Jugador $J'$ a comparar con $J_i$}
-\KwIn{Formación $L'_A$ = $\{J_1, J_2, \dots, J_{11}}\}$
+\KwIn{Formación $L'_A$ = $\{J_1, J_2, \dots, J_{11}\}$
 \KwOut{Distribuciones del PSL de $L_A$ con $J_i$ y de $L'_A$}
 Inicializar $N$ simulaciones\;
 }

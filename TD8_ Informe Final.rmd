@@ -2,8 +2,13 @@
 title: |
     ![](recursos_pdf/utdt.jpg){width=5in}  
     Cómo encontrar el mejor jugador para tu Equipo de Fútbol
-author: "Tomás Glauberman, Ignacio Pardo, Juan Ignacio Silvestri"
-date: ""
+subtitle: |
+    Escuela de Negocios - Licenciatura en Tecnología Digital
+author:
+    - Tomás Glauberman^[21F78 | [tglauberman@mail.utdt.edu](mailto:tglauberman@mail.utdt.edu)]
+    - Ignacio Pardo^[21R1160 | [ipardo@mail.utdt.edu](mailto:ipardo@mail.utdt.edu)]
+    - Juan Ignacio Silvestri^[21Q111 | [jsilvestri@mail.utdt.edu](mailto:jsilvestri@mail.utdt.edu)]
+date: "**CABA, Argentina. Diciembre 2024**"
 output:
    pdf_document:
       fig_caption: true
@@ -17,35 +22,30 @@ toc:
   ordered: false
 papersize: a4
 header-includes: |
-    \renewcommand*\contentsname{Contenidos}
+    \renewcommand{\contentsname}{Índice}
     \renewcommand{\listtablename}{Índice de Tablas}
     \renewcommand{\listfigurename}{Índice de Figuras}
+    \usepackage{fancyhdr}
+    \fancypagestyle{firstpage}{
+      \fancyhf{}
+      \fancyfoot[C]{\textit{CABA, Argentina. Diciembre 2024}}
+    }
+    \usepackage{etoolbox}
+    \AtBeginDocument{\thispagestyle{firstpage}}
+    \usepackage{bbm}
+    \usepackage[linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
 abstract: |
     En la última década, el análisis deportivo ha evolucionado hacia una perspectiva cada vez más matemática y sofisticada. Aplicaciones como el uso de análisis espacial en Basketball (Goldsberry, 2012) y modelos de juegos de suma cero en fútbol (Hirotsu y Wright, 2006) son ejemplos claros de la tendencia creciente en este campo. El béisbol, por mucho tiempo el deporte preferido para la analítica, ha experimentado una profunda transformación con la implementación de Sabermetrics (Baumer y Zimbalist, 2014; Wolf, 2015). La introducción de herramientas analíticas avanzadas ha producido resultados positivos para muchos equipos, lo que subraya el valor de estudiar métricas específicas dentro de cada deporte.
 
-    Este desarrollo se centra en el fútbol, un deporte en el cual los análisis previos se han concentrado, en su mayoría, en predecir resultados de partidos y mejorar el rendimiento de los equipos. Sin embargo, este trabajo propone un enfoque diferente al analizar el impacto de los jugadores sobre la posesión de balón y los disparos del equipo desde una perspectiva probabilística. 
+    Este desarrollo se centra en el fútbol, un deporte en el cual los análisis previos se han concentrado, en su mayoría, en predecir resultados de partidos y mejorar el rendimiento de los equipos. Sin embargo, este trabajo propone un enfoque diferente al analizar el impacto de los jugadores sobre la posesión de balón y los disparos del equipo desde una perspectiva probabilística.
 
     A partir de la métrica PSL [@huang_soccer_networks], planteamos un proceso para comparar el impacto que tienen los jugadores sobre la performance del equipo. En un enfoque bayesiano, logramos formular una metodología para estudiar la distribución de la performance de un equipo. Además, desarrollamos un modelo de machine learning llamado Player2Vec sobre el modelo teórico de redes de jugadores para representar a cada jugador. De esta manera podemos hallar jugadores similares para luego comparar su rendimiento resultante en un nuevo equipo.
-
+    \newpage
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
-<div style="text-align: center;">
-
-**Profesor: Pablo Nussenbaum y Gustavo Vulcano**  
-**CABA, Argentina. Diciembre 2024**
-
-Escuela de Negocios
-Licenciatura en Tecnología Digital
-
-<img src="./recursos_pdf/utdt.svg" alt="UTDT" width="200"/>
-
-</div>
-
-\newpage
 
 \tableofcontents
 
@@ -55,10 +55,6 @@ Licenciatura en Tecnología Digital
 
 Este trabajo no hubiera sido posible sin la ayuda de los profesores Gustavo Vulcano (Escuela de Negocios, Universidad Torcuato Di Tella) y Santiago Gallino (The Wharton School, University of Pennsylvania). Además queremos agradecer a Ignacio Vigilante (TIC \- Escuela ORT) y Tomás Spognardi (Exactas \- UBA) por sus aportes al modelo de Player2Vec y al PSL Bayesiano respectivamente.
 
-## **Abstract** {#abstract}
-
-Un resumen breve (entre 250 y 300 palabras) que debe incluir los puntos clave del trabajo: el problema, los objetivos, la metodología, los resultados más relevantes y las conclusiones principales. Está orientado a brindar una visión general del trabajo.
-
 ## **Introducción** {#introducción}
 
 Presenta el tema del trabajo, su contexto y la importancia. Aquí se debe captar el interés del lector, explicando brevemente los aspectos más importantes que se desarrollarán.
@@ -67,17 +63,48 @@ Presenta el tema del trabajo, su contexto y la importancia. Aquí se debe captar
 
 Explica **por qué el tema elegido es relevante**, tanto a nivel académico como práctico. Debe argumentar la importancia del trabajo para el campo de estudio o la sociedad. Similar a lo que se completó en el formulario de licitación de proyectos iniciales.
 
+El fútbol es uno de los deportes más populares y seguidos en todo el mundo. La capacidad de un equipo para ganar partidos y campeonatos depende en gran medida de la calidad y el rendimiento de sus jugadores. En este contexto, la identificación y selección de los mejores jugadores para un equipo se convierte en una tarea crucial para entrenadores, directores deportivos y analistas de rendimiento.
+
+### Relevancia Académica
+
+Desde una perspectiva académica, el análisis del rendimiento de los jugadores de fútbol ha sido un área de interés creciente en los últimos años. La aplicación de técnicas avanzadas de análisis de datos, aprendizaje automático y modelos probabilísticos ha permitido una comprensión más profunda del impacto de los jugadores en el rendimiento del equipo. Algunos ejemplos del estado del arte incluyen el modelo para maximizar la posesión esperada propuesto en el artículo de Rahimian et al. (2023) [@rahimian_2023] y el modelo de redes de jugadores para calcular la probabilidad de disparar al arco antes de perder el balón (PSL) presentado en el trabajo de Huang et al.[@huang_soccer_networks].
+
+Este trabajo se enmarca en esta línea de investigación, contribuyendo al desarrollo de nuevas metodologías y herramientas para evaluar y comparar el rendimiento de los jugadores.
+
+### Relevancia Práctica
+
+En el ámbito práctico, la capacidad de identificar a los mejores jugadores tiene implicaciones directas en la toma de decisiones estratégicas y operativas de los equipos de fútbol. La correcta selección de jugadores puede mejorar significativamente el rendimiento del equipo, aumentar las probabilidades de éxito en competiciones y optimizar la inversión en fichajes. Además, el uso de modelos avanzados como Player2Vec y PSL Bayesiano proporciona una ventaja competitiva por su poder predictivo del rendimiento de los jugadores.
+
 ## **Objetivos de Proyecto** {#objetivos-de-proyecto}
 
-Define claramente **qué es lo que se busca lograr con el proyecto/investigación.** Se suelen dividir en objetivos generales (el propósito principal) y específicos (pasos concretos para alcanzarlo).
+### Objetivo General
 
-Nuestro objetivo general es el de lograr predecir cómo performaría un jugador en un nuevo equipo,
+El objetivo principal de este proyecto es desarrollar y aplicar modelos avanzados de análisis de datos y probabilísticos, para mejorar la evaluación, comparación y selección de jugadores de fútbol. Esto permitirá a los equipos tomar decisiones más informadas y estratégicas, optimizando su rendimiento y aumentando sus probabilidades de éxito en competiciones. Mas concretamente, este trabajo busca responder la pregunta del titulo "¿Cómo encontrar al jugador ideal para tu equipo de fútbol?".
+
+### Objetivos Específicos
+
+1. **Desarrollar un Modelo de Evaluación del Rendimiento de Jugadores**:
+   - Implementar el modelo Player2Vec para analizar y representar las transiciones entre estados de los jugadores.
+   - Utilizar el modelo PSL Bayesiano para estimar el impacto de los jugadores en el rendimiento del equipo.
+
+2. **Comparar el Rendimiento de Jugadores**:
+   - Establecer métricas estandarizadas para comparar objetivamente el rendimiento de jugadores en diferentes posiciones y roles.
+   - Aplicar técnicas de aprendizaje automático y análisis de datos para identificar patrones y tendencias en el rendimiento de los jugadores.
+
+3. **Optimizar la Selección de Jugadores**:
+   - Desarrollar un sistema de recomendación para identificar a los jugadores que mejor se adaptan a las necesidades y estrategias específicas de un equipo.
+   - Evaluar la efectividad del sistema de recomendación mediante estudios de caso y análisis de datos históricos.
+
+4. **Validar los Modelos**:
+   - Realizar pruebas y validaciones de los modelos desarrollados utilizando datos reales de partidos y jugadores.
+
+5. **Generar Conocimiento y Herramientas para la Comunidad**:
+   - Documentar y publicar los resultados y metodologías desarrolladas en el proyecto.
+   - Crear herramientas y recursos accesibles para entrenadores, analistas y directores deportivos que deseen aplicar estos modelos en sus equipos.
 
 \newpage
 
 ## **Definición del problema** {#definición-del-problema}
-
-Desarrolla el problema o **la pregunta de investigación que motiva el proyecto/investigación**. Aquí se describe en detalle cuál es la situación o fenómeno que se desarrollará/investigará.
 
 A partir de la pregunta de la investigación, se plantea el problema de encontrar el jugador ideal para un equipo de fútbol. En un comienzo nos encontramos planteando como definir _performance_ de un jugador y cómo compararla con otros jugadores. Surgió la necesidad de encontrar una métrica evaluar el impacto de un jugador en el rendimiento de un equipo y como definir estos agentes. Además es necesario poder representar concretamente a un Jugdaor $J$.
 
@@ -206,12 +233,140 @@ Luego se entrenó un modelo de XGBoost para Regresión con el mismo split de Tra
 
 Este resultado junto al del modelo de predicción de ratios de pases nos llevó a buscar una mejor representación vectorial de los jugadores. En la sección de Player2Vec se explica el modelo utilizado para obtener un vector de representación (embedding $E$) de cada jugador. Con este embedding por construimos una red neuronal, el modelo resultante $f(E_{J}, \text{partido})$ dado el embedding de los jugadores y el partido predice los ratios de transición entre jugadores y el estado de disparo al arco. 
 
-## Player2Vec: Embeddings de Jugadores
+\newpage
+
+## **Analisis de las distribuciones de los $r(J, S)$**
+
+En un esfuerzo de comprender mejor el modelo de ratios de transición entre jugadores y el estado de disparo al arco, se decidió analizar las distribuciones de los $r(J, S)$ para cada jugador en la temporada 2012/13 de la EPL. 
+
+Se observó que las distribuciones de los ratios de transición entre jugadores y el estado de disparo al arco tienen moda cercana a 0, lo que indica que la mayoría de los jugadores tienen una baja probabilidad de disparar al arco antes de perder el balón. En la siguiente figura se puede observar la distribución de los $r(J, S)$ para todos los jugadores de la temporada 2012/13 de la EPL en todos los partidos.
+
+![Distribución de todos los $r(J, S)$](recursos_pdf/graficos/Probabilidad_de_disparo.png)
+
+Además, se observó que la distribución de los $r(J, S)$ de cada jugador no nescesariamente sigue una distribución normal ni similar a la de otros jugadores.
+
+Para el siguiente analisis se ajustaron las distribuciones de los $r(J, S)$ de cada jugador a una distribución de probabilidad beta y se obtuvieron los parámetros $\alpha$ y $\beta$ de cada jugador. 
+
+Inicialmente presentamos la distribución de dos jugadores a modo de ejemplo: **Sergio Agüero** y **Robin van Persie**
+
+![Distribución de los $r(J, S)$ de Sergio Agüero y Robin van Persie](recursos_pdf/graficos/Sergio_Aguero_Robin_van_Persie_shots_prob_beta_binomial.png)
+
+Luego se analizó la distribución de los $r(J, S)$ de los 10 jugadores con mayor cantidad de disparos, con mayor sesgo y con mayor suma de disparos a modo de comparación.
+
+![Distribución de los $r(J, S)$ de los 10 jugadores con mayor cantidad de disparos](recursos_pdf/graficos/Top_10_by_counts_players_shots_prob_beta_binomial.png)
+
+![Distribución de los $r(J, S)$ de los 10 jugadores con mayor sesgo](recursos_pdf/graficos/Top_10_by_skew_players_shots_prob_beta_binomial.png)
+
+![Top 20 Delanteros con distribución Beta más sesgada a la derecha - EPL 12/13](recursos_pdf/graficos/Top_20_Forwards_by_skew_players_shots_prob_beta_binomial.png)
+
+![Distribución de los $r(J, S)$ de los 10 jugadores con mayor suma](recursos_pdf/graficos/Top_10_by_sum_players_shots_prob_beta_binomial.png)
+
+### Comparación de las distribuciones de los $r(J, S)$
+
+A partir de la distribución ajustada de un jugador, podemos luego hayar por ejemplo jugadores similares en base a la distribución de los $r(J, S)$ utilizando la divergencia de Kullback-Leibler (KL). 
+
+En el siguiente gráfico se observa la distribución de los $r(J, S)$ de jugadores similares a él en la temporada 2012/13 de la EPL. Además se presentan solapados en otra figura.
+
+![Distribución de los $r(J, S)$ de jugadores similares a Sergio Agüero](recursos_pdf/graficos/Similar_to_Sergio_Aguero_shots_prob_beta_binomial.png)
+
+![Distribución de los $r(J, S)$ de jugadores similares a Sergio Agüero Superpuestos](recursos_pdf/graficos/Sergio_Aguero_and_similar_players_shots_prob_beta_binomial.png)
+
+Finalmente podemos agregar la condición de _misma posición_ al comparar dos jugadores, en el caso de Agüero de Delantero (F por Forward) y hayar nuevamente jugadores aún mas similares a el. 
+
+![Distribución de los $r(J, S)$ de jugadores similares a Sergio Agüero de la misma posición](recursos_pdf/graficos/Sergio_Aguero_and_similar_players_same_position_shots_prob_beta_binomial.png)
+
+Para conocer mejor la varianza de las distribuciones de los $r(J, S)$ de los jugadores, se estudió la distribución de los parámetros $\alpha$ y $\beta$ de las distribuciones beta ajustadas. Hicimos un análisis de clustering para agrupar a los jugadores en base a sus distribuciones de los $r(J, S)$.
+
+![Distribución de los parámetros $\alpha$ y $\beta$ de los $r(J, S)$ de los jugadores](recursos_pdf/graficos/Clusters_of_Players_shots_prob_beta_binomial.png)
+
+Como un extra, este sistema de clustering nos permite hallar rápido jugadores similares entre sí. A partir de los clusters la siguiente figura presenta las posibles distribuciones en cada cluster.
+
+![Distribución de los $r(J, S)$ de jugadores en clusters](recursos_pdf/graficos/Clusters_of_Players_shots_prob_beta_binomial_distributions.png)
+
+\newpage
+
+## **Estimación de la Distribución del PSL**
+
+A partir de los resultados obtenidos en el análisis de las distribuciones de los $r(J, S)$, se propone un utilizar estas como priors para cada jugador, es decir, se asume que la distribución de los $r(J, S)$ de un jugador es la distribución a priori de la variable aleatoria $r(J, S)$ para ese jugador, lo mismo para los $r(J_i, J_j)$, los $r(J, L)$ y los $r(J, G)$.
+
+De esta forma, cada jugador $J$ tiene una distribución a priori para cada uno de los 14 estados, considerando esto, podemos reformular la matriz de ratios de transición como una matriz de variables aleatorias donde cada una se distribuye según la distribución a priori del jugador correspondiente.
+
+### Variables Aleatorias para los $r(U, V)$ y PSL por Priors
+
+Para actualizar la notación, sean $r_{J, V}$ la variable aleatoria que representa la ratio de transición entre el jugador $J$ y el estado $V$, esto incluye $r_{J, S}$, $r_{J, L}$ y tambien $r_{G, J}$, asi como los $r_{J_i, J_j}$ para $i, j \in [1, 11]$.
+
+Luego $r_{J, V} \sim F_x$ la distribución a priori de la variable aleatoria $r_{J, V}$.
+
+Para generalizar el analisis de distribuciones planteadas en la sección anterior, se propone utilizar una distribución KDE (Kernel Density Estimation) a partir de los histogramas de los $r(J, V)$ para modelar sus distribuciones, ya que no todos los ratios de transición siguen una distribución beta tan bien como los $r(J, S)$.
+
+Finalmente obtenemos, para una formación dada de 11 jugadores, una matriz de variables aleatorias $\mathbf{R}$.
+
+$$
+    \mathbf{R} = \begin{pmatrix}
+        0 & r_{G, J_1} & \dots & r_{G, J_{11}} & 0 & 0 \\
+        0 & 0 & \dots & r_{J_1, J_{11}} & r_{J_1, L} & r_{J_1, S} \\
+        \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
+        0 & r_{J_{11}, J_1} & \dots & 0 & r_{J_{11}, L} & r_{J_{11}, S} \\
+        0 & 0 & \dots & 0 & 1 & 0 \\
+        0 & 0 & \dots & 0 & 0 & 1 \\
+    \end{pmatrix}
+$$
+
+Para mejor claridad, la siguiente vizualiación muestra la matriz de variables aleatorias $\mathbf{R}$ para un equipo de ejemplo. En cada posición se observa la distribución a priori de la variable aleatoria correspondiente.
+
+![Matriz de Variables Aleatorias $\mathbf{R}$](recursos_pdf/graficos/f9090710-1703-476a-b906-8fddde8ae6d6.png)
+
+### Proceso de Monte Carlo para estimar la distribución del PSL
+
+Dado un equipo $A$ con una formación de 11 jugadores, se busca estimar la distribución del PSL de ese equipo a partir de las distribuciones a prior de los $r(U, V)$ de cada jugador. Para ello, se propone un proceso de Monte Carlo para muestrear de las distribuciones a priori de los $r(U, V)$.
+
+El proceso de Monte Carlo se realiza de la siguiente manera:
+
+Decimos que $PSL(L_A)$ es la distribución de los $PSL_i$ para una formación $L$ del equipo $A$. De la formación $L_A$ podemos construir la matriz de variables aleatorias $\mathbf{R}$. Luego:
+
+\begin{algorithm}[H]
+\caption{Simulación del PSL del equipo $A$}\label{alg:cap}
+\SetAlgoLined
+\KwIn{Número de simulaciones $N$}
+\KwIn{Matriz de variables aleatorias $\mathbf{R}$}
+\KwOut{Distribución del PSL del equipo $A$}
+Inicializar $N$ simulaciones\;
+$PSL_i \gets 0$ para $i = 1, 2, \dots, N$\;
+\For{$i = 1$ \KwTo $N$}{
+    $R \gets $ Muestrear de la matriz $\mathbf{R}$ distribuciones a priori de los $r(U, V)$\;
+    $Q \gets$ Normalizar las filas de $R$\;
+    $PSL_i \gets PSL(Q)$\;
+}
+Estimar la distribución del PSL del equipo $A$ a partir de las $N$ observaciones obtenidas de las simulaciones\;
+\end{algorithm}
+
+A partir de esta distribución del PSL, se puede realizar comparaciones entre diferentes formaciones de 11 jugadores.
+
+El siguiente gráfico muestra la distribución del PSL de un equipo de ejemplo obtenida a partir de 1000 simulaciones del proceso de Monte Carlo para la formación mas utilizada en la temporada 2012/13 de la EPL del equipo Manchester City.
+
+![Distribución del PSL del equipo Manchester City](recursos_pdf/graficos/sergio_aguero_psl_distribution.png)
+
+### Comparar el impacto sobre el PSL de dos jugadores en una formación
+
+Para comparar el PSL de dos jugadores en una formación, se propone un análisis de sensibilidad que consiste en evaluar el impacto en la distribución del PSL al reemplazar a un jugador por otro en la formación. El proceso para ello es el siguiente: 
+
+\begin{algorithm}[H]
+\caption{Comparación de Distribuciones de PSL}\label{alg:cap2}
+\SetAlgoLined
+\KwIn{Formación $L_A$ = $\{J_1, J_2, \dots, J_{11}\}$, Donde algún $J_i$ es el jugador a "original"}
+\KwIn{Jugador $J'$ a comparar con $J_i$}
+\KwIn{Formación $L'_A$ = $\{J_1, J_2, \dots, J_{11}}\}$
+\KwOut{Distribuciones del PSL de $L_A$ con $J_i$ y de $L'_A$}
+Inicializar $N$ simulaciones\;
+}
+Estimar la distribución del PSL del equipo $A$ al reemplazar a $J_1$ por $J_2$ a partir de las $N$ observaciones obtenidas de las simulaciones\;
+\end{algorithm}
+
+## **Player2Vec**: Embeddings de Jugadores
 
 Para poder representar a cada jugador de forma vectorial, se desarrolló el modelo de Player2Vec que permite obtener un embedding de cada jugador en un espacio de $n$ dimensiones.
 Un embedding es una representación numérica de objetos en un espacio de $n$ dimensiones, donde propiedades o relaciones similares se preservan. En el contexto de jugadores, un embedding transforma las características de cada jugador en un vector de números, de tal manera que jugadores con comportamientos o atributos similares estén más cerca en este espacio vectorial. Esto facilita que modelos como redes neuronales aprendan patrones complejos a partir de estas representaciones compactas.
-
-#### Player2Vec
+#### Definición
 
 Player2Vec es una adaptación de Node2Vec para representar jugadores de fútbol en un espacio vectorial. En este caso, los nodos del grafo representan jugadores, y las aristas entre ellos reflejan la interacción entre los jugadores en partidos de fútbol. A partir de los datos de eventos de partidos (pases, disparos, goles, etc.), se construye un grafo donde los nodos son jugadores y las aristas representan la frecuencia de interacción entre ellos.
 
@@ -306,7 +461,39 @@ $$
 
 La cantidad de random walks $k$ asi como los otros hiperparametros del modelo de Node2Vec fueron seleccionados de forma empírica observando el resultado de los embeddings obtenidos.
 
-### Visualización de los Embeddings
+### Visualización y Exploración de los Embeddings
+
+Para comenzar a explorar el espacio vectoriál generado por Player2Vec, se ajustó un modelo inicialmente a partir siguientes hiperparametros:
+
+- Dimensión de embeddings: 3
+- Longitud de caminata: 16 nodos
+- Número de caminatas: 200
+- Tamaño de ventana: 12 nodos
+
+Se entrenó el modelo y se obtuvieron los embeddings de los 522 jugadores de la temporada 2012/13 de la EPL. La siguiente visualización muestra los embeddings de los jugadores en un espacio de 3 dimensiones, el color corresponde al equipo en el que juega el jugador.
+
+![Embeddings de Jugadores en 3D](recursos_pdf/graficos/players_3d.png)
+
+Para poder visualizar de forma más clara los embeddings de los jugadores, se realizó un PCA para reducir la dimensionalidad de los embeddings a 2 dimensiones. La siguiente visualización muestra los embeddings de los jugadores en un espacio de 2 dimensiones, el color corresponde al equipo en el que juega el jugador.
+
+![Embeddings de Jugadores en 3D - PCA a 2D](recursos_pdf/graficos/players_3d_2d.png)
+
+En la figura de los componentes principales se observa como los jugadores de un mismo equipo se encuentran cercanos en el espacio vectorial, lo que indica que los embeddings resultantes de este modelo capturan las relaciones entre los jugadores de un mismo equipo.
+
+Ademas se observa como en este espacio las direcciones en las que se representan a los equipos divergen de forma clara, lo que indica que los embeddings capturan unicamente las diferencias entre los equipos y no las similitudes. Buscan cierta ortogonalidad entre los equipos que no logra existir en este espacio de 3 dimensiones.
+
+Para explotar aún mas las relaciones a aprender por el modelo, se ajustó un segundo modelo con las siguientes características:
+
+- Dimensión de embeddings: 64
+- Longitud de caminata: 40 nodos
+- Número de caminatas: 500
+- Tamaño de ventana: 30 nodos
+
+Luego para explorar los embeddings resultantes se realizó nuevamente un analisis de componentes principales para reducir la dimensionalidad de los embeddings a 2 dimensiones.
+
+![Embeddings de Jugadores en 64D - PCA a 2D](recursos_pdf/graficos/players_64_2d.png)
+
+En esta figura resultante se puede observar como la direccionalidad de los equipos desaparece pero se mantienen las relaciones entre los jugadores de un mismo equipo.
 
 ### Potencial de Player2Vec
 
@@ -315,12 +502,6 @@ Con el modelo planteado de Grafos de Lineups por Equipos y Partidos se puede rep
 Otra cuestión considerada para expandir es ademas de tener un nodo general por jugador conectado a sus instancias en cada lineup, se podría tener un nodo que represente a un jugador en un equipo, de forma tal que el jugador real esta conectado a su nodo "Jugador en Equipo" y este nodo a su vez conectado a "Jugador en Lineup de Partido de Equipo". Esto permitiría poder evaluar el rendimiento de un jugador en un equipo en particular y como este se comporta en distintos contextos.
 
 En el paper de *Soccer Networks* donde se plantea el PSL definen una serie de coeficientes $h$, $a$, $\omega$, como la performance de un equipo al jugar de local, al jugar de visitante, y la performance ponderada de todos los otros equipos al jugar de visitante respectivamente. Se podría escalar por ejemplo los ratios de transición entre jugadores y el estado de disparo al arco en función de estos coeficientes para obtener una mejor representación de la performance de un jugador en un partido en particular.
-
-### Exploración de los Embeddings
-
-### Analisis de las distribuciones de los $r(J, S)$
-
-
 
 ## **Hipótesis** {#hipótesis}
 
@@ -351,6 +532,8 @@ En los casos en que corresponda, la hipótesis es una propuesta que se someterá
 
 Se sintetizan los puntos más importantes del estudio, haciendo énfasis en si se cumplieron los objetivos y qué se aprendió a partir de los resultados obtenidos.  
 También, se sugieren posibles líneas de investigación futuras o iteraciones del proyecto, aplicaciones prácticas de los resultados o recomendaciones para la implementación de los hallazgos en la vida real.
+
+\newpage
 
 ## **Referencias bibliográficas** {#referencias-bibliográficas}
 

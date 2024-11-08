@@ -316,6 +316,9 @@ class Player2Vec:
 
         shots_prob_emb_ds.T.to_json(output_path)
 
+    def __repr__(self):
+        return f"Player2Vec(model={self.model}, epl_data={self.epl_data.__repr__()}, dims={self.dims})"
+
 
 class EPL_Graph:
     """ Class to build the EPL player graph """

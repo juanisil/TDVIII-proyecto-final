@@ -254,10 +254,11 @@ class EPL_Data:
                         # Value in R[player_pos, 13] is the ratio of shots to time played for player_id
                         p_data = {
                             "player_id": player_id,
-                            "team_id": ti,
+                            "team_id": equipo["team_id"].values[0],
+                            "team_index": ti,
                             "match_id": match_id,
                             "match_num": pi,
-                            "lineup_id": li,
+                            "lineup_index": li,
                             "duration": get_lineup_duration(lineup),
                             "gains_prob": Q[player_pos, 1],
                             "losses_prob": Q[player_pos, 12],
@@ -298,7 +299,7 @@ class EPL_Data:
         return self.size
 
     def __repr__(self):
-        return f"{self.__class__.__name__}({self.epl_path}, {self.players_path}, {self.r_storage_path}) \n{len(self.partidos)} Partidos \n{len(self.player_ids)} Jugadores"
+        return f"{self.__class__.__name__}({self.epl_path}, {self.players_path}, {self.r_storage_path}), {len(self.partidos)} Partidos, {len(self.player_ids)} Jugadores"
 
 
 class RandomVariablePSL:

@@ -22,9 +22,13 @@ toc:
   ordered: false
 papersize: a4
 header-includes: |
+    \usepackage[linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
+    \newcommand{\listofalgorithmes}{\tocfile{\listalgorithmcfname}{loa}}
     \renewcommand{\contentsname}{Índice}
     \renewcommand{\listtablename}{Índice de Tablas}
     \renewcommand{\listfigurename}{Índice de Figuras}
+    \renewcommand{\listalgorithmcfname}{Índice de Algoritmos}
+    \usepackage{tocbibind}
     \usepackage{fancyhdr}
     \fancypagestyle{firstpage}{
       \fancyhf{}
@@ -33,7 +37,6 @@ header-includes: |
     \usepackage{etoolbox}
     \AtBeginDocument{\thispagestyle{firstpage}}
     \usepackage{bbm}
-    \usepackage[linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
 abstract: |
     En la última década, el análisis deportivo ha evolucionado hacia una perspectiva cada vez más matemática y sofisticada. Aplicaciones como el uso de análisis espacial en Basketball (Goldsberry, 2012) y modelos de juegos de suma cero en fútbol (Hirotsu y Wright, 2006) son ejemplos claros de la tendencia creciente en este campo. El béisbol, por mucho tiempo el deporte preferido para la analítica, ha experimentado una profunda transformación con la implementación de Sabermetrics (Baumer y Zimbalist, 2014; Wolf, 2015). La introducción de herramientas analíticas avanzadas ha producido resultados positivos para muchos equipos, lo que subraya el valor de estudiar métricas específicas dentro de cada deporte.
 
@@ -318,19 +321,21 @@ Para mejor claridad, la siguiente vizualiación muestra la matriz de variables a
 
 ### Proceso de Monte Carlo para estimar la distribución del PSL
 
-Dado un equipo $A$ con una formación de 11 jugadores, se busca estimar la distribución del PSL de ese equipo a partir de las distribuciones a prior de los $r(U, V)$ de cada jugador. Para ello, se propone un proceso de Monte Carlo para muestrear de las distribuciones a priori de los $r(U, V)$.
+Dado un equipo $A$ con una formación de 11 jugadores $L_A$, se busca estimar la distribución del PSL de ese equipo a partir de las distribuciones a prior de los $r(U, V)$ de cada jugador. Para ello, se propone un proceso de Monte Carlo para muestrear de las distribuciones a priori de los $r(U, V)$.
 
-El proceso de Monte Carlo se realiza de la siguiente manera:
+De la formación $L_A$ podemos construir la matriz de variables aleatorias $\mathbf{R}$ a partir de las distribuciones a priori de los $r(U, V)$ de cada jugador.
 
-Decimos que $PSL(L_A)$ es la distribución de los $PSL_i$ para una formación $L$ del equipo $A$. De la formación $L_A$ podemos construir la matriz de variables aleatorias $\mathbf{R}$. Luego:
+Definimos $\hat{F}^{N}_{PSL}(L_A)$ como la distribución empírica de los $PSL_i$ para la formación $L_A$ en base a $N$ simulaciones.
+
+El proceso de Monte Carlo para estimar la distribución del PSL de la formación $L_A$ es el siguiente:
 
 \begin{algorithm}[H]
 \caption{Simulación del PSL del equipo $A$}\label{alg:cap}
 \SetAlgoLined
 \KwIn{Número de simulaciones $N$}
-\KwIn{Matriz de variables aleatorias $\mathbf{R}$}
+\KwIn{Formación $L_A$ = $\{J_1, J_2, \dots, J_{11}\}$}
 \KwOut{Distribución del PSL del equipo $A$}
-Inicializar $N$ simulaciones\;
+$\mathbf{R} \gets$ Construir la matriz de variables aleatorias a partir de las distribuciones a priori de los $r(U, V)$ de cada jugador\;
 $PSL_i \gets 0$ para $i = 1, 2, \dots, N$\;
 \For{$i = 1$ \KwTo $N$}{
     $R \gets $ Muestrear de la matriz $\mathbf{R}$ distribuciones a priori de los $r(U, V)$\;
@@ -350,22 +355,21 @@ El siguiente gráfico muestra la distribución del PSL de un equipo de ejemplo o
 
 Para comparar el PSL de dos jugadores en una formación, se propone un análisis de sensibilidad que consiste en evaluar el impacto en la distribución del PSL al reemplazar a un jugador por otro en la formación. El proceso para ello es el siguiente: 
 
-\begin{algorithm}[H]
-\caption{Comparación de Distribuciones de PSL}\label{alg:cap2}
-\SetAlgoLined
-\KwIn{Formación $L_A$ = $\{J_1, J_2, \dots, J_{11}\}$, Donde algún $J_i$ es el jugador a "original"}
-\KwIn{Jugador $J'$ a comparar con $J_i$}
-\KwIn{Formación $L'_A$ = $\{J_1, J_2, \dots, J_{11}\}$
-\KwOut{Distribuciones del PSL de $L_A$ con $J_i$ y de $L'_A$}
-Inicializar $N$ simulaciones\;
-}
-Estimar la distribución del PSL del equipo $A$ al reemplazar a $J_1$ por $J_2$ a partir de las $N$ observaciones obtenidas de las simulaciones\;
-\end{algorithm}
+Se define la Formación $L_A$ = $\{J_1, J_2, \dots, J_{11}$ como la formación original del equipo $A$, donde alguno de los jugadores $J_i$ es el jugador a "original". 
+
+Se define el jugador $J'$ a comparar con $J_i$ y la formación $L'_A$ = $\{J_1, J_2, \dots, J_{11}\}$ como la formación con el jugador $J'$ en lugar de $J_i$.
+
+Luego, se puede computar $\hat{F}^{N}_{PSL}(L_A)$ y $\hat{F}^{N}_{PSL}(L'_A)$ para comparar las distribuciones del PSL de las formaciones $L_A$ y $L'_A$.
+
+## Comparación de Distribuciones de PSL
+
+
 
 ## **Player2Vec**: Embeddings de Jugadores
 
 Para poder representar a cada jugador de forma vectorial, se desarrolló el modelo de Player2Vec que permite obtener un embedding de cada jugador en un espacio de $n$ dimensiones.
 Un embedding es una representación numérica de objetos en un espacio de $n$ dimensiones, donde propiedades o relaciones similares se preservan. En el contexto de jugadores, un embedding transforma las características de cada jugador en un vector de números, de tal manera que jugadores con comportamientos o atributos similares estén más cerca en este espacio vectorial. Esto facilita que modelos como redes neuronales aprendan patrones complejos a partir de estas representaciones compactas.
+
 #### Definición
 
 Player2Vec es una adaptación de Node2Vec para representar jugadores de fútbol en un espacio vectorial. En este caso, los nodos del grafo representan jugadores, y las aristas entre ellos reflejan la interacción entre los jugadores en partidos de fútbol. A partir de los datos de eventos de partidos (pases, disparos, goles, etc.), se construye un grafo donde los nodos son jugadores y las aristas representan la frecuencia de interacción entre ellos.
@@ -435,6 +439,27 @@ El grafo resultante de la composición de todos los grafos de lineup $G_{\text{F
 ![Grafo de Jugadores Completo](recursos_pdf/graficos/G_EPL_12_13.png)
 
 Donde al igual que en la figura anterior, los nodos de jugadores reales se encuentran representados por los nodos de los lineups en los que participaron.
+
+El algoritmo en concreto para construir el grafo de la red de jugadores $G_{\text{Full}}$ es el siguiente:
+
+\begin{algorithm}[H]
+\caption{Construcción del Grafo de Jugadores}\label{alg:cap}
+\SetAlgoLined
+\KwIn{Datos de eventos de partidos de la temporada 2012/13 de la EPL}
+\KwOut{Grafo de la red de jugadores $G_{\text{Full}}$}
+$V \gets \{J_1, J_2, \dots, J_{522}, Gain, Loss, Shot\}$\;
+$E \gets \emptyset$\;
+\For{partido $M$}{
+    \For{lineup $L$ del partido $M$}{
+        \For{jugador $J_i$ en el lineup $L$}{
+            $V \gets V \cup \{J_i^{L, T, M}\}$\;
+            $E \gets E \cup \{(J_i, J_i^{L, T, M}, r(J_i, J_i^{L, T, M}))\}$\;
+        }
+        $V \gets V \cup \{Gain^{L, T, M}, Loss^{L, T, M}, Shot^{L, T, M}\}$\;
+        $E \gets E \cup \{(Gain, Gain^{L, T, M}, 1), (Loss^{L, T, M}, Loss, 1), (Shot^{L, T, M}, Shot, 1)\}$\;
+    }
+}
+\end{algorithm}
 
 ### Implementación
 
@@ -539,9 +564,8 @@ También, se sugieren posibles líneas de investigación futuras o iteraciones d
 
 <div id="refs"></div>
 
-## **Apéndices: Tablas, figuras, anexos** {#apéndices:-tablas,-figuras,-anexos}
-
-Se incluyen materiales adicionales como gráficos, tablas, cuestionarios, o documentos que sean relevantes pero no forman parte del cuerpo principal de la tesis.  
+## **Apéndices: Tablas, figuras, anexos** {#apéndices} 
 
 \listoffigures
 \listoftables
+\listofalgorithmes

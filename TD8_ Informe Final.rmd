@@ -443,7 +443,7 @@ Donde al igual que en la figura anterior, los nodos de jugadores reales se encue
 El algoritmo en concreto para construir el grafo de la red de jugadores $G_{\text{Full}}$ es el siguiente:
 
 \begin{algorithm}[H]
-\caption{Construcción del Grafo de Jugadores}\label{alg:cap}
+\caption{Construcción del Grafo de Jugadores}\label{alg:cap3}
 \SetAlgoLined
 \KwIn{Datos de eventos de partidos de la temporada 2012/13 de la EPL}
 \KwOut{Grafo de la red de jugadores $G_{\text{Full}}$}

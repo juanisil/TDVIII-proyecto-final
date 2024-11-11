@@ -123,7 +123,7 @@ Donde $A$ es el equipo, $P(A)$ es la posesión del balón, $PSL(A)$ es la probab
 
 ### Modelo de Red de Jugadores
 
-Utilizando Cadenas de Markov de Tiempo Continuo (CTMC) se puede calcular la probabilidad de que un equipo pierda el balón antes de patear al arco. En este modelo de red de jugadores se plantea un modelo de 14 estados: 11 jugadores ($J_{1} \dots J_{11}), Ganancia, Pérdida y Disparo. 
+Utilizando Cadenas de Markov de Tiempo Continuo (CTMC) se puede calcular la probabilidad de que un equipo pierda el balón antes de patear al arco. En este modelo de red de jugadores se plantea un modelo de 14 estados: 11 jugadores ($J_{1} \dots J_{11}$), Ganancia, Pérdida y Disparo. 
 
 ![Modelo de Red de Jugadores](recursos_pdf/graficos/soccer_network.png)
 
@@ -210,6 +210,11 @@ En el siguiente gráfico podemos observar como a pesar de predecir muy pobre los
 El modelo planteado no es capaz de predecir los ratios de transición, y a pesar de que desarrollamos otros modelos como XGBoost para regressión, Redes Neuronales y Redes Neuronales Probabilisticas (PNNs) no es posible predecir los ratios de transición entre los estados a partir de las métricas de los jugadores. Esto se debe principalmente a la cantidad de datos y la poca relación entre ellos. Al evaluar como resolver la predicción de los $r(J_i, J_j)$ decidimos observar como cada ratio de transición afecta al PSL.
 
 ### Test de Sensibilidad sobre PSL
+
+Para entender mejor la relación entre los ratios de transición y el PSL, se implementó el modelo en una librería de auto-diferenciación (pytorch) y se obtuvo el gradiente de PSL empíricamente. Esto nos permitió entender que estados tienen mayor influencia en la métrica que estamos analizando.
+Pudimos observar que las transiciones de Jugador a Shot son las que mas inciden sobre el PSL, seguido por las transiciones entre jugadores, tal como se observa en la figura. 
+
+![Gradiente del PSL](recursos_pdf/graficos/psl_gradient.jpeg)
 
 ### Modelo Predictivo sobre $r(J, S)$
 

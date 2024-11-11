@@ -13,6 +13,7 @@ output:
    pdf_document:
       fig_caption: true
       number_sections: true
+      extra_dependencies: ["flafter"]
 bibliography: ./recursos_pdf/bibliografia.bib
 csl: ./recursos_pdf/apa.csl
 nocite: '@*'
@@ -28,6 +29,7 @@ header-includes: |
     \renewcommand{\listtablename}{Índice de Tablas}
     \renewcommand{\listfigurename}{Índice de Figuras}
     \renewcommand{\listalgorithmcfname}{Índice de Algoritmos}
+    \usepackage{booktabs}
     \usepackage{tocbibind}
     \usepackage{fancyhdr}
     \fancypagestyle{firstpage}{
@@ -48,6 +50,7 @@ abstract: |
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.pos = "H", out.extra = "")
 ```
 
 \tableofcontents
@@ -123,9 +126,13 @@ Donde $A$ es el equipo, $P(A)$ es la posesión del balón, $PSL(A)$ es la probab
 
 ### Modelo de Red de Jugadores
 
-Utilizando Cadenas de Markov de Tiempo Continuo (CTMC) se puede calcular la probabilidad de que un equipo pierda el balón antes de patear al arco. En este modelo de red de jugadores se plantea un modelo de 14 estados: 11 jugadores ($J_{1} \dots J_{11}), Ganancia, Pérdida y Disparo. 
+Utilizando Cadenas de Markov de Tiempo Continuo (CTMC) se puede calcular la probabilidad de que un equipo pierda el balón antes de patear al arco. En este modelo de red de jugadores se plantea un modelo de 14 estados: 11 jugadores ($J_{1} \dots J_{11}$), Ganancia, Pérdida y Disparo. 
 
-![Modelo de Red de Jugadores](recursos_pdf/graficos/soccer_network.png)
+<!-- ![Modelo de Red de Jugadores](recursos_pdf/graficos/soccer_network.png) -->
+\begin{figure}
+  \includegraphics{recursos_pdf/graficos/soccer_network.png}
+    \caption{Modelo de Red de Jugadores}
+\end{figure}
 
 El grafo presentado en la figura representa el modelo de red de jugadores. Cada nodo representa un estado y cada arista representa una transición entre estados. El nodo verde representa el estado de disparo al arco, el rojo la pérdida del balón y el azul la ganancia del balón por parte de un jugador. Los ejes entre los nodos se representan con una matriz de adyasencia $R$ donde cada valor $r(U, V)$ representa la ratio de transición entre los estados $U$ y $V$. 
 
@@ -325,10 +332,11 @@ Dado un equipo $A$ con una formación de 11 jugadores $L_A$, se busca estimar la
 
 De la formación $L_A$ podemos construir la matriz de variables aleatorias $\mathbf{R}$ a partir de las distribuciones a priori de los $r(U, V)$ de cada jugador.
 
-Definimos $\hat{F}^{N}_{PSL}(L_A)$ como la distribución empírica de los $PSL_i$ para la formación $L_A$ en base a $N$ simulaciones.
+Definimos $\hat{f}^{N}_{PSL}(L_A)$ como la función distribución de probabilidad empírica de los $PSL_i$ para la formación $L_A$ en base a $N$ simulaciones.
 
 El proceso de Monte Carlo para estimar la distribución del PSL de la formación $L_A$ es el siguiente:
 
+```{=latex}
 \begin{algorithm}[H]
 \caption{Simulación del PSL del equipo $A$}\label{alg:cap}
 \SetAlgoLined
@@ -344,6 +352,7 @@ $PSL_i \gets 0$ para $i = 1, 2, \dots, N$\;
 }
 Estimar la distribución del PSL del equipo $A$ a partir de las $N$ observaciones obtenidas de las simulaciones\;
 \end{algorithm}
+```
 
 A partir de esta distribución del PSL, se puede realizar comparaciones entre diferentes formaciones de 11 jugadores.
 
@@ -359,11 +368,51 @@ Se define la Formación $L_A$ = $\{J_1, J_2, \dots, J_{11}$ como la formación o
 
 Se define el jugador $J'$ a comparar con $J_i$ y la formación $L'_A$ = $\{J_1, J_2, \dots, J_{11}\}$ como la formación con el jugador $J'$ en lugar de $J_i$.
 
-Luego, se puede computar $\hat{F}^{N}_{PSL}(L_A)$ y $\hat{F}^{N}_{PSL}(L'_A)$ para comparar las distribuciones del PSL de las formaciones $L_A$ y $L'_A$.
+Luego, se puede computar $\hat{f}^{N}_{PSL}(L_A)$ y $\hat{f}^{N}_{PSL}(L'_A)$ para comparar las distribuciones del PSL de las formaciones $L_A$ y $L'_A$.
 
 ## Comparación de Distribuciones de PSL
 
+Para explicar la comparación de distribuciones de PSL, se propone un ejemplo de dos formaciones de 11 jugadores distintas, en una formación $L_{MC}$ se encuentran 10 jugadores del equipo Manchester City + Sergio Agüero y en la otra $L_{MC}^{\text{Giroud}}$ los mismos 10 jugadores + Olivier Giroud del equipo Arsenal.
 
+Se realizó el proceso de Monte Carlo para estimar la distribución del PSL de cada formación a partir de 1000 simulaciones. Luego en la figura se puede observar las funciones de densidad de probabilidad aproximadas de las distribuciones del PSL de las formaciones $\hat{f}^{1000}_{PSL}(L_{MC})$ y $\hat{f}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$.
+
+### Comparación de Momentos de las distribuciones de PSL
+
+![Ejemplo de dos distribuciones de PSL de dos formaciones distintas](./recursos_pdf/graficos/psl_dists_aguero_v_giroud.png)
+
+Una posible comparación entre las distribuciones de PSL de dos formaciones es "a ojo" observando las funciones de densidad de probabilidad. En este caso puntual se puede observar como el equipo con Agüero tiene una distribución de PSL mas sesgada a la izquierda que el equipo con Giroud.
+
+En un enfoque mas númerico, se puede realizar una comparación por momentos de las distribuciones de PSL de dos formaciones. Se propone comparar la media y la varianza de las distribuciones $\hat{f}^{1000}_{PSL}(L_{MC})$ y $\hat{f}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$ ya que el método de Monte Carlo nos permite obtener una muestra significativa de las distribuciones. Al no ser distribuciones normales, la skewness y la kurtosis nos proveen información adicional sobre la forma de la distribución.
+
+<!-- Tabla Comparativa -->
+```{=latex}
+\begin{table}
+\caption{Comparación de momentos de las distribuciones de PSL de las formaciones $L_{MC}$ y $L_{MC}^{\text{Giroud}}$}
+\label{tab:comparacion_momentos_psl}
+\begin{tabular}{lrrrrr}
+\toprule
+ & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
+\midrule
+Aguero & 0.130861 & 0.041160 & 0.001694 & 0.554998 & 0.362611 \\
+Giroud & 0.134403 & 0.043310 & 0.001876 & 0.580404 & 0.405658 \\
+\bottomrule
+\end{tabular}
+\end{table}
+```
+
+Para este caso de ejemplo, se observa que la media y la varianza de las distribuciones de PSL de la formación $L_{MC}$ y $L_{MC}^{\text{Giroud}}$ son similares, aunque mayores en la formación con Giroud. Además, el tercer momento (skewness) nos confirma lo observado "a ojo" en las funciones de densidad de probabilidad, la distribución de PSL de la formación con Agüero es mas sesgada a la izquierda que la de la formación con Giroud. Por último el cuarto momento (kurtosis) nos indíca que la $\hat{f}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$ tiene colas mas pesadas que la $\hat{f}^{1000}_{PSL}(L_{MC})$.
+
+### Comparación de CDFs de las distribuciones de PSL
+
+Otra forma de comparar las distribuciones de PSL de dos formaciones es a través de las funciones de distribución acumulada (CDF). En la siguiente figura se observa la comparación de las CDFs de las distribuciones de PSL de las formaciones $L_{MC}$ y $L_{MC}^{\text{Giroud}}$. 
+
+Llamemos $\hat{F}^{N}_{PSL}(L)$ a la función de distribución acumulada de PSL obtenida a partir de $N$ simulaciones del proceso de Monte Carlo para la formación $L$.
+
+![Comparación de CDFs de las distribuciones de PSL de las formaciones $L_{MC}$ y $L_{MC}^{\text{Giroud}}$](./recursos_pdf/graficos/sergio_aguero_olivier_giroud_cdf_intersection.png)
+
+Nuevamente "a ojo" se puede analisar la relación entre las distribuciones $\hat{F}^{1000}_{PSL}(L_{MC})$ y $\hat{F}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$, en este caso podemos ver como la CDF de la formación con Agüero es menor a la de la formación con Giroud en la mayoría de los puntos, lo que indica que la formación con Agüero tiene un PSL menor que la formación con Giroud en la mayoría de los casos. 
+
+Especificamente, podemos ver que apartir del umbral resaltado en verde en la figura ($x=0.05346757$), $\hat{F}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$ tiene **dominancia estocástica** *parcial* sobre $\hat{F}^{1000}_{PSL}(L_{MC})$ [@gustavo_NYU; @bawa_1982_stochastic].
 
 ## **Player2Vec**: Embeddings de Jugadores
 
@@ -442,6 +491,7 @@ Donde al igual que en la figura anterior, los nodos de jugadores reales se encue
 
 El algoritmo en concreto para construir el grafo de la red de jugadores $G_{\text{Full}}$ es el siguiente:
 
+```{=latex}
 \begin{algorithm}[H]
 \caption{Construcción del Grafo de Jugadores}\label{alg:cap3}
 \SetAlgoLined
@@ -460,6 +510,7 @@ $E \gets \emptyset$\;
     }
 }
 \end{algorithm}
+```
 
 ### Implementación
 
@@ -527,6 +578,8 @@ Con el modelo planteado de Grafos de Lineups por Equipos y Partidos se puede rep
 Otra cuestión considerada para expandir es ademas de tener un nodo general por jugador conectado a sus instancias en cada lineup, se podría tener un nodo que represente a un jugador en un equipo, de forma tal que el jugador real esta conectado a su nodo "Jugador en Equipo" y este nodo a su vez conectado a "Jugador en Lineup de Partido de Equipo". Esto permitiría poder evaluar el rendimiento de un jugador en un equipo en particular y como este se comporta en distintos contextos.
 
 En el paper de *Soccer Networks* donde se plantea el PSL definen una serie de coeficientes $h$, $a$, $\omega$, como la performance de un equipo al jugar de local, al jugar de visitante, y la performance ponderada de todos los otros equipos al jugar de visitante respectivamente. Se podría escalar por ejemplo los ratios de transición entre jugadores y el estado de disparo al arco en función de estos coeficientes para obtener una mejor representación de la performance de un jugador en un partido en particular.
+
+## Modelo predictivo de Distribuciones de $r(U, V)$
 
 ## **Hipótesis** {#hipótesis}
 

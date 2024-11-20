@@ -23,6 +23,8 @@ from node2vec import Node2Vec
 from sklearn.manifold import TSNE
 from sklearn.decomposition import PCA
 
+# CLI Args
+import argparse
 
 def isPlayerId(x):
     if "_" in x:
@@ -618,3 +620,71 @@ class EPL_Graph:
 
         with open(path, "rb") as f:
             self.graph = pickle.load(f)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Train a Node2Vec model over the EPL player graph")
+    parser.add_argument(
+        "--model_path", type=str, help="Path to the model file", default=None
+    )
+    parser.add_argument(
+        "--output_path", type=str, help="Path to save the model", default=None
+    )
+    parser.add_argument(
+        "--dimensions", type=int, help="Dimension of the embeddings", default=3
+    )
+    parser.add_argument(
+        "--walk_length", type=int, help="Length of the random walks", default=16
+    )
+    parser.add_argument(
+        "--num_walks", type=int, help="Number of random walks", default=200
+    )
+    parser.add_argument("--p", type=int, help="p", default=1)
+    parser.add_argument("--q", type=int, help="q", default=1)
+    parser.add_argument("--workers", type=int, help="Number of workers", default=4)
+    parser.add_argument("--window", type=int, help="Window size", default=12)
+    parser.add_argument("--min_count", type=int, help="Minimum count", default=1)
+    parser.add_argument("--batch_words", type=int, help="Batch words", default=4)
+
+    # "../SampleData/epl.xlsx", "../SampleData/players.json", "R_storage.npy"
+    parser.add_argument(
+        "--epl_data_path",
+        type=str,
+        help="Path to the EPL data",
+        default="../SampleData/epl.xlsx",
+    )
+
+    parser.add_argument(
+        "--players_path",
+        type=str,
+        help="Path to the players data",
+        default="../SampleData/players.json",
+    )
+
+    parser.add_argument(
+        "--r_storage_path",
+        type=str,
+        help="Path to the R storage",
+        default="R_storage.npy",
+    )
+
+    args = parser.parse_args()
+
+    epl_data = EPL_Data(args.epl_data_path, args.players_path, args.r_storage_path)
+    player2vec = Player2Vec(model_path=args.model_path, epl_data=epl_data)
+    graph, _, _ = EPL_Graph(epl_data).build_graph()
+    player2vec.train(
+        graph=graph,
+        dimensions=args.dimensions,
+        walk_length=args.walk_length,
+        num_walks=args.num_walks,
+        p=args.p,
+        q=args.q,
+        workers=args.workers,
+        window=args.window,
+        min_count=args.min_count,
+        batch_words=args.batch_words,
+    )
+
+    player2vec.save_model(args.output_path)
+    player2vec.export_embeddings_json(args.output_path.replace(".model", ".json"))

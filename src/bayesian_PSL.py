@@ -50,8 +50,7 @@ class EPL_Data:
 
         self.Q_storage = self.Q_storage_from_R_storage()
 
-        self.tp_ds = None
-        self.build_transition_prob_dataset()
+        self.tp_ds = self.build_transition_prob_dataset()
 
         self.player_ids = self.get_transition_prob_dataset()["player_id"].unique()
 
@@ -234,12 +233,14 @@ class EPL_Data:
 
         return self.player_kdes
 
-    def build_transition_prob_dataset(self):
+    def build_transition_prob_dataset(self, n_matches=None):
         """Build the Transition Probability Dataset"""
 
         trans_prob_dataset = []
 
         for pi, partido in enumerate(self.partidos):
+            if n_matches is not None and pi >= n_matches:
+                break
             match_id = partido["match_id"].values[0]
             for ti, equipo in enumerate(separar_partido_en_equipo_pov(partido)):
                 for li, lineup in enumerate(
@@ -276,7 +277,7 @@ class EPL_Data:
                         }
                         trans_prob_dataset.append(p_data)
 
-        self.tp_ds = pd.DataFrame(trans_prob_dataset)
+        return pd.DataFrame(trans_prob_dataset)
 
     def __iter__(self):
         for pi, partido in enumerate(self.partidos):
@@ -336,6 +337,56 @@ class RandomVariablePSL:
                 ]
             }
         return player_kdes
+
+    @staticmethod
+    def calculate_player_stats(tp_ds, player_ids):
+        """Calculate KDEs for each player in the dataset
+
+        Args:
+            tp_ds (pd.DataFrame): Transition Probability Dataset
+            player_ids (List[int]): List of player IDs
+
+        Returns:
+            Dict[int, Dict[str, gaussian_kde]]: Dictionary with player IDs as keys and dictionaries of KDEs as values
+        """
+
+        return {
+            (player_id, prob): (
+                {
+                    "mean": (
+                        probs[probs > 0].mean()
+                        if probs[probs > 0].shape[0] > 0
+                        else None
+                    ),
+                    "std": (
+                        probs[probs > 0].std()
+                        if probs[probs > 0].shape[0] > 0
+                        else None
+                    ),
+                    "min": (
+                        probs[probs > 0].min()
+                        if probs[probs > 0].shape[0] > 0
+                        else None
+                    ),
+                    "max": (
+                        probs[probs > 0].max()
+                        if probs[probs > 0].shape[0] > 0
+                        else None
+                    ),
+                }
+                if (probs := tp_ds[tp_ds["player_id"] == player_id][prob]).shape[0] > 3
+                and probs[probs > 0].shape[0] > 3
+                else 0
+            )
+            for player_id in player_ids
+            for prob in [
+                "losses_prob",
+                "gains_prob",
+                "shots_prob",
+                "avg_pass_to_prob",
+                "avg_pass_from_prob",
+            ]
+        }
 
     @staticmethod
     def probability_psl_greater_than(psls, psls_2, n_kde_samples=10000):

@@ -298,7 +298,7 @@ class Player2Vec:
             if self.dims == emb_dims:
                 emb = self.get_embedding(player_id)
             else:
-                emb = self.get_TSNE_embeddings(player_id)
+                emb = self.get_reduced_embeddings(player_id)
 
             # kde = player_kdes_df.loc[player_id, "shots_prob"]
             # if kde != 0:
@@ -491,7 +491,7 @@ class EPL_Graph:
                     self.player_total_duration[id_] = 0
                 self.player_total_duration[id_] += duration
 
-    def build_graph(self, use_Q=False, weight_player_to_state=True):
+    def build_graph(self, use_Q=False, weight_player_to_state=True, n_matches=None):
         """ Build the EPL player graph
 
         Args:
@@ -529,6 +529,8 @@ class EPL_Graph:
         players_sub_nodes = {}
 
         for pi, ti, li, lineup, _, _ in tqdm(self.epl_data, desc="Building Graph", total=len(self.epl_data)):
+            if n_matches and pi >= n_matches:
+                break
             Q = self.Q_storage[pi, ti, li]
             R = self.R_storage[pi, ti, li]
             duration = self.durations[(pi, ti, li)]

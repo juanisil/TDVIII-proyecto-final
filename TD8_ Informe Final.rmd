@@ -750,6 +750,98 @@ En el paper de *Soccer Networks* donde se plantea el PSL definen una serie de co
 
 # **Modelo predictivo de Distribuciones de** $r(U, V)$
 
+# **Validación del Modelo** {#validación-del-modelo}
+
+Para evaluar la capacidad de nuestro modelo en escenarios reales, desarrollamos un caso de estudio basado en las transferencias más importantes en términos de precio y relevancia mediática de los próximos dos mercados de fichajes dentro de la Premier League. Nos limitamos a transferencias internas de esta liga debido a la falta de datos disponibles sobre otras competiciones. Este ejercicio busca medir qué tan bien nuestras métricas y simulaciones pueden justificar o desaconsejar dichas transferencias en función de su impacto en el rendimiento del equipo.
+
+En este apartado, profundizaremos en el análisis de dos casos específicos: la transferencia de Danny Welbeck al Arsenal y la de James Milner al Liverpool. Finalmente, presentaremos una tabla resumen con seis transferencias clave, acompañadas de las recomendaciones de nuestro modelo.
+
+Para comparar las distribuciones de PSL de los jugadores involucrados en las transferencias, utilizamos las métricas de comparación de distribuciones presentadas anteriormente: comparación de momentos, dominancia probabilística y dominancia estocástica.
+
+## **Caso de Estudio 1: Danny Welbeck al Arsenal**
+
+Para analizar la transferencia de Danny Welbeck(delantero) al Arsenal, evaluamos el impacto en el PSL del equipo simulando su inclusión en lugar de los principales delanteros titulares. Para ello, consideramos dos escenarios: en el primero, Welbeck reemplaza a Theo Walcott creando la formación $L_{AR1}^{\text{Welbeck}}$ cuya distribución es $X_{L_{AR1}^{\text{Welbeck}}} \sim \hat{f}^{1000}_{PSL}(L_{AR1}^{\text{Welbeck}})$. Y en el segundo, a Olivier Giroud creando la formación $L_{AR2}^{\text{Welbeck}}$ cuya distribución es $X_{L_{AR2}^{\text{Welbeck}}} \sim \hat{f}^{1000}_{PSL}(L_{AR2}^{\text{Welbeck}})$.
+
+Los resultados obtenidos son los siguientes:
+
+<!-- ![Comparación de CDFs y PDFs de Welbeck y Walcott](recursos_pdf/graficos/Welbeck_Walcott.png) -->
+\begin{figure}
+  \includegraphics{recursos_pdf/graficos/Welbeck_Walcott.png}
+    \caption{Comparación de CDFs y PDFs de Welbeck y Walcott}
+\end{figure}
+
+<!-- Tabla Comparativa Welbeck vs Walcott -->
+```{=latex}
+\begin{table}
+\caption{Comparación de momentos de $X_{L_{AR1}^{\text{Welbeck}}}$ y $X_{L_{AR1}}$}
+\label{tab:comparacion_momentos_psl_Welbeck_Walcott}
+\begin{center}
+\begin{tabular}{lrrrrr}
+\toprule
+ & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
+\midrule
+Theo Walcott  &  0.137735 &  0.043914 &         0.001928 &  0.547502 &  0.421810 \\
+Danny Welbeck &  0.129325 &  0.038815 &         0.001507 &  0.761120 &  0.773602 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+```
+
+
+<!-- ![Comparación de CDFs y PDFs de Welbeck y Giroud](recursos_pdf/graficos/Welbeck_Giroud.png) -->
+\begin{figure}
+  \includegraphics{recursos_pdf/graficos/Welbeck_Giroud.png}
+    \caption{Comparación de CDFs y PDFs de Welbeck y Giroud}
+\end{figure}
+
+<!-- Tabla Comparativa Welbeck vs Giroud -->
+```{=latex}
+\begin{table}
+\caption{Comparación de momentos de $X_{L_{AR2}^{\text{Welbeck}}}$ y $X_{L_{AR2}}$}
+\label{tab:comparacion_momentos_psl_Welbeck_Giroud}
+\begin{center}
+\begin{tabular}{lrrrrr}
+\toprule
+ & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
+\midrule
+Olivier Giroud &  0.134801 &  0.042535 &         0.001809 &  0.587343 &  0.777267 \\
+Danny Welbeck  &  0.128931 &  0.040130 &         0.001610 &  0.700550 &  1.325063 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+Como se puede observar, la distribución de la formación con Walcott, $X_{L_{AR1}}$, presenta una mayor media en PSL en comparación con $X_{L_{AR1}^{\text{Welbeck}}}$. Además, al observar "a ojo" la PDF de $X_{L_{AR1}}$, notamos un mayor sesgo hacia la derecha, lo que indica que la formación con Walcott posee un PSL superior al de la formación con Welbeck en la mayoría de los casos.
+
+Dado que $P(X_{L_{AR1}^{\text{Welbeck}}} > X_{L_{AR1}}) = 0.44$, se sigue que $P(X_{L_{AR1}} > X_{L_{AR1}^{\text{Welbeck}}}) = 0.56$, lo cual indica que la formación con Walcott tiene dominancia probabilística sobre la formación con Welbeck.
+
+Asimismo, podemos concluir que la formación con Walcott domina estocásticamente a la formación con Welbeck, ya que la CDF de $X_{L_{AR1}}$ es mayor que la de $X_{L_{AR1}^{\text{Welbeck}}}$ en todos los puntos a partir del umbral de 0.07.
+
+Todas estas métricas se repiten a favor de la formación con Giroud, $X_{L_{AR2}}$, en comparación con $X_{L_{AR2}^{\text{Welbeck}}}$.
+
+Por lo tanto, podemos concluir que, según nuestro modelo, la transferencia de Danny Welbeck al Arsenal no es recomendable porque su inclusión en lugar de Theo Walcott o Olivier Giroud disminuiría el PSL del equipo y empeoraria la performance del mismo.
+
+
+## **Caso de Estudio 2: James Milner al Liverpool**
+
+
+
+<!-- ![Comparación de CDFs y PDFs de Milner y Gerrard](recursos_pdf/graficos/Milner_Gerrard.png) -->
+\begin{figure}
+  \includegraphics{recursos_pdf/graficos/Milner_Gerrard.png}
+    \caption{Comparación de CDFs y PDFs de Milner y Gerrard}
+\end{figure}
+
+<!-- ![Comparación de CDFs y PDFs de Milner y Downing](recursos_pdf/graficos/Milner_Downing.png) -->
+\begin{figure}
+  \includegraphics{recursos_pdf/graficos/Milner_Downing.png}
+    \caption{Comparación de CDFs y PDFs de Milner y Downing}
+\end{figure}
+
+## **Resumen de Transferencias Clave**
+
+
 # **Hipótesis** {#hipótesis}
 
 <!-- En los casos en que corresponda, la hipótesis es una propuesta que se someterá a prueba a lo largo de la investigación, basada en el planteamiento del problema. -->

@@ -811,6 +811,7 @@ Danny Welbeck  &  0.128931 &  0.040130 &         0.001610 &  0.700550 &  1.32506
 \end{tabular}
 \end{center}
 \end{table}
+```
 
 Como se puede observar, la distribución de la formación con Walcott, $X_{L_{AR1}}$, presenta una mayor media en PSL en comparación con $X_{L_{AR1}^{\text{Welbeck}}}$. Además, al observar "a ojo" la PDF de $X_{L_{AR1}}$, notamos un mayor sesgo hacia la derecha, lo que indica que la formación con Walcott posee un PSL superior al de la formación con Welbeck en la mayoría de los casos.
 
@@ -852,6 +853,7 @@ James Milner   &  0.139559 &  0.043333 &         0.001878 &  0.703642 &  0.71226
 \end{tabular}
 \end{center}
 \end{table}
+```
 
 <!-- ![Comparación de CDFs y PDFs de Milner y Downing](recursos_pdf/graficos/Milner_Downing.png) -->
 \begin{figure}
@@ -875,8 +877,46 @@ James Milner    &  0.127622 &  0.038303 &         0.001467 &  0.651483 &  0.7685
 \end{tabular}
 \end{center}
 \end{table}
+```
 
-## Resumen de Transferencias Clave
+Como se puede observar, ambas distribuciones con Milner, $X_{L_{LIV1}^{\text{Milner}}}$ y $X_{L_{LIV2}^{\text{Milner}}}$, presentan una mayor media en PSL en comparación con  $X_{L_{LIV1}}$ y $X_{L_{LIV2}}$ respectivamente.
+Además, al observar "a ojo" las PDFs de $X_{L_{LIV1}^{\text{Milner}}}$ y $X_{L_{LIV2}^{\text{Milner}}}$, notamos un mayor sesgo hacia la derecha que las originales, lo que indica que las formaciones con Milner poseen un PSL superior en la mayoría de los casos.
+
+Dado que $P(X_{L_{LIV1}^{\text{Milner}}} > X_{L_{LIV1}}) = 0.56$ y $P(X_{L_{LIV2}} > X_{L_{LIV2}^{\text{Milner}}}) = 0.57$, implica que las formaciones con Milner tienen dominancia probabilística sobre las formaciones originales.
+
+También notamos que las CDFs de $X_{L_{LIV1}^{\text{Milner}}}$ y $X_{L_{LIV2}^{\text{Milner}}}$ son mayores que las originales en todos los puntos a partir del umbral de 0.06, lo que indica que las formaciones con Milner dominan estocásticamente a las formaciones originales.
+
+Por lo tanto, podemos concluir que, según nuestro modelo, la transferencia de James Milner al Liverpool es recomendable porque su inclusión en lugar de Steven Gerrard o Stewart Downing mejoraría el PSL del equipo y aumentaría la performance del mismo.
+
+## Recomendaciones de Transferencias Clave
+
+En la tabla a continuación se presentan las seis transferencias más importantes dentro de la Premier League en la temporada 13/14, evaluadas según nuestro modelo. Cada transferencia fue analizada utilizando las distribuciones de PSL del jugador y simulando su impacto en el rendimiento del equipo destino.
+Las recomendaciones se clasificaron en:
+- **Recomendable**: La transferencia mejora el PSL del equipo destino.
+- **No Recomendable**: La transferencia empeora el PSL del equipo destino.
+- **Indeciso**: La transferencia no tiene un impacto significativo en el PSL del equipo destino.
+
+<!-- Tabla Resumen de Transferencias Clave -->
+```{=latex}
+\begin{table}
+\caption{Recomendaciones de Transferencias Clave}
+\label{tab:recomendaciones_transferencias}
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+& Jugador & Posición & Equipo Origen & Equipo Destino & Recomedación \\
+\midrule
+James Milner & Mediocampista & Manchester City & Liverpool & Recomendable \\
+Andros Townsend & Mediocampista & Tottenham & Newcastle & Recomendable \\
+Juan Mata & Mediocampista & Chelsea & Manchester United & Recomendable \\
+Romelu Lukaku & Delantero & Chelsea & Everton & Indeciso \\
+Ryan Bertrand & Defensor & Chelsea & Southampton & No Recomendable \\
+Danny Welbeck & Delantero & Manchester United & Arsenal & No Recomendable \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+```
 
 
 # **Hipótesis** {#hipótesis}

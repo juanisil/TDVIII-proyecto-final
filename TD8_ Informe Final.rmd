@@ -758,7 +758,7 @@ En este apartado, profundizaremos en el análisis de dos casos específicos: la 
 
 Para comparar las distribuciones de PSL de los jugadores involucrados en las transferencias, utilizamos las métricas de comparación de distribuciones presentadas anteriormente: comparación de momentos, dominancia probabilística y dominancia estocástica.
 
-## **Caso de Estudio 1: Danny Welbeck al Arsenal**
+## Caso de Estudio 1: Danny Welbeck al Arsenal
 
 Para analizar la transferencia de Danny Welbeck(delantero) al Arsenal, evaluamos el impacto en el PSL del equipo simulando su inclusión en lugar de los principales delanteros titulares. Para ello, consideramos dos escenarios: en el primero, Welbeck reemplaza a Theo Walcott creando la formación $L_{AR1}^{\text{Welbeck}}$ cuya distribución es $X_{L_{AR1}^{\text{Welbeck}}} \sim \hat{f}^{1000}_{PSL}(L_{AR1}^{\text{Welbeck}})$. Y en el segundo, a Olivier Giroud creando la formación $L_{AR2}^{\text{Welbeck}}$ cuya distribución es $X_{L_{AR2}^{\text{Welbeck}}} \sim \hat{f}^{1000}_{PSL}(L_{AR2}^{\text{Welbeck}})$.
 
@@ -823,8 +823,11 @@ Todas estas métricas se repiten a favor de la formación con Giroud, $X_{L_{AR2
 Por lo tanto, podemos concluir que, según nuestro modelo, la transferencia de Danny Welbeck al Arsenal no es recomendable porque su inclusión en lugar de Theo Walcott o Olivier Giroud disminuiría el PSL del equipo y empeoraria la performance del mismo.
 
 
-## **Caso de Estudio 2: James Milner al Liverpool**
+## Caso de Estudio 2: James Milner al Liverpool
 
+Para analizar la transferencia de James Milner(Mediocampista) utilizamos la misma metodología que en el caso anterior. Evaluamos el impacto en el PSL del equipo simulando su inclusión en lugar de los principales mediocampistas titulares. Para ello, consideramos dos escenarios: en el primero, Milner reemplaza a Steven Gerrard creando la formación $L_{LIV1}^{\text{Milner}}$ cuya distribución es $X_{L_{LIV1}^{\text{Milner}}} \sim \hat{f}^{1000}_{PSL}(L_{LIV1}^{\text{Milner}})$. Y en el segundo, a Stewart Downing creando la formación $L_{LIV2}^{\text{Milner}}$ cuya distribución es $X_{L_{LIV2}^{\text{Milner}}} \sim \hat{f}^{1000}_{PSL}(L_{LIV2}^{\text{Milner}})$.
+
+Los resultados obtenidos luego de la simulación son los siguientes:
 
 
 <!-- ![Comparación de CDFs y PDFs de Milner y Gerrard](recursos_pdf/graficos/Milner_Gerrard.png) -->
@@ -833,13 +836,47 @@ Por lo tanto, podemos concluir que, según nuestro modelo, la transferencia de D
     \caption{Comparación de CDFs y PDFs de Milner y Gerrard}
 \end{figure}
 
+<!-- Tabla Comparativa Milner vs Gerrard -->
+```{=latex}
+\begin{table}
+\caption{Comparación de momentos de $X_{L_{LIV1}^{\text{Milner}}}$ y $X_{L_{LIV1}}$}
+\label{tab:comparacion_momentos_psl_Milner_Gerrard}
+\begin{center}
+\begin{tabular}{lrrrrr}
+\toprule
+ & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
+\midrule
+Steven Gerrard &  0.130349 &  0.038290 &         0.001466 &  0.748219 &  0.862186 \\
+James Milner   &  0.139559 &  0.043333 &         0.001878 &  0.703642 &  0.712261 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
 <!-- ![Comparación de CDFs y PDFs de Milner y Downing](recursos_pdf/graficos/Milner_Downing.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/Milner_Downing.png}
     \caption{Comparación de CDFs y PDFs de Milner y Downing}
 \end{figure}
 
-## **Resumen de Transferencias Clave**
+<!-- Tabla Comparativa Milner vs Downing -->
+```{=latex}
+\begin{table}
+\caption{Comparación de momentos de $X_{L_{LIV2}^{\text{Milner}}}$ y $X_{L_{LIV2}}$}
+\label{tab:comparacion_momentos_psl_Milner_Downing}
+\begin{center}
+\begin{tabular}{lrrrrr}
+\toprule
+ & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
+\midrule
+Stewart Downing &  0.117987 &  0.033518 &         0.001123 &  0.696171 &  1.087000 \\
+James Milner    &  0.127622 &  0.038303 &         0.001467 &  0.651483 &  0.768572 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+## Resumen de Transferencias Clave
 
 
 # **Hipótesis** {#hipótesis}

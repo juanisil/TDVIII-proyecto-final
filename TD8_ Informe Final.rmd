@@ -481,9 +481,9 @@ En un enfoque mas númerico, se puede realizar una comparación por momentos de 
 \caption{Comparación de momentos de $\hat{f}^{1000}_{PSL}(L_{MC})$ y $\hat{f}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$}
 \label{tab:comparacion_momentos_psl}
 \begin{center}
-\begin{tabular}{lrrrrr}
+\begin{tabular}{llllll}
 \toprule
- & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
+Jugador & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
 \midrule
 Aguero & 0.130861 & 0.041160 & 0.001694 & 0.554998 & 0.362611 \\
 Giroud & 0.134403 & 0.043310 & 0.001876 & 0.580404 & 0.405658 \\
@@ -776,9 +776,9 @@ Los resultados obtenidos son los siguientes:
 \caption{Comparación de momentos de $X_{L_{AR1}^{\text{Welbeck}}}$ y $X_{L_{AR1}}$}
 \label{tab:comparacion_momentos_psl_Welbeck_Walcott}
 \begin{center}
-\begin{tabular}{lrrrrr}
+\begin{tabular}{llllll}
 \toprule
- & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
+Jugador & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
 \midrule
 Theo Walcott  &  0.137735 &  0.043914 &         0.001928 &  0.547502 &  0.421810 \\
 Danny Welbeck &  0.129325 &  0.038815 &         0.001507 &  0.761120 &  0.773602 \\
@@ -801,9 +801,9 @@ Danny Welbeck &  0.129325 &  0.038815 &         0.001507 &  0.761120 &  0.773602
 \caption{Comparación de momentos de $X_{L_{AR2}^{\text{Welbeck}}}$ y $X_{L_{AR2}}$}
 \label{tab:comparacion_momentos_psl_Welbeck_Giroud}
 \begin{center}
-\begin{tabular}{lrrrrr}
+\begin{tabular}{llllll}
 \toprule
- & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
+Jugador & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
 \midrule
 Olivier Giroud &  0.134801 &  0.042535 &         0.001809 &  0.587343 &  0.777267 \\
 Danny Welbeck  &  0.128931 &  0.040130 &         0.001610 &  0.700550 &  1.325063 \\
@@ -843,9 +843,9 @@ Los resultados obtenidos luego de la simulación son los siguientes:
 \caption{Comparación de momentos de $X_{L_{LIV1}^{\text{Milner}}}$ y $X_{L_{LIV1}}$}
 \label{tab:comparacion_momentos_psl_Milner_Gerrard}
 \begin{center}
-\begin{tabular}{lrrrrr}
+\begin{tabular}{llllll}
 \toprule
- & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
+Jugador & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
 \midrule
 Steven Gerrard &  0.130349 &  0.038290 &         0.001466 &  0.748219 &  0.862186 \\
 James Milner   &  0.139559 &  0.043333 &         0.001878 &  0.703642 &  0.712261 \\
@@ -867,9 +867,9 @@ James Milner   &  0.139559 &  0.043333 &         0.001878 &  0.703642 &  0.71226
 \caption{Comparación de momentos de $X_{L_{LIV2}^{\text{Milner}}}$ y $X_{L_{LIV2}}$}
 \label{tab:comparacion_momentos_psl_Milner_Downing}
 \begin{center}
-\begin{tabular}{lrrrrr}
+\begin{tabular}{llllll}
 \toprule
- & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
+Jugador & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
 \midrule
 Stewart Downing &  0.117987 &  0.033518 &         0.001123 &  0.696171 &  1.087000 \\
 James Milner    &  0.127622 &  0.038303 &         0.001467 &  0.651483 &  0.768572 \\
@@ -892,8 +892,11 @@ Por lo tanto, podemos concluir que, según nuestro modelo, la transferencia de J
 
 En la tabla a continuación se presentan las seis transferencias más importantes dentro de la Premier League en la temporada 13/14, evaluadas según nuestro modelo. Cada transferencia fue analizada utilizando las distribuciones de PSL del jugador y simulando su impacto en el rendimiento del equipo destino.
 Las recomendaciones se clasificaron en:
+
 - **Recomendable**: La transferencia mejora el PSL del equipo destino.
+
 - **No Recomendable**: La transferencia empeora el PSL del equipo destino.
+
 - **Indeciso**: La transferencia no tiene un impacto significativo en el PSL del equipo destino.
 
 <!-- Tabla Resumen de Transferencias Clave -->
@@ -902,9 +905,9 @@ Las recomendaciones se clasificaron en:
 \caption{Recomendaciones de Transferencias Clave}
 \label{tab:recomendaciones_transferencias}
 \begin{center}
-\begin{tabular}{lcc}
+\begin{tabular}{lllll}
 \toprule
-& Jugador & Posición & Equipo Origen & Equipo Destino & Recomedación \\
+Jugador & Posición & Equipo Origen & Equipo Destino & Recomedación \\
 \midrule
 James Milner & Mediocampista & Manchester City & Liverpool & Recomendable \\
 Andros Townsend & Mediocampista & Tottenham & Newcastle & Recomendable \\

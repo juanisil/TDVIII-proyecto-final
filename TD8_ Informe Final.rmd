@@ -42,19 +42,26 @@ header-includes: |
     \usepackage{pdfpages}
     \usepackage{graphicx}
     \DeclareUnicodeCharacter{0301}{*************************************}
+    \usepackage{float}
+    \floatplacement{figure}{H}
+    \floatplacement{table}{H}
 abstract: |
     En la última década, el análisis deportivo ha evolucionado hacia una perspectiva cada vez más matemática y sofisticada. Aplicaciones como el uso de análisis espacial en Basketball (Goldsberry, 2012) y modelos de juegos de suma cero en fútbol (Hirotsu y Wright, 2006) son ejemplos claros de la tendencia creciente en este campo. El béisbol, por mucho tiempo el deporte preferido para la analítica, ha experimentado una profunda transformación con la implementación de Sabermetrics (Baumer y Zimbalist, 2014; Wolf, 2015). La introducción de herramientas analíticas avanzadas ha producido resultados positivos para muchos equipos, lo que subraya el valor de estudiar métricas específicas dentro de cada deporte.
 
     Este desarrollo se centra en el fútbol, un deporte en el cual los análisis previos se han concentrado, en su mayoría, en predecir resultados de partidos y mejorar el rendimiento de los equipos. Sin embargo, este trabajo propone un enfoque diferente al analizar el impacto de los jugadores sobre la posesión de balón y los disparos del equipo desde una perspectiva probabilística.
 
-    A partir de la métrica PSL [@huang_soccer_networks], planteamos un proceso para comparar el impacto que tienen los jugadores sobre la performance del equipo. Logramos formular una metodología para estudiar la distribución de la performance de un equipo. Luego, proponemos una serie de métodos y métricas para comparar el rendimiento de dos formaciones de jugadores.
-    Además, desarrollamos una forma de representación vectorial (Embeddings) de los jugadores, llamada Player2Vec, un modelo de Machine Learning tambien basado sobre el modelo de redes de jugadores planteado en el mismo paper [@huang_soccer_networks]. Esto último nos permite desarrollar modelos predictivos sobre el rendimiento de los jugadores en un equipo.
+    A partir de la métrica PSL propuesta en el paper "Soccer Networks" [@huang_soccer_networks], planteamos un proceso para comparar el impacto que tienen los jugadores sobre la performance del equipo. Logramos formular una metodología para estudiar la distribución de la performance de un equipo. Luego, proponemos una serie de métodos y métricas para comparar el rendimiento de dos formaciones de jugadores.
+    Además, desarrollamos una forma de representación vectorial (Embeddings) de los jugadores, llamada Player2Vec, un modelo de Machine Learning tambien basado sobre el modelo de redes de jugadores planteado en el mismo paper "Soccer Networks". Esto último nos permite desarrollar modelos predictivos sobre el rendimiento de los jugadores en un equipo.
     \newpage
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(fig.pos = "H", out.extra = "")
+```
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.pos = 'H')
 ```
 
 \tableofcontents
@@ -65,7 +72,7 @@ knitr::opts_chunk$set(fig.pos = "H", out.extra = "")
 
 Este trabajo no hubiera sido posible sin la ayuda de los profesores Gustavo Vulcano (Escuela de Negocios, Universidad Torcuato Di Tella) y Santiago Gallino (The Wharton School, University of Pennsylvania). Además queremos agradecer a Ignacio Vigilante (TIC \- Escuela ORT) y Tomás Spognardi (Exactas \- UBA) por sus contribuciones al modelo de Player2Vec y al PSL Bayesiano respectivamente.
 
-**Ignacio Pardo quiere agradecer** a su familia, amigos, colegas y jefe (Darío Mischener) de TIC en la Escuela ORT por su apoyo y acompañamiento durante el transcurso de su carrera universitaria. 
+**Ignacio Pardo quiere agradecer** a su familia, amigos, colegas y jefe (Darío Mischener) por su apoyo y acompañamiento durante el transcurso de su carrera universitaria.
 
 
 # **Introducción** {#introducción}
@@ -78,7 +85,7 @@ En la última década el análisis del futbol ha evolucionado hacia una perspect
 
 El trabajo en desarrollo "Soccer Networks" [@huang_soccer_networks] propone un modelo de red de jugadores para calcular la probabilidad de disparar al arco antes de perder el balón (**PSL**), lo cual demuestran tiene alta correlación con el rendimiento del equipo y una gran importancia al nivel del **xG**.
 
-Este trabajo profundiza en el análisis de la métrica **PSL** y propone un analisis probabilistico sobre las componentes del modelo de redes de jugadores y su injerencia en el rendimiento de los jugadores y consecuentemente del equipo.
+Este trabajo profundiza en el análisis de la métrica **PSL** y propone un analisis probabilistico sobre las componentes del modelo de redes de jugadores y su injerencia en el rendimiento de los jugadores y consecuentemente del equipo. Finalmente, proponemos una metodología para comparar el rendimiento de jugadores y formaciones de jugadores en base a la métrica **PSL**.
 
 # **Motivación Justificación del tema** {#motivación-justificación-del-tema}
 
@@ -105,8 +112,9 @@ El objetivo principal de este proyecto es desarrollar y aplicar modelos avanzado
 ## Objetivos Específicos
 
 1. **Desarrollar un Modelo de Evaluación del Rendimiento de Jugadores**:
-   - Implementar el modelo Player2Vec para analizar y representar las transiciones entre estados de los jugadores.
-   - Utilizar el modelo PSL Bayesiano para estimar el impacto de los jugadores en el rendimiento del equipo.
+   - Analisar las componentes del modelo de red de jugadores.
+   - Explotar el modelo PSL para estimar el impacto de los jugadores en el rendimiento del equipo.
+   - Crear una representación vectorial de cada jugador para poder utilizarlas en modelos predictivos.
 
 2. **Comparar el Rendimiento de Jugadores**:
    - Establecer métricas estandarizadas para comparar objetivamente el rendimiento de jugadores en diferentes posiciones y roles.
@@ -560,6 +568,8 @@ La comparación por momentos es una forma rápida y sencilla de comparar distrib
 
 El campo de estudio sobre la Dominancia Estocástica es amplio y complejo, en esta investigación se presentó una humilde introducción al tema y se propuso un método para evaluar la dominancia, por lo que se recomienda profundizar en el tema para una mejor comprensión a la hora de tomar desiciones basado en comparación de CDFs. Recomendamos la publicación "Stochastic Dominance: A Research Bibliography" [@bawa_1982_stochastic] que contiene al rededor de 400 referencias sobre el tema.
 
+\newpage
+
 # **Player2Vec**: Embeddings de Jugadores
 
 Para poder representar a cada jugador de forma vectorial, se desarrolló el modelo de Player2Vec que permite obtener un embedding de cada jugador en un espacio de $n$ dimensiones.
@@ -751,6 +761,8 @@ Otra cuestión considerada para expandir es ademas de tener un nodo general por 
 
 En el paper de *Soccer Networks* donde se plantea el PSL definen una serie de coeficientes $h$, $a$, $\omega$, como la performance de un equipo al jugar de local, al jugar de visitante, y la performance ponderada de todos los otros equipos al jugar de visitante respectivamente. Se podría escalar por ejemplo los ratios de transición entre jugadores y el estado de disparo al arco en función de estos coeficientes para obtener una mejor representación de la performance de un jugador en un partido en particular.
 
+\newpage
+
 # **Modelo predictivo de Distribuciones de** $r(U, V)$ {#modelo-predictivo}
 
 El trabajo de Player2Vec nos permite obtener embeddings de jugadores que capturan las relaciones entre ellos en un espacio vectorial. A partir de estos embeddings, se propone un modelo predictivo dede las distribuciones de $r(U, V)$.
@@ -913,7 +925,7 @@ El modelo final seleccionado obtuvo un rendimiento aceptable en el conjunto de v
 
 El modelo resultante logró generalizar mejor, posiblemente estemos presenciando un caso de overfitting del conjunto de validación, ya que la pérdida en el conjunto de testeo es mayor que en el de validación, sin embargo los resultados obtenidos son satisfactorios.
 
-## Hardwares y Tiempos de Entrenamiento
+## Hardware y Tiempos de Entrenamiento
 
 El entrenamiento del modelo base se realizó en una máquina con las siguientes características:
 
@@ -921,6 +933,7 @@ Macbook Pro M1 2020
 - Procesador: Apple M1
 - Memoria RAM: 16 GB
 - GPU: 8-core GPU
+- 16-core Neural Engine
 - OS: macOS Sequoia 15.0.1 (24A348)
 
 - Python 3.10.14
@@ -929,6 +942,8 @@ Macbook Pro M1 2020
 El entrenamiento del modelo final tomó tan solo 30 segundos a lo largo de los 115 epochs que duró el entrenamiento por el mecanismo de early stopping.
 
 La busqueda de hiperparametros de 1000 iteraciones tomó al rededor de 5hs en la misma máquina.
+
+\newpage
 
 # **Validación del Modelo de Distribuciones** {#validación-del-modelo}
 
@@ -1003,6 +1018,7 @@ Todas estas métricas se repiten a favor de la formación con Giroud, $X_{L_{AR2
 
 Por lo tanto, podemos concluir que, según nuestro modelo, la transferencia de Danny Welbeck al Arsenal no es recomendable porque su inclusión en lugar de Theo Walcott o Olivier Giroud disminuiría el PSL del equipo y empeoraria la performance del mismo.
 
+\newpage
 
 ## Caso de Estudio 2: James Milner al Liverpool
 

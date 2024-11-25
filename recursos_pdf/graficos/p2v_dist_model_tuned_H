@@ -1,5 +1,5 @@
 strict digraph p2v_dist_model {
-	graph [ordering=in rankdir=LR size="14.1,14.1"]
+	graph [ordering=in rankdir=LR size="12.299999999999999,12.299999999999999"]
 	node [align=left fontname="Linux libertine" fontsize=10 height=0.2 margin=0 ranksep=0.1 shape=plaintext style=filled]
 	edge [fontsize=10]
 	0 [label=<
@@ -17,7 +17,7 @@ strict digraph p2v_dist_model {
                     </TR>
                     <TR>
                         <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 1024) </TD>
                     </TR>
                     </TABLE>> fillcolor=darkseagreen1]
 	2 [label=<
@@ -26,11 +26,11 @@ strict digraph p2v_dist_model {
                     <TR>
                         <TD ROWSPAN="2">LeakyReLU<BR/>depth:1</TD>
                         <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 1024) </TD>
                     </TR>
                     <TR>
                         <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 1024) </TD>
                     </TR>
                     </TABLE>> fillcolor=darkseagreen1]
 	3 [label=<
@@ -39,11 +39,11 @@ strict digraph p2v_dist_model {
                     <TR>
                         <TD ROWSPAN="2">Dropout<BR/>depth:1</TD>
                         <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 1024) </TD>
                     </TR>
                     <TR>
                         <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 1024) </TD>
                     </TR>
                     </TABLE>> fillcolor=darkseagreen1]
 	4 [label=<
@@ -52,11 +52,11 @@ strict digraph p2v_dist_model {
                     <TR>
                         <TD ROWSPAN="2">Linear<BR/>depth:1</TD>
                         <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 1024) </TD>
                     </TR>
                     <TR>
                         <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 1024) </TD>
                     </TR>
                     </TABLE>> fillcolor=darkseagreen1]
 	5 [label=<
@@ -65,11 +65,11 @@ strict digraph p2v_dist_model {
                     <TR>
                         <TD ROWSPAN="2">LeakyReLU<BR/>depth:1</TD>
                         <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 1024) </TD>
                     </TR>
                     <TR>
                         <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 1024) </TD>
                     </TR>
                     </TABLE>> fillcolor=darkseagreen1]
 	6 [label=<
@@ -78,11 +78,11 @@ strict digraph p2v_dist_model {
                     <TR>
                         <TD ROWSPAN="2">Dropout<BR/>depth:1</TD>
                         <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 1024) </TD>
                     </TR>
                     <TR>
                         <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 1024) </TD>
                     </TR>
                     </TABLE>> fillcolor=darkseagreen1]
 	7 [label=<
@@ -91,11 +91,11 @@ strict digraph p2v_dist_model {
                     <TR>
                         <TD ROWSPAN="2">Linear<BR/>depth:1</TD>
                         <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 1024) </TD>
                     </TR>
                     <TR>
                         <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 32) </TD>
                     </TR>
                     </TABLE>> fillcolor=darkseagreen1]
 	8 [label=<
@@ -104,11 +104,11 @@ strict digraph p2v_dist_model {
                     <TR>
                         <TD ROWSPAN="2">LeakyReLU<BR/>depth:1</TD>
                         <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 32) </TD>
                     </TR>
                     <TR>
                         <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 32) </TD>
                     </TR>
                     </TABLE>> fillcolor=darkseagreen1]
 	9 [label=<
@@ -117,11 +117,11 @@ strict digraph p2v_dist_model {
                     <TR>
                         <TD ROWSPAN="2">Dropout<BR/>depth:1</TD>
                         <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 32) </TD>
                     </TR>
                     <TR>
                         <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 32) </TD>
                     </TR>
                     </TABLE>> fillcolor=darkseagreen1]
 	10 [label=<
@@ -130,11 +130,11 @@ strict digraph p2v_dist_model {
                     <TR>
                         <TD ROWSPAN="2">Linear<BR/>depth:1</TD>
                         <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 32) </TD>
                     </TR>
                     <TR>
                         <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 128) </TD>
                     </TR>
                     </TABLE>> fillcolor=darkseagreen1]
 	11 [label=<
@@ -143,11 +143,11 @@ strict digraph p2v_dist_model {
                     <TR>
                         <TD ROWSPAN="2">LeakyReLU<BR/>depth:1</TD>
                         <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 128) </TD>
                     </TR>
                     <TR>
                         <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 128) </TD>
                     </TR>
                     </TABLE>> fillcolor=darkseagreen1]
 	12 [label=<
@@ -156,11 +156,11 @@ strict digraph p2v_dist_model {
                     <TR>
                         <TD ROWSPAN="2">Dropout<BR/>depth:1</TD>
                         <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 128) </TD>
                     </TR>
                     <TR>
                         <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 128) </TD>
                     </TR>
                     </TABLE>> fillcolor=darkseagreen1]
 	13 [label=<
@@ -169,11 +169,11 @@ strict digraph p2v_dist_model {
                     <TR>
                         <TD ROWSPAN="2">Linear<BR/>depth:1</TD>
                         <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 128) </TD>
                     </TR>
                     <TR>
                         <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 128) </TD>
                     </TR>
                     </TABLE>> fillcolor=darkseagreen1]
 	14 [label=<
@@ -182,11 +182,11 @@ strict digraph p2v_dist_model {
                     <TR>
                         <TD ROWSPAN="2">LeakyReLU<BR/>depth:1</TD>
                         <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 128) </TD>
                     </TR>
                     <TR>
                         <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 128) </TD>
                     </TR>
                     </TABLE>> fillcolor=darkseagreen1]
 	15 [label=<
@@ -195,11 +195,11 @@ strict digraph p2v_dist_model {
                     <TR>
                         <TD ROWSPAN="2">Dropout<BR/>depth:1</TD>
                         <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 128) </TD>
                     </TR>
                     <TR>
                         <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 128) </TD>
                     </TR>
                     </TABLE>> fillcolor=darkseagreen1]
 	16 [label=<
@@ -208,11 +208,11 @@ strict digraph p2v_dist_model {
                     <TR>
                         <TD ROWSPAN="2">Linear<BR/>depth:1</TD>
                         <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 128) </TD>
                     </TR>
                     <TR>
                         <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 1024) </TD>
                     </TR>
                     </TABLE>> fillcolor=darkseagreen1]
 	17 [label=<
@@ -221,11 +221,11 @@ strict digraph p2v_dist_model {
                     <TR>
                         <TD ROWSPAN="2">LeakyReLU<BR/>depth:1</TD>
                         <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 1024) </TD>
                     </TR>
                     <TR>
                         <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 1024) </TD>
                     </TR>
                     </TABLE>> fillcolor=darkseagreen1]
 	18 [label=<
@@ -234,11 +234,11 @@ strict digraph p2v_dist_model {
                     <TR>
                         <TD ROWSPAN="2">Dropout<BR/>depth:1</TD>
                         <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 1024) </TD>
                     </TR>
                     <TR>
                         <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 1024) </TD>
                     </TR>
                     </TABLE>> fillcolor=darkseagreen1]
 	19 [label=<
@@ -247,53 +247,14 @@ strict digraph p2v_dist_model {
                     <TR>
                         <TD ROWSPAN="2">Linear<BR/>depth:1</TD>
                         <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
-                    </TR>
-                    <TR>
-                        <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
-                    </TR>
-                    </TABLE>> fillcolor=darkseagreen1]
-	20 [label=<
-                    <TABLE BORDER="0" CELLBORDER="1"
-                    CELLSPACING="0" CELLPADDING="4">
-                    <TR>
-                        <TD ROWSPAN="2">LeakyReLU<BR/>depth:1</TD>
-                        <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
-                    </TR>
-                    <TR>
-                        <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
-                    </TR>
-                    </TABLE>> fillcolor=darkseagreen1]
-	21 [label=<
-                    <TABLE BORDER="0" CELLBORDER="1"
-                    CELLSPACING="0" CELLPADDING="4">
-                    <TR>
-                        <TD ROWSPAN="2">Dropout<BR/>depth:1</TD>
-                        <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
-                    </TR>
-                    <TR>
-                        <TD COLSPAN="2">output: </TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
-                    </TR>
-                    </TABLE>> fillcolor=darkseagreen1]
-	22 [label=<
-                    <TABLE BORDER="0" CELLBORDER="1"
-                    CELLSPACING="0" CELLPADDING="4">
-                    <TR>
-                        <TD ROWSPAN="2">Linear<BR/>depth:1</TD>
-                        <TD COLSPAN="2">input:</TD>
-                        <TD COLSPAN="2">(1, 512) </TD>
+                        <TD COLSPAN="2">(1, 1024) </TD>
                     </TR>
                     <TR>
                         <TD COLSPAN="2">output: </TD>
                         <TD COLSPAN="2">(1, 10) </TD>
                     </TR>
                     </TABLE>> fillcolor=darkseagreen1]
-	23 [label=<
+	20 [label=<
                     <TABLE BORDER="0" CELLBORDER="1"
                     CELLSPACING="0" CELLPADDING="4">
                         <TR><TD>output-tensor<BR/>depth:0</TD><TD>(1, 10)</TD></TR>
@@ -318,7 +279,4 @@ strict digraph p2v_dist_model {
 	17 -> 18
 	18 -> 19
 	19 -> 20
-	20 -> 21
-	21 -> 22
-	22 -> 23
 }

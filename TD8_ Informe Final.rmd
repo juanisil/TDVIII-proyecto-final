@@ -871,42 +871,45 @@ Además se implementó una clase de Red Neuronal paramétrica para poder explora
 
 ## Resultados del Tuning de Hiperparámetros
 
-En la busquedad de hiperparametros se logró un valor de pérdida mínimo en validación de $0.00737$ con los siguientes hiperparámetros:
+La busqueda de hiperparámetros se realizó con 1000 iteraciones. La mejor combinación de hiperparámetros y arquitectura de red neuronal encontrada fue la siguiente:
 
-- Tasa de aprendizaje: 
-- Momentum: 
-- Weight decay: 
-- Optimizador: 
-- Scheduler:
-- Early stopping:
-- Early stopping window:
-
-La arquitectura de la red neuronal fue la siguiente:
+- Tasa de aprendizaje: 0.01
+- Momentum: 0.99
+- Weight decay: 0.0005
+- Optimizador: `AdamW`
+- Scheduler: `CosineAnnealingLR`
+- Early stopping window: 50
+- Arquitectura de red neuronal:
+  - Activación: LeakyReLU
+  - Dropout: 0.3
+  - Número de capas: 6
+  - Tamaños de capas ocultas: (1024, 1024, 32, 128, 128, 1024)
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{recursos_pdf/graficos/p2v_dist_model_tuned_H.pdf}
   \caption{Arquitectura del Modelo Tuned}
 \end{figure}
-
-El modelo final seleccionado fue entrenado con el 80\% de los datos de entrenamiento y testeado con el 20\% restante. Los resultados obtenidos fueron los siguientes:
-
-![Resultados del Modelo Tuned](recursos_pdf/graficos/p2v_dist_model_oos_190_for_graph_190_for_model_64_10000_0.005_StepLR.png)
-
+<!-- 
 ```{=latex}
 \begin{table}
-\caption{Resultados del Modelo Tuned}
-\begin{tabular}{|c|c|c|}
-\hline
-\textbf{Métrica} & \textbf{Entrenamiento} & \textbf{Validación} \\
-\hline
-Loss & 0.00664 & 0.01167 \\
-\hline
+\caption{Resultados del Modelo}
+\begin{tabular}{lrrr}
+\toprule
+ & train_loss & val_loss & test_loss \\
+\midrule
+0 & 0.003932 & 0.004977 & 0.008988 \\
+\bottomrule
 \end{tabular}
 \end{table}
-```
+``` -->
 
-El modelo final seleccionado obtuvo un rendimiento similar al modelo base, con una pérdida de $$ en el conjunto de entrenamiento y una pérdida de $$ en el conjunto de testeo.
+El modelo final seleccionado obtuvo un rendimiento aceptable en el conjunto de validación, con una pérdida de $0.004977$, aún mejor que la perdida de Train del modelo base. Se procedió a evaluar el modelo en el conjunto de testeo y se obtuvo una pérdida de $0.008988$.
+
+![Resultados del Modelo Tuned](recursos_pdf/graficos/p2v_dist_model_oos_190_for_graph_190_for_model_64_5000_0.01_CosineAnnealingLR_tuned_eval_test_loss.png)
+
+El modelo resultante logró generalizar mejor, posiblemente estemos presenciando un caso de overfitting del conjunto de validación, ya que la pérdida en el conjunto de testeo es mayor que en el de validación, sin embargo los resultados obtenidos son satisfactorios.
+
 
 # **Validación del Modelo de Distribuciones** {#validación-del-modelo}
 

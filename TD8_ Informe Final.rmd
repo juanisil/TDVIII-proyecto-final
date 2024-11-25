@@ -39,6 +39,9 @@ header-includes: |
     \usepackage{etoolbox}
     \AtBeginDocument{\thispagestyle{firstpage}}
     \usepackage{bbm}
+    \usepackage{pdfpages}
+    \usepackage{graphicx}
+    \DeclareUnicodeCharacter{0301}{*************************************}
 abstract: |
     En la última década, el análisis deportivo ha evolucionado hacia una perspectiva cada vez más matemática y sofisticada. Aplicaciones como el uso de análisis espacial en Basketball (Goldsberry, 2012) y modelos de juegos de suma cero en fútbol (Hirotsu y Wright, 2006) son ejemplos claros de la tendencia creciente en este campo. El béisbol, por mucho tiempo el deporte preferido para la analítica, ha experimentado una profunda transformación con la implementación de Sabermetrics (Baumer y Zimbalist, 2014; Wolf, 2015). La introducción de herramientas analíticas avanzadas ha producido resultados positivos para muchos equipos, lo que subraya el valor de estudiar métricas específicas dentro de cada deporte.
 
@@ -748,9 +751,164 @@ Otra cuestión considerada para expandir es ademas de tener un nodo general por 
 
 En el paper de *Soccer Networks* donde se plantea el PSL definen una serie de coeficientes $h$, $a$, $\omega$, como la performance de un equipo al jugar de local, al jugar de visitante, y la performance ponderada de todos los otros equipos al jugar de visitante respectivamente. Se podría escalar por ejemplo los ratios de transición entre jugadores y el estado de disparo al arco en función de estos coeficientes para obtener una mejor representación de la performance de un jugador en un partido en particular.
 
-# **Modelo predictivo de Distribuciones de** $r(U, V)$
+# **Modelo predictivo de Distribuciones de** $r(U, V)$ {#modelo-predictivo}
 
-# **Validación del Modelo** {#validación-del-modelo}
+El trabajo de Player2Vec nos permite obtener embeddings de jugadores que capturan las relaciones entre ellos en un espacio vectorial. A partir de estos embeddings, se propone un modelo predictivo dede las distribuciones de $r(U, V)$.
+
+## Definición
+
+Dado un jugador $J_i$, se obtiene su embedding $E(J_i)$ a partir del modelo de Player2Vec. 
+Para este $J_i$, se busca predecir los estadisticos Media y Varianza de las distribuciones de ratios de transición de $J_i$.
+
+- $r(\text{Gain}, J_i)$
+- $r(J_i, \text{Shot})$
+- $r(J_i, \text{Loss})$
+- $r(J_i, J_j)$
+- $r(J_j, J_i)$
+
+Sean $\mu_{\text{Gain}, J_i}$ y $\sigma_{\text{Gain}, J_i}$ la media y la varianza de la distribución de $r(Gain, J_i)$ respectivamente. Análogamente para las otras distribuciones.
+
+Asumiendo normalidad, podemos decir que $r(U, V) \dot{\sim} \mathcal{N}(\mu_{U, V}, \sigma_{U, V})$.
+
+## Modelo
+
+El modelo planteado es una Red Neuronal de la forma:
+
+$$
+\begin{aligned}
+    f(E(J_i)) &= (\mu_{\text{Gain}, J_i}, \sigma_{\text{Gain}, J_i}, \mu_{J_i, \text{Shot}}, \sigma_{J_i, \text{Shot}}, \mu_{J_i, \text{Loss}}, \sigma_{J_i, \text{Loss}}, \mu_{J_i, J_j}, \sigma_{J_i, J_j}, \mu_{J_j, J_i}, \sigma_{J_j, J_i}) \\
+\end{aligned}
+$$
+
+La función de perdida a minimizar es una ponderación de la Divergencia de Jensen-Shannon (JSD) entre la distribución real y la predicha para cada estadístico.
+
+$$
+JSD(p || q) = \frac{1}{2} D_{KL}(p||m) + \frac{1}{2} D_{KL}(q||m)
+$$
+
+Donde $D_{KL}(p||q)$ es la divergencia de Kullback-Leibler entre las distribuciones $p$ y $q$ y $m = \frac{p + q}{2}$.
+
+## Datos
+
+Para entrenar el modelo, se utilizó un dataset de eventos de partidos de la temporada 2012/13 de la EPL. Se separó la temporada en dos mitades (190 partidos cada una). Con la primera mitad, se construyó un grafo de la red de jugadores $G_{\text{Half}}$ y se obtuvieron los embeddings de los jugadores con Player2Vec `(dimensions=64, window=30, num_walks=500, walk_length=40)`. Con la segunda mitad, se obtuvieron las distribuciones de ratios de transición de los jugadores.
+
+Luego, de la segunda mitad se obtuvieron las medias y varianzas de las distribuciones de ratios de transición de los jugadores. Un 80\% de los datos se utilizó para entrenar el modelo y un 20\% para test.
+
+## Implementación
+
+El modelo se implementó en PyTorch. Se utilizó una red neuronal con la siguiente arquitectura:
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{recursos_pdf/graficos/p2v_dist_model_H.pdf}
+  \caption{Arquitectura del Modelo Base}
+\end{figure}
+
+La función de pérdida utilizada fue la Divergencia de Jensen-Shannon (JSD) entre las distribuciones reales y predichas ponderando las 5 distribuciones a estimar. Se utilizó la implementación de Divergencia de Kullback-Leibler de PyTorch `nn.KLDivLoss` en la implementación del modulo `JSD` hayado en el foro de PyTorch[@alexneakamenipytorchforums_2022_jensen] y este luego se utilizó para la función de pérdida en el entrenamiento del modelo.
+
+## Entrenamiento
+
+Para entrenar el modelo, se utilizó el optimizador SGD (Stochastic Gradient Descent) con una tasa de aprendizaje (lr) de 0.005, un momentum de 0.9 y un weight decay de 0.0005 para prevenir el sobreajuste.
+
+Además, se utilizó un scheduler de tasa de aprendizaje (scheduler) con una estrategia de StepLR, que reduce la tasa de aprendizaje en un factor de 0.1 cada 100 épocas. El entrenamiento se llevó a cabo durante un máximo de 10,000 épocas, con un mecanismo de early stopping para detener el entrenamiento si no se observaban mejoras en el rendimiento del modelo en el conjunto de validación durante un número determinado de épocas consecutivas.
+
+## Resultados iniciales
+
+El modelo base se entrenó con los hiperparámetros y arquitectura mencionados anteriormente, su entrenamiento finalizó en el epoch $5244$.
+
+![Resultados del Modelo Base](recursos_pdf/graficos/p2v_dist_model_oos_190_for_graph_190_for_model_64_10000_0.005_StepLR.png)
+
+```{=latex}
+\begin{table}
+\caption{Resultados del Modelo Base}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Métrica} & \textbf{Entrenamiento} & \textbf{Validación} \\
+\hline
+Loss & 0.00664 & 0.01167 \\
+\hline
+\end{tabular}
+\end{table}
+```
+
+El modelo base obtuvo un rendimiento aceptable en el conjunto de entrenamiento, con una pérdida de 0.00664, pero casi el doble en el conjunto de validación, con una pérdida de 0.01167. Esto puede ser un indicador de sobreajuste, por lo que se procedió a realizar un proceso de tuning de hiperparámetros y arquitectura con validación cruzada.
+
+## Tuning de Hiperparámetros y Arquitectura con Validación Cruzada
+
+Para mejorar el rendimiento del modelo, se realizó un proceso de tuning de hiperparámetros y arquitectura con validación cruzada. Se evaluaron distintas combinaciones de hiperparámetros y arquitecturas de red neuronal, y se seleccionó la que mejor rendimiento presentó en el conjunto de validación.
+
+Del 80\% de los datos de entrenamiento, se separó un 20\% para validación para hacer holdout CV.
+
+Con la librería `Hyperopt` [@bergstra_2015_hyperopt], se realizó una búsqueda de hiperparámetros bayesina. Se evaluaron distintas combinaciones de hiperparámetros, y se seleccionó la que mejor rendimiento presentó en el conjunto de validación.
+
+\subsection{Espacio de Hiperparámetros}
+
+El espacio de hiperparámetros que se exploró fue el siguiente:
+
+\begin{itemize}
+    \item \textbf{Tasa de aprendizaje (lr)}: \{0.1, 0.01, 0.001\}
+    \item \textbf{Momentum}: \{0.8, 0.9, 0.99\}
+    \item \textbf{Weight decay}: \{0.0005, 0.0001\}
+    \item \textbf{Optimizador}:
+    \begin{itemize}
+        \item SGD con momentum
+        \item Adam
+        \item AdamW
+        \item RMSprop con momentum
+    \end{itemize}
+    \item \textbf{Scheduler}:
+    \begin{itemize}
+        \item StepLR con step\_size \{50, 100, 200\} y gamma \{0.1, 0.05, 0.01\}
+        \item MultiStepLR con milestones \{50, 100, 200\} y gamma \{0.1, 0.05, 0.01\}
+        \item ExponentialLR con gamma \{0.1, 0.05, 0.01\}
+        \item CosineAnnealingLR con T\_max \{50, 100, 200\}
+    \end{itemize}
+    \item \textbf{Early stopping}: \{True\}
+    \item \textbf{Early stopping window}: \{10, 20, 50, 100\}
+\end{itemize}
+
+Además se implementó una clase de Red Neuronal paramétrica para poder explorar distintas arquitecturas de red neuronal. 
+
+## Resultados del Tuning de Hiperparámetros
+
+En la busquedad de hiperparametros se logró un valor de pérdida mínimo en validación de $0.00737$ con los siguientes hiperparámetros:
+
+- Tasa de aprendizaje: 
+- Momentum: 
+- Weight decay: 
+- Optimizador: 
+- Scheduler:
+- Early stopping:
+- Early stopping window:
+
+La arquitectura de la red neuronal fue la siguiente:
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{recursos_pdf/graficos/p2v_dist_model_tuned_H.pdf}
+  \caption{Arquitectura del Modelo Tuned}
+\end{figure}
+
+El modelo final seleccionado fue entrenado con el 80\% de los datos de entrenamiento y testeado con el 20\% restante. Los resultados obtenidos fueron los siguientes:
+
+![Resultados del Modelo Tuned](recursos_pdf/graficos/p2v_dist_model_oos_190_for_graph_190_for_model_64_10000_0.005_StepLR.png)
+
+```{=latex}
+\begin{table}
+\caption{Resultados del Modelo Tuned}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Métrica} & \textbf{Entrenamiento} & \textbf{Validación} \\
+\hline
+Loss & 0.00664 & 0.01167 \\
+\hline
+\end{tabular}
+\end{table}
+```
+
+El modelo final seleccionado obtuvo un rendimiento similar al modelo base, con una pérdida de $$ en el conjunto de entrenamiento y una pérdida de $$ en el conjunto de testeo.
+
+# **Validación del Modelo de Distribuciones** {#validación-del-modelo}
 
 Para evaluar la capacidad de nuestro modelo en escenarios reales, desarrollamos un caso de estudio basado en las transferencias más importantes en términos de precio y relevancia mediática de los próximos dos mercados de fichajes dentro de la Premier League. Nos limitamos a transferencias internas de esta liga debido a la falta de datos disponibles sobre otras competiciones. Este ejercicio busca medir qué tan bien nuestras métricas y simulaciones pueden justificar o desaconsejar dichas transferencias en función de su impacto en el rendimiento del equipo.
 
@@ -760,7 +918,7 @@ Para comparar las distribuciones de PSL de los jugadores involucrados en las tra
 
 ## Caso de Estudio 1: Danny Welbeck al Arsenal
 
-Para analizar la transferencia de Danny Welbeck(delantero) al Arsenal, evaluamos el impacto en el PSL del equipo simulando su inclusión en lugar de los principales delanteros titulares. Para ello, consideramos dos escenarios: en el primero, Welbeck reemplaza a Theo Walcott creando la formación $L_{AR1}^{\text{Welbeck}}$ cuya distribución es $X_{L_{AR1}^{\text{Welbeck}}} \sim \hat{f}^{1000}_{PSL}(L_{AR1}^{\text{Welbeck}})$. Y en el segundo, a Olivier Giroud creando la formación $L_{AR2}^{\text{Welbeck}}$ cuya distribución es $X_{L_{AR2}^{\text{Welbeck}}} \sim \hat{f}^{1000}_{PSL}(L_{AR2}^{\text{Welbeck}})$.
+Para analizar la transferencia de Danny Welbeck (delantero) al Arsenal, evaluamos el impacto en el PSL del equipo simulando su inclusión en lugar de los principales delanteros titulares. Para ello, consideramos dos escenarios: en el primero, Welbeck reemplaza a Theo Walcott creando la formación $L_{AR1}^{\text{Welbeck}}$ cuya distribución es $X_{L_{AR1}^{\text{Welbeck}}} \sim \hat{f}^{1000}_{PSL}(L_{AR1}^{\text{Welbeck}})$. Y en el segundo, a Olivier Giroud creando la formación $L_{AR2}^{\text{Welbeck}}$ cuya distribución es $X_{L_{AR2}^{\text{Welbeck}}} \sim \hat{f}^{1000}_{PSL}(L_{AR2}^{\text{Welbeck}})$.
 
 Los resultados obtenidos son los siguientes:
 
@@ -920,20 +1078,6 @@ Danny Welbeck & Delantero & Manchester United & Arsenal & No Recomendable \\
 \end{center}
 \end{table}
 ```
-
-
-# **Hipótesis** {#hipótesis}
-
-<!-- En los casos en que corresponda, la hipótesis es una propuesta que se someterá a prueba a lo largo de la investigación, basada en el planteamiento del problema. -->
-
-# **Marco teórico**  {#marco-teórico}
-
-<!-- * **Proyectos de Investigación**: Aquí se exponen las teorías, antecedentes y conceptos clave relacionados con el tema de estudio. Sirve para fundamentar el trabajo con bases teóricas y estudios previos. Se deben incluir metodologías de desarrollo de software (ágil, Scrum, etc.), paradigmas de programación, tecnologías y frameworks utilizados (por ejemplo, React, Node.js, bases de datos SQL o NoSQL)   -->
-
-# **Marco metodológico**  {#marco-metodológico}
-
-<!-- * **Proyectos de Investigación**: Describe el enfoque metodológico utilizado en la investigación, es decir, cómo se va a llevar a cabo el estudio. Incluye el diseño de la investigación, las técnicas de limpieza de datos (si hubo) y el análisis que se hará. Se debe incluir un flujo o diagrama de la arquitectura de la solución planteada.   -->
-
 
 # **Resultados**  {#resultados}
 

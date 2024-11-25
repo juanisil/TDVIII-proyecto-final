@@ -890,19 +890,22 @@ La busqueda de hiperparámetros se realizó con 1000 iteraciones. La mejor combi
   \includegraphics[width=\textwidth]{recursos_pdf/graficos/p2v_dist_model_tuned_H.pdf}
   \caption{Arquitectura del Modelo Tuned}
 \end{figure}
-<!-- 
+
 ```{=latex}
 \begin{table}
 \caption{Resultados del Modelo}
+\label{tab:resultados_modelo_tuned}
+\begin{center}
 \begin{tabular}{lrrr}
 \toprule
- & train_loss & val_loss & test_loss \\
+ & Train loss & Val loss & Test loss \\
 \midrule
 0 & 0.003932 & 0.004977 & 0.008988 \\
 \bottomrule
 \end{tabular}
+\end{center}
 \end{table}
-``` -->
+```
 
 El modelo final seleccionado obtuvo un rendimiento aceptable en el conjunto de validación, con una pérdida de $0.004977$, aún mejor que la perdida de Train del modelo base. Se procedió a evaluar el modelo en el conjunto de testeo y se obtuvo una pérdida de $0.008988$.
 
@@ -910,6 +913,22 @@ El modelo final seleccionado obtuvo un rendimiento aceptable en el conjunto de v
 
 El modelo resultante logró generalizar mejor, posiblemente estemos presenciando un caso de overfitting del conjunto de validación, ya que la pérdida en el conjunto de testeo es mayor que en el de validación, sin embargo los resultados obtenidos son satisfactorios.
 
+## Hardwares y Tiempos de Entrenamiento
+
+El entrenamiento del modelo base se realizó en una máquina con las siguientes características:
+
+Macbook Pro M1 2020
+- Procesador: Apple M1
+- Memoria RAM: 16 GB
+- GPU: 8-core GPU
+- OS: macOS Sequoia 15.0.1 (24A348)
+
+- Python 3.10.14
+- PyTorch 2.2.2 MPS (Metal Performance Shaders)
+
+El entrenamiento del modelo final tomó tan solo 30 segundos a lo largo de los 115 epochs que duró el entrenamiento por el mecanismo de early stopping.
+
+La busqueda de hiperparametros de 1000 iteraciones tomó al rededor de 5hs en la misma máquina.
 
 # **Validación del Modelo de Distribuciones** {#validación-del-modelo}
 

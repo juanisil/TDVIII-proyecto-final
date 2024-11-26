@@ -153,10 +153,10 @@ Utilizando Cadenas de Markov de Tiempo Continuo (CTMC) se puede calcular la prob
 <!-- ![Modelo de Red de Jugadores](recursos_pdf/graficos/soccer_network.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/soccer_network.png}
-    \caption{Modelo de Red de Jugadores}
+  \caption{Modelo de Red de Jugadores}\label{fig:soccer_network}
 \end{figure}
 
-El grafo presentado en la figura representa el modelo de red de jugadores. Cada nodo representa un estado y cada arista representa una transición entre estados. El nodo verde representa el estado de disparo al arco, el rojo la pérdida del balón, el negro la ganancia del balón por parte del equipo y los azules a los jugadores. Los ejes entre los nodos se representan con una matriz de adyacencia $R$ donde cada valor $r(U, V)$ representa la ratio de transición entre los estados $U$ y $V$. 
+El grafo presentado en la figura \ref{fig:soccer_network} representa el modelo de red de jugadores. Cada nodo representa un estado y cada arista representa una transición entre estados. El nodo verde representa el estado de disparo al arco, el rojo la pérdida del balón, el negro la ganancia del balón por parte del equipo y los azules a los jugadores. Los ejes entre los nodos se representan con una matriz de adyacencia $R$ donde cada valor $r(U, V)$ representa el ratio de transición entre los estados $U$ y $V$. 
 
 $$
     R = \begin{pmatrix}
@@ -199,7 +199,7 @@ En este trabajo se propone un método probabilístico bayesiano para hallar la D
 
 ## Modelo Predictivo de probabilidades de transición
 
-En un comienzo se planteó desarrollar un modelo predictivo para estimar las ratios de transición entre los estados. Optamos por buscar predecir los ratios $r$ y no las probabilidades de transición $q$ ya que la normalización no es igual en cada instancia de $R$. Más concretamente buscamos estimar la función $f$ que mapea los estados $U$ y $V$ al ratio de transición $r(U, V)$.
+En un comienzo se planteó desarrollar un modelo predictivo para estimar los ratios de transición entre los estados. Optamos por buscar predecir los ratios $r$ y no las probabilidades de transición $q$ ya que la normalización no es igual en cada instancia de $R$. Más concretamente buscamos estimar la función $f$ que mapea los estados $U$ y $V$ al ratio de transición $r(U, V)$.
 
 $$
     \hat{r}(U, V) = f(U, V, \theta)
@@ -231,13 +231,13 @@ Para validar elegimos separar de forma temporal los 380 partidos de la temporada
 
 Luego de entrenar el modelo, para cada instancia de test obtuvimos la matriz de ratios de transición $R$ y calculamos el PSL real, para luego predecir la matriz de transición $\hat{R}$ y calcular el PSL predicho. Finalmente calculamos el coeficiente de correlación de Pearson entre el PSL real y el PSL predicho. 
 
-En el siguiente gráfico podemos observar como a pesar de predecir muy pobre los ratios de transición al resultar en un coeficiente de correlación de Pearson entre los $r(J_i, J_j)$ y los $\hat{r}(J_i, J_j)$ de $0.12$, sin embargo al comparar el PSL real del PSL calculado a partir de $\hat{R}$ se obtiene un coeficiente de correlación de Pearson de $0.85$.
+En la figura \ref{fig:regresion_lineal_r_p} podemos observar como a pesar de predecir muy pobre los ratios de transición al resultar en un coeficiente de correlación de Pearson entre los $r(J_i, J_j)$ y los $\hat{r}(J_i, J_j)$ de $0.12$, sin embargo al comparar el PSL real del PSL calculado a partir de $\hat{R}$ se obtiene un coeficiente de correlación de Pearson de $0.85$.
 
 <!-- ![Resultados Modelo de Regresión Lineal](recursos_pdf/graficos/regresion_lineal_r_p.png) -->
 
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/regresion_lineal_r_p.png}
-    \caption{Resultados Modelo de Regresión Lineal}
+  \caption{Resultados Modelo de Regresión Lineal}\label{fig:regresion_lineal_r_p}
 \end{figure}
 
 El modelo planteado no es capaz de predecir los ratios de transición, y a pesar de que desarrollamos otros modelos como XGBoost para regresión, Redes Neuronales y Redes Neuronales Probabilísticas (PNNs) no es posible predecir los ratios de transición entre los estados a partir de las métricas de los jugadores. Se debe a que los ratios de transición pueden variar mucho entre partidos para un mismo jugador. Para entender mejor el efecto de estos ratios, decidimos observar como cada ratio de transición afecta al PSL.
@@ -245,9 +245,14 @@ El modelo planteado no es capaz de predecir los ratios de transición, y a pesar
 ## Test de Sensibilidad sobre PSL
 
 Para entender mejor la relación entre los ratios de transición y el PSL, se implementó el modelo en una librería de auto-diferenciación (pytorch) y se obtuvo el gradiente de PSL empíricamente respecto a los ratios de transición. Esto nos permitió entender qué estados tienen mayor influencia en la métrica que estamos analizando.
-Pudimos observar que las transiciones de Jugador a Shot son las que más inciden sobre el PSL, seguido por las transiciones entre jugadores, tal como se observa en la figura. 
+Pudimos observar que las transiciones de Jugador a Shot son las que más inciden sobre el PSL, seguido por las transiciones entre jugadores, tal como se observa en la figura \ref{fig:psl_gradient}.
 
-![Gradiente del PSL](recursos_pdf/graficos/psl_gradient.jpeg)
+<!-- ![Gradiente del PSL](recursos_pdf/graficos/psl_gradient.jpeg) -->
+
+\begin{figure}
+  \includegraphics{recursos_pdf/graficos/psl_gradient.jpeg}
+  \caption{Gradiente del PSL}\label{fig:psl_gradient}
+\end{figure}
 
 ## Modelo Predictivo sobre $r(J, S)$
 
@@ -266,20 +271,21 @@ $$
     \end{pmatrix}
 $$
 
-Para el vector de los jugadores $J$ se agregó también la posición en la que juega (Arquero, Defensor, Mediocampista, Delantero) one-hot-encoded.
+Para el vector de los jugadores $J$ se agregó también la posición en la que juega (Arquero G por Goalkeeper, Defensor D por Defender, Mediocampista M por Midfielder, Delantero F por Forward) one-hot-encoded.
 
 Luego se entrenó un modelo de XGBoost para Regresión con el mismo split de Train y Test. Se logró obtener un mejor resultado sobre las predicciones de Train en comparación al modelo anterior. Se obtuvo un coeficiente de correlación de Pearson de $0.95$ entre los $r(J_i, S)$ y los $\hat{r}(J_i, S)$ en Train, pero de $0.08$ en Test.
 
 <!-- ![Resultados Modelo de XGBoost](recursos_pdf/graficos/xgb_shots.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/xgb_shots.png}
-    \caption{Resultados Modelo de XGBoost}
+  \caption{Resultados Modelo de XGBoost}\label{fig:xgb_shots}
 \end{figure}
 
-Este resultado junto al del modelo de predicción de ratios de pases nos llevó a buscar una mejor representación vectorial de los jugadores. En la sección de Player2Vec se explica el modelo utilizado para obtener un vector de representación (embedding E) de cada jugador. Con este embedding entrenamos una red neuronal, para obtener un modelo resultante f (EJ , partido) que dado el embedding de los jugadores y el partido, predice los ratios de transición entre jugadores y el estado de disparo al arco.
+Este resultado junto al del modelo de predicción de ratios de pases nos llevó a buscar una mejor representación vectorial de los jugadores. En la sección de Player2Vec se explica el modelo utilizado para obtener un vector de representación (embedding E) de cada jugador. Con este embedding de input modelamos la función como una red neuronal, para obtener un modelo resultante $f (E(J) , \text{partido})$ que dado el embedding de los jugadores y el partido, predice los ratios de transición entre jugadores y el estado de disparo al arco.
+
 \newpage
 
-# **Análisis de las distribuciones de los $r(J, S)$**
+# **Análisis de las distribuciones de los Ratio de Transición a Disparo al Arco** $r(J, S)$
 
 En un esfuerzo de comprender mejor el modelo de ratios de transición entre jugadores y el estado de disparo al arco, se decidió analizar las distribuciones de los $r(J, S)$ para cada jugador en la temporada 2012/13 de la EPL. 
 
@@ -288,7 +294,7 @@ Se observó que las distribuciones de los ratios de transición entre jugadores 
 <!-- ![Distribución de todos los $r(J, S)$](recursos_pdf/graficos/Probabilidad_de_disparo.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/Probabilidad_de_disparo.png}
-    \caption{Distribución de todos los $r(J, S)$}
+  \caption{Distribución de todos los $r(J, S)$}\label{fig:Probabilidad_de_disparo}
 \end{figure}
 
 Además, se observó que la distribución de los $r(J, S)$ de cada jugador no necesariamente sigue una distribución normal ni similar a la de otros jugadores. Para el siguiente análisis se ajustaron las distribuciones de los $r(J, S)$ de cada jugador a una distribución de probabilidad beta y se obtuvieron los parámetros $\alpha$ y $\beta$ de cada jugador. Inicialmente presentamos la distribución de dos jugadores a modo de ejemplo: **Sergio Agüero** y **Robin van Persie**
@@ -296,54 +302,27 @@ Además, se observó que la distribución de los $r(J, S)$ de cada jugador no ne
 <!-- ![Distribución de los $r(J, S)$ de Sergio Agüero y Robin van Persie](recursos_pdf/graficos/Sergio_Aguero_Robin_van_Persie_shots_prob_beta_binomial.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/Sergio_Aguero_Robin_van_Persie_shots_prob_beta_binomial.png}
-    \caption{Distribución de los $r(J, S)$ de Sergio Agüero y Robin van Persie}
+  \caption{Distribución de los $r(J, S)$ de Sergio Agüero y Robin van Persie}\label{fig:Sergio_Aguero_Robin_van_Persie_shots_prob_beta_binomial}
 \end{figure}
 
-
-Luego se analizó la distribución de los $r(J, S)$ de los 10 jugadores con mayor cantidad de disparos, con mayor sesgo y con mayor suma de disparos a modo de comparación.
-
-<!-- ![Distribución de los $r(J, S)$ de los 10 jugadores con mayor cantidad de disparos](recursos_pdf/graficos/Top_10_by_counts_players_shots_prob_beta_binomial.png) -->
-\begin{figure}
-  \includegraphics{recursos_pdf/graficos/Top_10_by_counts_players_shots_prob_beta_binomial.png}
-    \caption{Distribución de los $r(J, S)$ de los 10 jugadores con mayor cantidad de disparos}
-\end{figure}
-
-<!-- ![Distribución de los $r(J, S)$ de los 10 jugadores con mayor sesgo](recursos_pdf/graficos/Top_10_by_skew_players_shots_prob_beta_binomial.png) -->
-\begin{figure}
-  \includegraphics{recursos_pdf/graficos/Top_10_by_skew_players_shots_prob_beta_binomial.png}
-    \caption{Distribución de los $r(J, S)$ de los 10 jugadores con mayor sesgo}
-\end{figure}
-
-
-<!-- ![Top 20 Delanteros con distribución Beta más sesgada a la derecha - EPL 12/13](recursos_pdf/graficos/Top_20_Forwards_by_skew_players_shots_prob_beta_binomial.png) -->
-
-\begin{figure}
-  \includegraphics{recursos_pdf/graficos/Top_20_Forwards_by_skew_players_shots_prob_beta_binomial.png}
-    \caption{Top 20 Delanteros con distribución Beta más sesgada a la derecha - EPL 12/13}
-\end{figure}
-
-<!-- ![Distribución de los $r(J, S)$ de los 10 jugadores con mayor suma](recursos_pdf/graficos/Top_10_by_sum_players_shots_prob_beta_binomial.png) -->
-\begin{figure}
-  \includegraphics{recursos_pdf/graficos/Top_10_by_sum_players_shots_prob_beta_binomial.png}
-    \caption{Distribución de los $r(J, S)$ de los 10 jugadores con mayor suma}
-\end{figure}
+Luego se analizó la distribución de los $r(J, S)$ de los 10 jugadores con mayor cantidad de disparos, con mayor sesgo y con mayor suma de disparos a modo de comparación. En el anexo se presentan gráficos correspondientes junto a otras distribuciones pertinentes, ver figuras \ref{fig:Top_10_by_counts_players_shots_prob_beta_binomial}, \ref{fig:Top_10_by_skew_players_shots_prob_beta_binomial}, \ref{fig:Top_20_Forwards_by_skew_players_shots_prob_beta_binomial}, \ref{fig:Top_10_by_sum_players_shots_prob_beta_binomial}
 
 ## Comparación de las distribuciones de los $r(J, S)$
 
-A partir de la distribución ajustada de un jugador, podemos luego hallar jugadores similares en base a la distribución de los $r(J, S)$ utilizando la divergencia de Kullback-Leibler (KL). 
+A partir de la distribución ajustada de un jugador, podemos hallar jugadores similares en base a la distribución de los $r(J, S)$ utilizando la divergencia de Kullback-Leibler (KL). 
 
-En el siguiente gráfico se observa la distribución de los $r(J, S)$ de jugadores similares a él en la temporada 2012/13 de la EPL. Además se presentan solapados en otra figura.
+En la figura \ref{fig:Similar_to_Sergio_Aguero_shots_prob_beta_binomial} se observa la distribución de los $r(J, S)$ de jugadores similares a él en la temporada 2012/13 de la EPL. Además se presentan solapados en la figura \ref{fig:Sergio_Aguero_and_similar_players_shots_prob_beta_binomial}.
 
 <!-- ![Distribución de los $r(J, S)$ de jugadores similares a Sergio Agüero](recursos_pdf/graficos/Similar_to_Sergio_Aguero_shots_prob_beta_binomial.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/Similar_to_Sergio_Aguero_shots_prob_beta_binomial.png}
-    \caption{Distribución de los $r(J, S)$ de jugadores similares a Sergio Agüero}
+  \caption{Distribución de los $r(J, S)$ de jugadores similares a Sergio Agüero}\label{fig:Similar_to_Sergio_Aguero_shots_prob_beta_binomial}
 \end{figure}
 
 <!-- ![Distribución de los $r(J, S)$ de jugadores similares a Sergio Agüero Superpuestos](recursos_pdf/graficos/Sergio_Aguero_and_similar_players_shots_prob_beta_binomial.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/Sergio_Aguero_and_similar_players_shots_prob_beta_binomial.png}
-    \caption{Distribución de los $r(J, S)$ de jugadores similares a Sergio Agüero Superpuestos}
+  \caption{Distribución de los $r(J, S)$ de jugadores similares a Sergio Agüero Superpuestos}\label{fig:Sergio_Aguero_and_similar_players_shots_prob_beta_binomial}
 \end{figure}
 
 Finalmente podemos agregar la condición de _misma posición_ al comparar dos jugadores, en el caso de Agüero de Delantero (F por Forward) y hallar nuevamente jugadores aún más similares a él. 
@@ -351,7 +330,7 @@ Finalmente podemos agregar la condición de _misma posición_ al comparar dos ju
 <!-- ![Distribución de los $r(J, S)$ de jugadores similares a Sergio Agüero de la misma posición](recursos_pdf/graficos/Sergio_Aguero_and_similar_players_same_position_shots_prob_beta_binomial.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/Sergio_Aguero_and_similar_players_same_position_shots_prob_beta_binomial.png}
-    \caption{Distribución de los $r(J, S)$ de jugadores similares a Sergio Agüero de la misma posición}
+  \caption{Distribución de los $r(J, S)$ de jugadores similares a Sergio Agüero de la misma posición}\label{fig:Sergio_Aguero_and_similar_players_same_position_shots_prob_beta_binomial}
 \end{figure}
 
 Para conocer mejor la varianza de las distribuciones de los $r(J, S)$ de los jugadores, se estudió la distribución de los parámetros $\alpha$ y $\beta$ de las distribuciones beta ajustadas. Hicimos un análisis de clustering para agrupar a los jugadores en base a sus distribuciones de los $r(J, S)$.
@@ -359,7 +338,7 @@ Para conocer mejor la varianza de las distribuciones de los $r(J, S)$ de los jug
 <!-- ![Distribución de los parámetros $\alpha$ y $\beta$ de los $r(J, S)$ de los jugadores](recursos_pdf/graficos/Clusters_of_Players_shots_prob_beta_binomial.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/Clusters_of_Players_shots_prob_beta_binomial.png}
-    \caption{Distribución de los parámetros $\alpha$ y $\beta$ de los $r(J, S)$ de los jugadores}
+  \caption{Distribución de los parámetros $\alpha$ y $\beta$ de los $r(J, S)$ de los jugadores}\label{fig:Clusters_of_Players_shots_prob_beta_binomial}
 \end{figure}
 
 Como un extra, este sistema de clustering nos permite hallar rápido jugadores similares entre sí. A partir de los clusters la siguiente figura presenta las posibles distribuciones en cada cluster.
@@ -367,7 +346,7 @@ Como un extra, este sistema de clustering nos permite hallar rápido jugadores s
 <!-- ![Distribución de los $r(J, S)$ de jugadores en clusters](recursos_pdf/graficos/Clusters_of_Players_shots_prob_beta_binomial_distributions.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/Clusters_of_Players_shots_prob_beta_binomial_distributions.png}
-    \caption{Distribución de los $r(J, S)$ de jugadores en clusters}
+  \caption{Distribución de los $r(J, S)$ de jugadores en clusters}\label{fig:Clusters_of_Players_shots_prob_beta_binomial_distributions}
 \end{figure}
 
 \newpage
@@ -380,7 +359,7 @@ De esta forma, cada jugador $J$ tiene una distribución _a-priori_ para cada uno
 
 ## Variables Aleatorias para los $r(U, V)$ y PSL por Priors
 
-Para actualizar la notación, sean $r_{J, V}$ la variable aleatoria que representa la ratio de transición entre el jugador $J$ y el estado $V$, esto incluye $r_{J, S}$, $r_{J, L}$ y también $r_{G, J}$, asi como los $r_{J_i, J_j}$ para $i, j \in [1, 11]$.
+Para actualizar la notación, sean $r_{J, V}$ la variable aleatoria que representa el ratio de transición entre el jugador $J$ y el estado $V$, esto incluye $r_{J, S}$, $r_{J, L}$ y también $r_{G, J}$, asi como los $r_{J_i, J_j}$ para $i, j \in [1, 11]$.
 
 Luego $r_{J, V} \sim F_x$ la distribución _a-priori_ de la variable aleatoria $r_{J, V}$.
 
@@ -404,7 +383,7 @@ Para mejor claridad, la siguiente visualización muestra la matriz de variables 
 <!-- ![Matriz de Variables Aleatorias $\mathbf{R}$](recursos_pdf/graficos/f9090710-1703-476a-b906-8fddde8ae6d6.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/f9090710-1703-476a-b906-8fddde8ae6d6.png}
-    \caption{Matriz de Variables Aleatorias $\mathbf{R}$}
+  \caption{Matriz de Variables Aleatorias $\mathbf{R}$}\label{fig:8fddde8ae6d6}
 \end{figure}
 
 ## Proceso de Monte Carlo para estimar la distribución del PSL
@@ -419,7 +398,7 @@ El proceso de Monte Carlo para estimar la distribución del PSL de la formación
 
 ```{=latex}
 \begin{algorithm}[H]
-\caption{Simulación del PSL del equipo $A$}\label{alg:cap}
+\caption{Simulación del PSL del equipo $A$}\label{alg:montecarlo}
 \SetAlgoLined
 \KwIn{Número de simulaciones $N$}
 \KwIn{Formación $L_{A}$ = $\{J_1, J_2, \dots, J_{11}\}$}
@@ -437,19 +416,19 @@ Estimar la distribución del PSL del equipo $A$ a partir de las $N$ observacione
 
 A partir de esta distribución del PSL, se puede realizar comparaciones entre diferentes formaciones de 11 jugadores.
 
-El siguiente gráfico muestra la distribución del PSL de un equipo de ejemplo obtenida a partir de 1000 simulaciones del proceso de Monte Carlo para la formación más utilizada en la temporada 2012/13 de la EPL del equipo Manchester City.
+El siguiente gráfico en la figura \ref{fig:sergio_aguero_psl_distribution} muestra la distribución del PSL de un equipo de ejemplo obtenida a partir de 1000 simulaciones del proceso de Monte Carlo para la formación más utilizada en la temporada 2012/13 de la EPL del equipo Manchester City.
 
 <!-- ![Distribución del PSL del equipo Manchester City](recursos_pdf/graficos/sergio_aguero_psl_distribution.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/sergio_aguero_psl_distribution.png}
-    \caption{Distribución del PSL del equipo Manchester City}
+  \caption{Distribución del PSL del equipo Manchester City}\label{fig:sergio_aguero_psl_distribution}
 \end{figure}
 
 ## Comparar el impacto sobre el PSL de dos jugadores en una formación
 
 Para comparar el PSL de dos jugadores en una formación, se propone un análisis que consiste en evaluar el impacto en la distribución del PSL al reemplazar a un jugador por otro en la formación. El proceso para ello es el siguiente: 
 
-Se define la Formación $L_{A}$ = $\{J_1, J_2, \dots, J_{11}$ como la formación original del equipo $A$, donde alguno de los jugadores $J_i$ es el jugador a "original". 
+Se define la Formación $L_{A}$ = $\{J_1, J_2, \dots, J_{11}\}$ como la formación original del equipo $A$, donde alguno de los jugadores $J_i$ es el jugador a "original". 
 
 Se define el jugador $J'$ a comparar con $J_i$ y la formación $L'_A$ = $\{J_1, J_2, \dots, J_{11}\}$ como la formación con el jugador $J'$ en lugar de $J_i$.
 
@@ -465,14 +444,14 @@ En la siguiente sección postulamos una serie de métodos y métricas para compa
 
 Para explicar la comparación de distribuciones de PSL, se propone un ejemplo de dos formaciones de 11 jugadores distintas, en una formación $L_{MC}$ se encuentran 10 jugadores del equipo Manchester City + Sergio Agüero y en la otra $L_{MC}^{\text{Giroud}}$ los mismos 10 jugadores + Olivier Giroud del equipo Arsenal.
 
-Se realizó el proceso de Monte Carlo para estimar la distribución del PSL de cada formación a partir de 1000 simulaciones. Luego en la figura se puede observar las funciones de densidad de probabilidad aproximadas de las distribuciones del PSL de las formaciones $\hat{f}^{1000}_{PSL}(L_{MC})$ y $\hat{f}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$.
+Se realizó el proceso de Monte Carlo para estimar la distribución del PSL de cada formación a partir de 1000 simulaciones. Luego en la figura \ref{fig:psl_dists_aguero_v_giroud} se puede observar las funciones de densidad de probabilidad aproximadas de las distribuciones del PSL de las formaciones $\hat{f}^{1000}_{PSL}(L_{MC})$ y $\hat{f}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$.
 
 ### Comparación de Momentos Estadísticos
 
 <!-- ![Ejemplo de dos distribuciones de PSL de dos formaciones distintas](./recursos_pdf/graficos/psl_dists_aguero_v_giroud.png) -->
 \begin{figure}
   \includegraphics{./recursos_pdf/graficos/psl_dists_aguero_v_giroud.png}
-    \caption{Ejemplo de dos distribuciones de PSL de dos formaciones distintas}
+  \caption{Ejemplo de dos distribuciones de PSL de dos formaciones distintas}\label{fig:psl_dists_aguero_v_giroud}
 \end{figure}
 
 Una posible comparación entre las distribuciones de PSL de dos formaciones es "a ojo" observando las funciones de densidad de probabilidad. En este caso puntual se puede observar como el equipo con Agüero tiene una distribución de PSL más desplazada a izquierda que el equipo con Giroud.
@@ -514,7 +493,7 @@ El algoritmo para calcular la dominancia probabilística es el siguiente:
 
 ```{=latex}
 \begin{algorithm}[H]
-\caption{Dominancia Probabilística}\label{alg:cap2}
+\caption{Dominancia Probabilística}\label{alg:dominancia_probabilistica}
 \SetAlgoLined
 \KwIn{Distribuciones de PSL $\hat{f}^{1000}_{PSL}(L)$ y $\hat{f}^{1000}_{PSL}(L')$}
 \KwOut{Probabilidad de que un sample de PSL de la formación $L$ sea mayor que un sample de PSL de la formación con $L'$}
@@ -542,7 +521,7 @@ En la siguiente figura se observa la comparación de las CDFs de las distribucio
 <!-- ![Comparación de CDFs de las distribuciones de PSL de las formaciones $L_{MC}$ y $L_{MC}^{\text{Giroud}}$](./recursos_pdf/graficos/sergio_aguero_olivier_giroud_cdf_intersection.png) -->
 \begin{figure}
   \includegraphics{./recursos_pdf/graficos/sergio_aguero_olivier_giroud_cdf_intersection.png}
-    \caption{Comparación de CDFs de las distribuciones de PSL de las formaciones $L_{MC}$ y $L_{MC}^{\text{Giroud}}$}
+  \caption{Comparación de CDFs de las distribuciones de PSL de las formaciones $L_{MC}$ y $L_{MC}^{\text{Giroud}}$}\label{fig:sergio_aguero_olivier_giroud_cdf_intersection}
 \end{figure}
 
 Nuevamente "a ojo" se puede analizar la relación entre las distribuciones $\hat{F}^{1000}_{PSL}(L_{MC})$ y $\hat{F}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$, en este caso podemos ver como la CDF de la formación con Agüero es menor a la de la formación con Giroud en la mayoría de los puntos, lo que indica que la formación con Agüero tiene un PSL menor que la formación con Giroud en la mayoría de los casos. 
@@ -551,7 +530,7 @@ Nuevamente "a ojo" se puede analizar la relación entre las distribuciones $\hat
 
 Más formalmente se puede evaluar la dominancia estocástica entre las CDFs $\hat{F}^{1000}_{PSL}(L_{MC})$ y $\hat{F}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$. La dominancia estocástica es una relación de orden entre dos funciones de distribución acumulada que indica si una distribución es mayor que la otra en todos los puntos.
 
-Especificamente, podemos ver que a partir del umbral resaltado en verde en la figura ($x = 0.05346757$), $\hat{F}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$ tiene **dominancia estocástica** *parcial* sobre $\hat{F}^{1000}_{PSL}(L_{MC})$ [@gustavo_NYU; @bawa_1982_stochastic].
+Especificamente, podemos ver que a partir del umbral resaltado en verde en la figura \ref{fig:sergio_aguero_olivier_giroud_cdf_intersection} ($x = 0.05346757$), $\hat{F}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$ tiene **dominancia estocástica** *parcial* sobre $\hat{F}^{1000}_{PSL}(L_{MC})$ [@gustavo_NYU; @bawa_1982_stochastic].
 
 ### Conclusiones sobre la Comparación de Distribuciones de PSL
 
@@ -600,12 +579,12 @@ $$
 
 Donde cada $J_i^{L, T, M} \mid i \in [1, 11]$ es un nodo que representa a un jugador en el lineup $L$ del equipo $T$ en el partido $M$. $Gain^{L, T, M}$ es el nodo que representa la ganancia del balón, $Loss^{L, T, M}$ la pérdida del balón y $Shot^{L, T, M}$ el disparo al arco en el lineup $L$ del equipo $T$ en el partido $M$.
 
-En la figura se visualiza un ejemplo de un grafo de lineup $G^{L, T, M}$ genérico con los ejes $r(J_1^{L, T, M}, U)$ resaltados.
+En la figura \ref{fig:G_LTM} se visualiza un ejemplo de un grafo de lineup $G^{L, T, M}$ genérico con los ejes $r(J_1^{L, T, M}, U)$ resaltados.
 
 <!-- ![Grafo de Lineup](recursos_pdf/graficos/G_LTM.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/G_LTM.png}
-    \caption{Grafo de Lineup}
+  \caption{Grafo de Lineup}\label{fig:G_LTM}
 \end{figure}
 
 Luego sean:
@@ -633,23 +612,23 @@ $$
     r(J_i, J_i^{L, T, M}) = \frac{\text{Time Played}_{J_i^{L, T, M}}}{\text{Time Played}_{J_i}}
 $$
 
-La siguiente figura es una visualización de una instancia de un Equipo en un Partido con sus lineups. En este caso el equipo hizo dos cambios en el partido ($J_4$ por $J_{12}$ y $J_2$ por $J_{13}$). Se puede observar como los jugadores reales $J_4$ y $J_{12}$ se encuentran representados por el mismo nodo $J_4^{L, T, M}$ y lo mismo para $J_2$ y $J_{13}$ con $J_2^{L, T, M}$ para sus respectivos lineups. El resto de los nodos de jugadores reales mantienen su identidad en los grafos de lineups.
+La siguiente figura (\ref{fig:G_TM}) es una visualización de una instancia de un Equipo en un Partido con sus lineups. En este caso el equipo hizo dos cambios en el partido ($J_4$ por $J_{12}$ y $J_2$ por $J_{13}$). Se puede observar como los jugadores reales $J_4$ y $J_{12}$ se encuentran representados por el mismo nodo $J_4^{L, T, M}$ y lo mismo para $J_2$ y $J_{13}$ con $J_2^{L, T, M}$ para sus respectivos lineups. El resto de los nodos de jugadores reales mantienen su identidad en los grafos de lineups.
 
 <!-- ![Grafo de Jugadores](recursos_pdf/graficos/G_TM.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/G_TM.png}
-    \caption{Grafo de Jugadores}
+  \caption{Grafo de Jugadores}\label{fig:G_TM}
 \end{figure}
 
-El grafo resultante de la composición de todos los grafos de lineup $G_{\text{Full}}$ se puede comprender mejor en la siguiente visualización:
+El grafo resultante de la composición de todos los grafos de lineup $G_{\text{Full}}$ se puede comprender mejor en la visualización presente en la figura \ref{fig:G_EPL_12_13}:
 
 <!-- ![Grafo de Jugadores Completo](recursos_pdf/graficos/G_EPL_12_13.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/G_EPL_12_13.png}
-    \caption{Grafo de Jugadores Completo}
+  \caption{Grafo de Jugadores Completo}\label{fig:G_EPL_12_13}
 \end{figure}
 
-Donde al igual que en la figura anterior, los nodos de jugadores reales se encuentran representados por los nodos de los lineups en los que participaron.
+Donde al igual que en la figura anterior (\ref{fig:G_LTM}), los nodos de jugadores reales se encuentran representados por los nodos de los lineups en los que participaron.
 
 El algoritmo en concreto para construir el grafo de la red de jugadores $G_{\text{Full}}$ es el siguiente:
 
@@ -708,24 +687,24 @@ Para comenzar a explorar el espacio vectorial generado por Player2Vec, se ajust�
 - Número de caminatas: 200
 - Tamaño de ventana: 12 nodos
 
-Se entrenó el modelo y se obtuvieron los embeddings de los 522 jugadores de la temporada 2012/13 de la EPL. La siguiente visualización muestra los embeddings de los jugadores en un espacio de 3 dimensiones, el color corresponde al equipo en el que juega el jugador.
+Se entrenó el modelo y se obtuvieron los embeddings de los 522 jugadores de la temporada 2012/13 de la EPL. La siguiente visualización en la figura \ref{fig:players_3d} muestra los embeddings de los jugadores en un espacio de 3 dimensiones, el color corresponde al equipo en el que juega el jugador.
 
 <!-- ![Embeddings de Jugadores en 3D](recursos_pdf/graficos/players_3d.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/players_3d.png}
-    \caption{Embeddings de Jugadores en 3D}
+  \caption{Embeddings de Jugadores en 3D}\label{fig:players_3d}
 \end{figure}
 
-Para poder visualizar de forma más clara los embeddings de los jugadores, se realizó un PCA para reducir la dimensionalidad de los embeddings a 2 dimensiones. La siguiente visualización muestra los embeddings de los jugadores en un espacio de 2 dimensiones, el color corresponde al equipo en el que juega el jugador.
+Para poder visualizar de forma más clara los embeddings de los jugadores, se realizó un PCA para reducir la dimensionalidad de los embeddings a 2 dimensiones. La visualización presente en la figura \ref{fig:players_3d_2d} muestra los embeddings de los jugadores en un espacio de 2 dimensiones, el color corresponde al equipo en el que juega el jugador.
 
 <!-- ![Embeddings de Jugadores en 3D - PCA a 2D](recursos_pdf/graficos/players_3d_2d.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/players_3d_2d.png}
-    \caption{Embeddings de Jugadores en 3D - PCA a 2D}
+  \caption{Embeddings de Jugadores en 3D - PCA a 2D}\label{fig:players_3d_2d}
 \end{figure}
 
 
-En la figura de los componentes principales se observa cómo los jugadores de un mismo equipo se encuentran cercanos en el espacio vectorial, lo que indica que los embeddings resultantes de este modelo capturan las relaciones entre los jugadores de un mismo equipo.
+En la figura \ref{fig:players_3d_2d} se observa cómo los jugadores de un mismo equipo se encuentran cercanos en el espacio vectorial, lo que indica que los embeddings resultantes de este modelo capturan las relaciones entre los jugadores de un mismo equipo.
 
 Además se observa como en este espacio las direcciones en las que se representan a los equipos divergen de forma clara, lo que indica que los embeddings capturan únicamente las diferencias entre los equipos y no las similitudes. Buscan cierta ortogonalidad entre los equipos que no logra existir en este espacio de 3 dimensiones.
 
@@ -741,7 +720,7 @@ Luego para explorar los embeddings resultantes se realizó nuevamente un anális
 <!-- ![Embeddings de Jugadores en 64D - PCA a 2D](recursos_pdf/graficos/players_64_2d.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/players_64_2d.png}
-    \caption{Embeddings de Jugadores en 64D - PCA a 2D}
+  \caption{Embeddings de Jugadores en 64D - PCA a 2D}\label{fig:players_64_2d}
 \end{figure}
 
 En esta figura resultante se puede observar como la direccionalidad de los equipos desaparece pero se mantienen las relaciones entre los jugadores de un mismo equipo.
@@ -828,7 +807,7 @@ El modelo se implementó en PyTorch. Se utilizó una red neuronal con la siguien
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{recursos_pdf/graficos/p2v_dist_model_H.pdf}
-  \caption{Arquitectura del Modelo Base}
+  \caption{Arquitectura del Modelo Base}\label{fig:p2v_dist_model_H}
 \end{figure}
 
 La función de pérdida utilizada fue la Divergencia de Jensen-Shannon (JSD) entre las distribuciones reales y predichas ponderando las 5 distribuciones a estimar. Se utilizó la implementación de Divergencia de Kullback-Leibler de PyTorch `nn.KLDivLoss` en la implementación del módulo `JSD` hallado en el foro de PyTorch[@alexneakamenipytorchforums_2022_jensen] y este luego se utilizó para la función de pérdida en el entrenamiento del modelo.
@@ -853,6 +832,7 @@ El modelo base se entrenó con los hiperparámetros y arquitectura mencionados a
 ```{=latex}
 \begin{table}
 \caption{Resultados del Modelo Base}
+\begin{center}
 \begin{tabular}{|c|c|c|}
 \hline
 \textbf{Métrica} & \textbf{Entrenamiento} & \textbf{Test} \\
@@ -860,6 +840,7 @@ El modelo base se entrenó con los hiperparámetros y arquitectura mencionados a
 Loss & 0.01068 & 0.01505 \\
 \hline
 \end{tabular}
+\end{center}
 \end{table}
 ```
 
@@ -939,7 +920,7 @@ La búsqueda de hiperparámetros se realizó con 1000 iteraciones. La mejor comb
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{recursos_pdf/graficos/p2v_dist_model_tuned_H.pdf}
-  \caption{Arquitectura del Modelo Tuned}
+  \caption{Arquitectura del Modelo Tuned}\label{fig:p2v_dist_model_tuned_H}
 \end{figure}
 
 (0.004966359119862318, 0.008916404098272324, 0.014493363909423351)
@@ -1028,7 +1009,7 @@ Los resultados obtenidos son los siguientes:
 <!-- ![Comparación de CDFs y PDFs de Welbeck y Walcott](recursos_pdf/graficos/Welbeck_Walcott.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/Welbeck_Walcott.png}
-    \caption{Comparación de CDFs y PDFs de Welbeck y Walcott}
+  \caption{Comparación de CDFs y PDFs de Welbeck y Walcott}\label{fig:Welbeck_Walcott}
 \end{figure}
 
 <!-- Tabla Comparativa Welbeck vs Walcott -->
@@ -1053,7 +1034,7 @@ Danny Welbeck &  0.129325 &  0.038815 &         0.001507 &  0.761120 &  0.773602
 <!-- ![Comparación de CDFs y PDFs de Welbeck y Giroud](recursos_pdf/graficos/Welbeck_Giroud.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/Welbeck_Giroud.png}
-    \caption{Comparación de CDFs y PDFs de Welbeck y Giroud}
+  \caption{Comparación de CDFs y PDFs de Welbeck y Giroud}\label{fig:Welbeck_Giroud}
 \end{figure}
 
 <!-- Tabla Comparativa Welbeck vs Giroud -->
@@ -1096,7 +1077,7 @@ Los resultados obtenidos luego de la simulación son los siguientes:
 <!-- ![Comparación de CDFs y PDFs de Milner y Gerrard](recursos_pdf/graficos/Milner_Gerrard.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/Milner_Gerrard.png}
-    \caption{Comparación de CDFs y PDFs de Milner y Gerrard}
+  \caption{Comparación de CDFs y PDFs de Milner y Gerrard}\label{fig:Milner_Gerrard}
 \end{figure}
 
 <!-- Tabla Comparativa Milner vs Gerrard -->
@@ -1120,7 +1101,7 @@ James Milner   &  0.139559 &  0.043333 &         0.001878 &  0.703642 &  0.71226
 <!-- ![Comparación de CDFs y PDFs de Milner y Downing](recursos_pdf/graficos/Milner_Downing.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/Milner_Downing.png}
-    \caption{Comparación de CDFs y PDFs de Milner y Downing}
+  \caption{Comparación de CDFs y PDFs de Milner y Downing}\label{fig:Milner_Downing}
 \end{figure}
 
 <!-- Tabla Comparativa Milner vs Downing -->
@@ -1183,7 +1164,7 @@ Danny Welbeck & Delantero & Manchester United & Arsenal & No Recomendable \\
 \end{table}
 ```
 
-# **Resultados**  {#resultados}
+<!-- # **Resultados**  {#resultados} -->
 
 <!-- * **Proyectos de Investigación**: Se presentan los datos o hallazgos obtenidos en la investigación de forma clara y organizada. En este apartado no se deben interpretar los resultados, sólo exponerlos.   -->
 
@@ -1191,10 +1172,7 @@ Danny Welbeck & Delantero & Manchester United & Arsenal & No Recomendable \\
 
 <!-- * **Proyectos de Investigación**: Aquí se interpretan los resultados obtenidos, comparándolos con la literatura revisada en el marco teórico. Se analizan los hallazgos y se discute su relevancia.   -->
 
-# **Conclusiones & Recomendaciones** {#conclusiones-&-recomendaciones}
-<!-- 
-Se sintetizan los puntos más importantes del estudio, haciendo énfasis en si se cumplieron los objetivos y qué se aprendió a partir de los resultados obtenidos. También, se sugieren posibles líneas de investigación futuras o iteraciones del proyecto, aplicaciones prácticas de los resultados o recomendaciones para la implementación de los hallazgos en la vida real. -->
-El presente trabajo presenta varias limitaciones y posibles áreas de mejora que deben ser consideradas para futuros desarrollos. En primer lugar, la cantidad de datos de entrenamiento disponibles es limitada, ya que se utilizó solo una temporada de la Premier League (PL). Extender el análisis a múltiples temporadas y ligas adicionales permitiría contar con un conjunto de datos más amplio y representativo. Esto no solo mejoraría la capacidad del modelo para generalizar, sino que también fortalecería su validez externa al ser probado en diferentes contextos competitivos y estilos de juego.
+El presente trabajo presenta varias limitaciones y posibles áreas de mejora que deben ser consideradas para futuros desarrollos. En primer lugar, la cantidad de datos de entrenamiento disponibles es limitada, ya que se utilizó solo una temporada de la English Premier League (EPL). Extender el análisis a múltiples temporadas y ligas adicionales permitiría contar con un conjunto de datos más amplio y representativo. Esto no solo mejoraría la capacidad del modelo para generalizar, sino que también fortalecería su validez externa al ser probado en diferentes contextos competitivos y estilos de juego.
 
 En cuanto a la validación del modelo, una metodología más robusta podría incluir el análisis del desempeño de los jugadores recomendados tras integrarse en nuevos equipos. Esto permitiría evaluar directamente si las estimaciones del modelo reflejan un impacto positivo en el rendimiento del equipo y del jugador, lo que fortalecería la confianza en las recomendaciones generadas.
 
@@ -1202,13 +1180,54 @@ Finalmente, es importante destacar que el modelo carece de ciertas variables con
 
 En síntesis, aunque este trabajo ofrece un enfoque inicial prometedor, existe un amplio margen para mejorar la representatividad de los datos, la complejidad del modelo y la validez de las estimaciones a través de futuras extensiones y refinamientos.
 
+# **Conclusiones** {#conclusiones}
+<!-- 
+Se sintetizan los puntos más importantes del estudio, haciendo énfasis en si se cumplieron los objetivos y qué se aprendió a partir de los resultados obtenidos. También, se sugieren posibles líneas de investigación futuras o iteraciones del proyecto, aplicaciones prácticas de los resultados o recomendaciones para la implementación de los hallazgos en la vida real. -->
+
+En este trabajo, se presentó un modelo predictivo de distribuciones de ratios de transición de jugadores de fútbol basado en embeddings de jugadores obtenidos con **Player2Vec**. El modelo fue entrenado y validado utilizando datos de eventos de partidos de la temporada 2012/13 de la EPL, y se evaluó su capacidad para predecir las distribuciones de ratios de transición de jugadores en un contexto de transferencias.
+
+Se validó y presentó un caso de estudio de dos transferencias clave en las temporadas posteriores de la Premier League, demostrando la capacidad del modelo para evaluar el impacto de las transferencias en el rendimiento de los equipos. A través de la metodólogía propuesta, se encontró que el modelo es capaz de identificar transferencias que mejoran o empeoran el PSL de los equipos, proporcionando recomendaciones útiles para la toma de decisiones en el mercado de fichajes.
+
+Los resultados obtenidos muestran que el modelo es capaz de predecir mejor que los priors las distribuciones de ratios de transición de los jugadores, lo que sugiere que puede ser una herramienta valiosa para la evaluación de transferencias en el fútbol profesional.
+
 \newpage
 
 # **Referencias bibliográficas** {#referencias-bibliográficas}
 
 <div id="refs"></div>
 
+\newpage
+
 # **Apéndices: Tablas, figuras, anexos** {#apéndices} 
+
+## Distribuciones de ratios de transición de los jugadores
+
+<!-- ![Distribución de los $r(J, S)$ de los 10 jugadores con mayor cantidad de disparos](recursos_pdf/graficos/Top_10_by_counts_players_shots_prob_beta_binomial.png) -->
+\begin{figure}
+  \includegraphics{recursos_pdf/graficos/Top_10_by_counts_players_shots_prob_beta_binomial.png}
+  \caption{Distribución de los $r(J, S)$ de los 10 jugadores con mayor cantidad de disparos}\label{fig:Top_10_by_counts_players_shots_prob_beta_binomial}
+\end{figure}
+
+<!-- ![Distribución de los $r(J, S)$ de los 10 jugadores con mayor sesgo](recursos_pdf/graficos/Top_10_by_skew_players_shots_prob_beta_binomial.png) -->
+\begin{figure}
+  \includegraphics{recursos_pdf/graficos/Top_10_by_skew_players_shots_prob_beta_binomial.png}
+  \caption{Distribución de los $r(J, S)$ de los 10 jugadores con mayor sesgo}\label{fig:Top_10_by_skew_players_shots_prob_beta_binomial}
+\end{figure}
+
+<!-- ![Top 20 Delanteros con distribución Beta más sesgada a la derecha - EPL 12/13](recursos_pdf/graficos/Top_20_Forwards_by_skew_players_shots_prob_beta_binomial.png) -->
+
+\begin{figure}
+  \includegraphics{recursos_pdf/graficos/Top_20_Forwards_by_skew_players_shots_prob_beta_binomial.png}
+  \caption{Top 20 Delanteros con distribución Beta más sesgada a la derecha - EPL 12/13}\label{fig:Top_20_Forwards_by_skew_players_shots_prob_beta_binomial}
+\end{figure}
+
+<!-- ![Distribución de los $r(J, S)$ de los 10 jugadores con mayor suma](recursos_pdf/graficos/Top_10_by_sum_players_shots_prob_beta_binomial.png) -->
+\begin{figure}
+  \includegraphics{recursos_pdf/graficos/Top_10_by_sum_players_shots_prob_beta_binomial.png}
+  \caption{Distribución de los $r(J, S)$ de los 10 jugadores con mayor suma}\label{fig:Top_10_by_sum_players_shots_prob_beta_binomial}
+\end{figure}
+
+\newpage
 
 \listoffigures
 \listoftables

@@ -22,6 +22,7 @@ toc:
   depth_to: 6
   ordered: false
 papersize: a4
+classoption: twoside
 header-includes: |
     \usepackage[linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
     \newcommand{\listofalgorithmes}{\tocfile{\listalgorithmcfname}{loa}}
@@ -45,13 +46,17 @@ header-includes: |
     \usepackage{float}
     \floatplacement{figure}{H}
     \floatplacement{table}{H}
+    \let\origdoublepage\cleardoublepage
+    \newcommand{\clearemptydoublepage}{%
+      \clearpage
+      {\pagestyle{empty}\origdoublepage}%
+    }
 abstract: |
-    En la última década, el análisis deportivo ha evolucionado hacia una perspectiva cada vez más matemática y sofisticada. Aplicaciones como el uso de análisis espacial en Basketball (Goldsberry, 2012) y modelos de juegos de suma cero en fútbol (Hirotsu y Wright, 2006) son ejemplos claros de la tendencia creciente en este campo. El béisbol, por mucho tiempo el deporte preferido para la analítica, ha experimentado una profunda transformación con la implementación de Sabermetrics (Baumer y Zimbalist, 2014; Wolf, 2015). La introducción de herramientas analíticas avanzadas ha producido resultados positivos para muchos equipos, lo que subraya el valor de estudiar métricas específicas dentro de cada deporte.
+    En la última década, el análisis deportivo ha evolucionado hacia una perspectiva cada vez más matemática y sofisticada. Aplicaciones como el uso de análisis espacial en Basketball (Goldsberry, 2012) y la investigación estádistica del Brentford con Smartodds son ejemplos claros de la tendencia creciente en este campo. El béisbol, por mucho tiempo el deporte preferido para la analítica, ha experimentado una profunda transformación con la implementación de Sabermetrics (Baumer y Zimbalist, 2014; Wolf, 2015). La introducción de herramientas analíticas avanzadas ha producido resultados positivos para muchos equipos, lo que resalta el valor de estudiar métricas específicas dentro de cada deporte.
 
     Este desarrollo se centra en el fútbol, un deporte en el cual los análisis previos se han concentrado, en su mayoría, en predecir resultados de partidos y mejorar el rendimiento de los equipos. Sin embargo, este trabajo propone un enfoque diferente al analizar el impacto de los jugadores sobre la posesión de balón y los disparos del equipo desde una perspectiva probabilística.
 
-    A partir de la métrica PSL propuesta en el paper "Soccer Networks" [@huang_soccer_networks], planteamos un proceso para comparar el impacto que tienen los jugadores sobre la performance del equipo. Logramos formular una metodología para estudiar la distribución de la performance de un equipo. Luego, proponemos una serie de métodos y métricas para comparar el rendimiento de dos formaciones de jugadores.
-    Además, desarrollamos una forma de representación vectorial (Embeddings) de los jugadores, llamada Player2Vec, un modelo de Machine Learning también basado sobre el modelo de redes de jugadores planteado en el mismo paper "Soccer Networks". Esto último nos permite desarrollar modelos predictivos sobre el rendimiento de los jugadores en un equipo.
+    A partir de la métrica PSL propuesta en el paper *Soccer Networks* [@huang_soccer_networks], planteamos un proceso para comparar el impacto que tienen los jugadores sobre la performance del equipo. Logramos formular una metodología para estudiar la distribución de la performance de un equipo. Luego, proponemos una serie de métodos y métricas para comparar el rendimiento de dos formaciones de jugadores. Además, desarrollamos una forma de representación vectorial (Embeddings) de los jugadores, llamada Player2Vec, un modelo de Machine Learning también basado sobre el modelo de redes de jugadores planteado en el mismo paper del PSL. Esto último permite desarrollar modelos predictivos sobre el rendimiento de los jugadores en un equipo.
     \newpage
 ---
 
@@ -67,6 +72,7 @@ knitr::opts_chunk$set(fig.pos = 'H')
 \tableofcontents
 
 \newpage
+\cleardoublepage
 
 # **Agradecimientos** {#agradecimientos}
 
@@ -74,17 +80,25 @@ Este trabajo no hubiera sido posible sin la ayuda de los profesores Gustavo Vulc
 
 **Ignacio Pardo quiere agradecer** a su familia, amigos, colegas y jefe (Darío Mischener) por su apoyo y acompañamiento durante el transcurso de su carrera universitaria.
 
+\newpage
+
+\cleardoublepage
+
 # **Introducción** {#introducción}
 
 <!-- Presenta el tema del trabajo, su contexto y la importancia. Aquí se debe captar el interés del lector, explicando brevemente los aspectos más importantes que se desarrollarán. -->
 
 A diferencia de otros deportes como el béisbol o el basketball, el fútbol ha sido tradicionalmente menos propenso a la aplicación de técnicas avanzadas de análisis de datos y aprendizaje automático. Sin embargo, en los últimos años ha habido un crecimiento significativo en el uso de herramientas analíticas para evaluar el rendimiento de los jugadores y los equipos.
 
-En la última década el análisis del fútbol ha evolucionado hacia una perspectiva cada vez más matemática y sofisticada. El desarrollo que más impacto tuvo sin dudas es el de la métrica de Expected Goals (**xG**) que permiten evaluar la calidad de las oportunidades de gol de un equipo. El uso de **xG** en el análisis de partidos y jugadores ha permitido una mayor capacidad predictiva y una mejor comprensión del rendimiento de los equipos.
+En la última década el análisis del fútbol ha evolucionado hacia una perspectiva cada vez más matemática y sofisticada. El desarrollo que más impacto tuvo sin dudas es el de la métrica de Expected Goals (**xG**) [@green_2012], que permiten evaluar la calidad de las oportunidades de gol de un equipo. El uso de **xG** en el análisis de partidos y jugadores ha permitido una mayor capacidad predictiva y una mejor comprensión del rendimiento de los equipos. La industria que mas potenció este cambio fue la de las apuestas deportivas, que comenzó a utilizar modelos predictivos para estimar las probabilidades de los partidos. Ejemplos como Smartodds, StatsBomb y Opta Sports son claros ejemplos de como la analítica de datos ha impactado en la industria del fútbol. Mas específicamente, el Arsenal y el Brentford de la Premier League poseen sus propias empresas de analítica de datos; StatDNA y Smartodds [@tippett_2019, p. 37].
 
-El trabajo en desarrollo "Soccer Networks" [@huang_soccer_networks] propone un modelo de red de jugadores para calcular la probabilidad de disparar al arco antes de perder el balón (**PSL**), lo cual demuestran tiene alta correlación con el rendimiento del equipo y una gran importancia al nivel del **xG**.
+El trabajo en desarrollo *Soccer Networks* [@huang_soccer_networks] propone un modelo de red de jugadores para calcular la probabilidad de disparar al arco antes de perder el balón (**PSL**), una métrica poca estudiada. En el paper se demuestra que el **PSL** tiene una alta correlación con el rendimiento del equipo y una gran importancia al nivel del **xG**.
 
-Este trabajo profundiza en el análisis de la métrica **PSL** y propone un análisis probabilístico sobre las componentes del modelo de redes de jugadores y su injerencia en el rendimiento de los jugadores y consecuentemente del equipo. Finalmente, proponemos una metodología para comparar el rendimiento de jugadores y formaciones de jugadores en base a la métrica **PSL**.
+Este trabajo profundiza en el análisis de la métrica **PSL** y propone un análisis probabilístico sobre las componentes del modelo de redes de jugadores y su injerencia en el rendimiento de los jugadores y consecuentemente del equipo. Proponemos una metodología para comparar el rendimiento de jugadores y formaciones de jugadores en base a la métrica **PSL**. Finalmente, desarrollamos un modelo de representación vectorial de los jugadores, llamado **Player2Vec**, para poder utilizarlo en modelos predictivos sobre el rendimiento de los jugadores.
+
+\newpage
+
+\cleardoublepage
 
 # **Motivación** {#motivación}
 
@@ -94,13 +108,23 @@ El fútbol es uno de los deportes más populares y seguidos en todo el mundo. La
 
 ## Relevancia Académica
 
-Desde una perspectiva académica, el análisis del rendimiento de los jugadores de fútbol ha sido un área de interés creciente en los últimos años. La aplicación de técnicas avanzadas de análisis de datos, aprendizaje automático y modelos probabilísticos ha permitido una comprensión más profunda del impacto de los jugadores en el rendimiento del equipo. Algunos ejemplos del estado del arte incluyen el modelo para maximizar la posesión esperada propuesto en el artículo de [@rahimian_2023] y el modelo de redes de jugadores para calcular la probabilidad de disparar al arco antes de perder el balón (PSL) presentado en el trabajo de Huang et al.[@huang_soccer_networks].
+Desde una perspectiva académica, el análisis del rendimiento de los jugadores de fútbol ha sido un área de interés creciente en los últimos años. La aplicación de técnicas avanzadas de análisis de datos, aprendizaje automático y modelos probabilísticos ha permitido una comprensión más profunda del impacto de los jugadores en el rendimiento del equipo. Algunos ejemplos del estado del arte incluyen el modelo para maximizar la posesión esperada propuesto en el artículo de [@rahimian_2023] y el modelo de redes de jugadores para calcular la probabilidad de disparar al arco antes de perder el balón (PSL) presentado en el trabajo de [@huang_soccer_networks].
 
 Este trabajo se enmarca en esta línea de investigación, contribuyendo al desarrollo de nuevas metodologías y herramientas para evaluar y comparar el rendimiento de los jugadores.
 
 ## Relevancia Práctica
 
-En el ámbito práctico, la capacidad de identificar a los mejores jugadores tiene implicaciones directas en la toma de decisiones estratégicas y operativas de los equipos de fútbol. La correcta selección de jugadores puede mejorar significativamente el rendimiento del equipo, aumentar las probabilidades de éxito en competiciones y optimizar la inversión en fichajes. Además, el uso de modelos avanzados como Player2Vec y PSL Bayesiano proporciona una ventaja competitiva por su poder predictivo del rendimiento de los jugadores.
+En el ámbito práctico, la capacidad de identificar a los mejores jugadores tiene implicaciones directas en la toma de decisiones estratégicas y operativas de los equipos de fútbol. La correcta selección de jugadores puede mejorar significativamente el rendimiento del equipo, aumentar las probabilidades de éxito en competiciones y optimizar la inversión en fichajes. 
+
+El Brentford FC es un caso de ejemplo del impacto positivo que puede tener el análisis de datos en el fútbol. El club implementó un enfoque basado estadística para la identificación y selección de jugadores con alto potencial de rendimiento. El equipo para el 2014/2015 había ascendido a la EFL Championship desde la Ligue One (Tercera División de Inglaterra) por primera vez en 21 años, y en 2021, ascendió a la Premier League, su primera vez en 74 años.
+
+Mas recientemente, el caso de estudio sobre el Real Racing Club de Santander de la Segunda División B de España presentado por la Facultad de Ciencias Exactas y Naturales, UBA en la 33rd European Conference on Operational Research es un nuevo ejemplo de cómo integrar el proceso actual de scouting con un modelo de aprendizaje supervisado [@brunetti_2024].
+
+Partiendo de estos antecedentes, este trabajo busca proporcionar a los equipos de fútbol herramientas y metodologías para evaluar, comparar y seleccionar a los jugadores más adecuados para sus necesidades y estrategias específicas.
+
+\newpage
+
+\cleardoublepage
 
 # **Objetivos de Proyecto** {#objetivos-de-proyecto}
 
@@ -132,13 +156,15 @@ El objetivo principal de este proyecto es desarrollar y aplicar modelos avanzado
 
 \newpage
 
+\cleardoublepage
+
 # **Definición del problema** {#definición-del-problema}
 
 A partir de la pregunta de la investigación, se plantea el problema de encontrar el jugador ideal para un equipo de fútbol. En un comienzo nos encontramos planteando cómo definir la _performance_ de un jugador y cómo compararla con otros jugadores. Surgió la necesidad de encontrar una métrica para evaluar el impacto de un jugador en el rendimiento de un equipo y cómo definir estos agentes. Además es necesario poder representar concretamente a un Jugador $J$.
 
 ## PSL como métrica de Performance 
 
-En el paper en proceso *How to Find the Right Player for your Soccer Team? (Huang et al.)* se plantea la descomposición del Gol Esperado ($xG$) como:
+En el paper en proceso *Soccer Networks* [@huang_soccer_networks] se plantea la descomposición del Gol Esperado ($xG$) como:
 
 $$
     xG(A) = P(A) \cdot PSL(A) \cdot SA(A)
@@ -281,9 +307,11 @@ Luego se entrenó un modelo de XGBoost para Regresión con el mismo split de Tra
   \caption{Resultados Modelo de XGBoost}\label{fig:xgb_shots}
 \end{figure}
 
-Este resultado junto al del modelo de predicción de ratios de pases nos llevó a buscar una mejor representación vectorial de los jugadores. En la sección de Player2Vec se explica el modelo utilizado para obtener un vector de representación (embedding E) de cada jugador. Con este embedding de input modelamos la función como una red neuronal, para obtener un modelo resultante $f (E(J) , \text{partido})$ que dado el embedding de los jugadores y el partido, predice los ratios de transición entre jugadores y el estado de disparo al arco.
+Este resultado junto al del modelo de predicción de ratios de pases nos llevó a buscar una mejor representación vectorial de los jugadores. En la Sección \ref{player2vec} [Player2Vec](#player2vec) se explica el modelo utilizado para obtener un vector de representación (embedding E) de cada jugador. Con este embedding de input modelamos la función como una red neuronal, para obtener un modelo resultante $f (E(J) , \text{partido})$ que dado el embedding de los jugadores y el partido, predice los ratios de transición entre jugadores y el estado de disparo al arco.
 
 \newpage
+
+\cleardoublepage
 
 # **Análisis de las distribuciones de los Ratio de Transición a Disparo al Arco** $r(J, S)$
 
@@ -305,7 +333,7 @@ Además, se observó que la distribución de los $r(J, S)$ de cada jugador no ne
   \caption{Distribución de los $r(J, S)$ de Sergio Agüero y Robin van Persie}\label{fig:Sergio_Aguero_Robin_van_Persie_shots_prob_beta_binomial}
 \end{figure}
 
-Luego se analizó la distribución de los $r(J, S)$ de los 10 jugadores con mayor cantidad de disparos, con mayor sesgo y con mayor suma de disparos a modo de comparación. En el anexo se presentan gráficos correspondientes junto a otras distribuciones pertinentes, ver figuras \ref{fig:Top_10_by_counts_players_shots_prob_beta_binomial}, \ref{fig:Top_10_by_skew_players_shots_prob_beta_binomial}, \ref{fig:Top_20_Forwards_by_skew_players_shots_prob_beta_binomial}, \ref{fig:Top_10_by_sum_players_shots_prob_beta_binomial}
+Luego se analizó la distribución de los $r(J, S)$ de los 10 jugadores con mayor cantidad de disparos, con mayor sesgo y con mayor suma de disparos a modo de comparación. En el [anexo](#anexo) se presentan gráficos correspondientes junto a otras distribuciones pertinentes, ver figuras \ref{fig:Top_10_by_counts_players_shots_prob_beta_binomial}, \ref{fig:Top_10_by_skew_players_shots_prob_beta_binomial}, \ref{fig:Top_20_Forwards_by_skew_players_shots_prob_beta_binomial}, \ref{fig:Top_10_by_sum_players_shots_prob_beta_binomial}
 
 ## Comparación de las distribuciones de los $r(J, S)$
 
@@ -350,6 +378,8 @@ Como un extra, este sistema de clustering nos permite hallar rápido jugadores s
 \end{figure}
 
 \newpage
+
+\cleardoublepage
 
 # **Estimación de la Distribución del PSL**
 
@@ -542,7 +572,9 @@ El campo de estudio sobre la Dominancia Estocástica es amplio y complejo, en es
 
 \newpage
 
-# **Player2Vec**: Embeddings de Jugadores
+\cleardoublepage
+
+# **Player2Vec**: Embeddings de Jugadores {#player2vec}
 
 Para poder representar a cada jugador de forma vectorial, se desarrolló el modelo de Player2Vec que permite obtener un embedding de cada jugador en un espacio de $n$ dimensiones.
 
@@ -734,6 +766,8 @@ Otra cuestión considerada para expandir es además de tener un nodo general por
 En el paper de *Soccer Networks* donde se plantea el PSL definen una serie de coeficientes $h$, $a$, $\omega$, como la performance de un equipo al jugar de local, al jugar de visitante, y la performance ponderada de todos los otros equipos al jugar de visitante respectivamente. Se podrían escalar los ratios de transición entre jugadores y el estado de disparo al arco en función de estos coeficientes para obtener una mejor representación de la performance de un jugador en un partido en particular.
 
 \newpage
+
+\cleardoublepage
 
 # **Modelo predictivo de Distribuciones de Ratios de Transición** ($r(U, V)$) {#modelo-predictivo}
 
@@ -990,6 +1024,8 @@ Por lo que se puede observar, el modelo logra una mejora significativa en la cap
 
 \newpage
 
+\cleardoublepage
+
 # **Validación del Modelo de Distribuciones** {#validación-del-modelo}
 
 Para evaluar la capacidad de nuestro modelo en escenarios reales, desarrollamos un caso de estudio basado en las transferencias más importantes en términos de precio y relevancia mediática de los próximos dos mercados de fichajes dentro de la Premier League. Nos limitamos a transferencias internas de esta liga debido a la falta de datos disponibles sobre otras competiciones. Este ejercicio busca medir qué tan bien nuestras métricas y simulaciones pueden justificar o desaconsejar dichas transferencias en función de su impacto en el rendimiento del equipo.
@@ -1065,7 +1101,7 @@ Todas estas métricas se repiten a favor de la formación con Giroud, $X_{L_{AR2
 
 Por lo tanto, podemos concluir que, según nuestro modelo, la transferencia de Danny Welbeck al Arsenal no es recomendable porque su inclusión en lugar de Theo Walcott o Olivier Giroud disminuiría el PSL del equipo y empeoraría la performance del mismo.
 
-\newpage
+<!-- \newpage -->
 
 ## Caso de Estudio 2: James Milner al Liverpool
 
@@ -1168,6 +1204,10 @@ Danny Welbeck & Delantero & Manchester United & Arsenal & No Recomendable \\
 
 <!-- * **Proyectos de Investigación**: Se presentan los datos o hallazgos obtenidos en la investigación de forma clara y organizada. En este apartado no se deben interpretar los resultados, sólo exponerlos.   -->
 
+\newpage
+
+\cleardoublepage
+
 # **Discusión**  {#discusión}
 
 <!-- * **Proyectos de Investigación**: Aquí se interpretan los resultados obtenidos, comparándolos con la literatura revisada en el marco teórico. Se analizan los hallazgos y se discute su relevancia.   -->
@@ -1179,6 +1219,10 @@ En cuanto a la validación del modelo, una metodología más robusta podría inc
 Finalmente, es importante destacar que el modelo carece de ciertas variables contextuales clave. No se han incluido factores como el impacto del equipo rival, las estrategias del entrenador, las condiciones específicas de la fecha (por ejemplo, clima o nivel de fatiga acumulada), ni el efecto de la localía. La incorporación de estas variables podría enriquecer el análisis y permitir una comprensión más completa del entorno competitivo en el que se desarrolla el rendimiento del jugador.
 
 En síntesis, aunque este trabajo ofrece un enfoque inicial prometedor, existe un amplio margen para mejorar la representatividad de los datos, la complejidad del modelo y la validez de las estimaciones a través de futuras extensiones y refinamientos.
+
+\newpage
+
+\cleardoublepage
 
 # **Conclusiones** {#conclusiones}
 <!-- 
@@ -1192,13 +1236,17 @@ Los resultados obtenidos muestran que el modelo es capaz de predecir mejor que l
 
 \newpage
 
+\cleardoublepage
+
 # **Referencias bibliográficas** {#referencias-bibliográficas}
 
 <div id="refs"></div>
 
 \newpage
 
-# **Apéndices: Tablas, figuras, anexos** {#apéndices} 
+\cleardoublepage
+
+# **Anexo** {#anexo} 
 
 ## Distribuciones de ratios de transición de los jugadores
 
@@ -1228,6 +1276,8 @@ Los resultados obtenidos muestran que el modelo es capaz de predecir mejor que l
 \end{figure}
 
 \newpage
+
+\cleardoublepage
 
 \listoffigures
 \listoftables

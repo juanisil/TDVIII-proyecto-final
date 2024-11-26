@@ -134,7 +134,7 @@ El objetivo principal de este proyecto es desarrollar y aplicar modelos avanzado
 
 # **Definición del problema** {#definición-del-problema}
 
-A partir de la pregunta de la investigación, se plantea el problema de encontrar el jugador ideal para un equipo de fútbol. En un comienzo nos encontramos planteando cómo definir _performance_ de un jugador y cómo compararla con otros jugadores. Surgió la necesidad de encontrar una métrica para evaluar el impacto de un jugador en el rendimiento de un equipo y cómo definir estos agentes. Además es necesario poder representar concretamente a un Jugador $J$.
+A partir de la pregunta de la investigación, se plantea el problema de encontrar el jugador ideal para un equipo de fútbol. En un comienzo nos encontramos planteando cómo definir la _performance_ de un jugador y cómo compararla con otros jugadores. Surgió la necesidad de encontrar una métrica para evaluar el impacto de un jugador en el rendimiento de un equipo y cómo definir estos agentes. Además es necesario poder representar concretamente a un Jugador $J$.
 
 ## PSL como métrica de Performance 
 
@@ -144,7 +144,7 @@ $$
     xG(A) = P(A) \cdot PSL(A) \cdot SA(A)
 $$
 
-Donde $A$ es el equipo, $P(A)$ es la posesión del balón, $PSL(A)$ es la probabilidad de patear al arco antes de perder el balón y $SA(A)$ es la probabilidad de que un disparo al arco se convierta en gol. A diferencia de la posesión del balón y la probabilidad de convertir un disparo en gol, $PSL(A)$ no es una métrica comúnmente utilizada en el análisis de fútbol ni existen modelos que la calculen. El paper plantea un modelo de red de jugadores que permite calcular $PSL(A)$ para cada equipo.
+Donde $A$ es el equipo, $P(A)$ es el número de posesiones del balón, $PSL(A)$ es la probabilidad de patear al arco antes de perder el balón y $SA(A)$ es la probabilidad de que un disparo al arco se convierta en gol. A diferencia de la posesión del balón y la probabilidad de convertir un disparo en gol, $PSL(A)$ no es una métrica comúnmente utilizada en el análisis de fútbol ni existen modelos que la calculen. El paper plantea un modelo de red de jugadores que permite calcular $PSL(A)$ para cada equipo.
 
 ## Modelo de Red de Jugadores
 
@@ -156,7 +156,7 @@ Utilizando Cadenas de Markov de Tiempo Continuo (CTMC) se puede calcular la prob
     \caption{Modelo de Red de Jugadores}
 \end{figure}
 
-El grafo presentado en la figura representa el modelo de red de jugadores. Cada nodo representa un estado y cada arista representa una transición entre estados. El nodo verde representa el estado de disparo al arco, el rojo la pérdida del balón y el azul la ganancia del balón por parte de un jugador. Los ejes entre los nodos se representan con una matriz de adyacencia $R$ donde cada valor $r(U, V)$ representa la ratio de transición entre los estados $U$ y $V$. 
+El grafo presentado en la figura representa el modelo de red de jugadores. Cada nodo representa un estado y cada arista representa una transición entre estados. El nodo verde representa el estado de disparo al arco, el rojo la pérdida del balón, el negro la ganancia del balón por parte del equipo y los azules a los jugadores. Los ejes entre los nodos se representan con una matriz de adyacencia $R$ donde cada valor $r(U, V)$ representa la ratio de transición entre los estados $U$ y $V$. 
 
 $$
     R = \begin{pmatrix}
@@ -240,7 +240,7 @@ En el siguiente gráfico podemos observar como a pesar de predecir muy pobre los
     \caption{Resultados Modelo de Regresión Lineal}
 \end{figure}
 
-El modelo planteado no es capaz de predecir los ratios de transición, y a pesar de que desarrollamos otros modelos como XGBoost para regresión, Redes Neuronales y Redes Neuronales Probabilísticas (PNNs) no es posible predecir los ratios de transición entre los estados a partir de las métricas de los jugadores. Se debe a que los ratios de transición pueden variar mucho entre partidos para un mismo jugador.. Al evaluar como resolver la predicción de los $r(J_i, J_j)$ decidimos observar como cada ratio de transición afecta al PSL.
+El modelo planteado no es capaz de predecir los ratios de transición, y a pesar de que desarrollamos otros modelos como XGBoost para regresión, Redes Neuronales y Redes Neuronales Probabilísticas (PNNs) no es posible predecir los ratios de transición entre los estados a partir de las métricas de los jugadores. Se debe a que los ratios de transición pueden variar mucho entre partidos para un mismo jugador. Para entender mejor el efecto de estos ratios, decidimos observar como cada ratio de transición afecta al PSL.
 
 ## Test de Sensibilidad sobre PSL
 
@@ -268,7 +268,7 @@ $$
 
 Para el vector de los jugadores $J$ se agregó también la posición en la que juega (Arquero, Defensor, Mediocampista, Delantero) one-hot-encoded.
 
-Luego se entrenó un modelo de XGBoost para Regresión con el mismo split de Train y Test. Se logró obtener un mejor resultado sobre la predicciones de Train en comparación al modelo anterior. Se obtuvo un coeficiente de correlación de Pearson de $0.95$ entre los $r(J_i, S)$ y los $\hat{r}(J_i, S)$ en Train, pero de $0.08$ en Test.
+Luego se entrenó un modelo de XGBoost para Regresión con el mismo split de Train y Test. Se logró obtener un mejor resultado sobre las predicciones de Train en comparación al modelo anterior. Se obtuvo un coeficiente de correlación de Pearson de $0.95$ entre los $r(J_i, S)$ y los $\hat{r}(J_i, S)$ en Train, pero de $0.08$ en Test.
 
 <!-- ![Resultados Modelo de XGBoost](recursos_pdf/graficos/xgb_shots.png) -->
 \begin{figure}
@@ -276,8 +276,7 @@ Luego se entrenó un modelo de XGBoost para Regresión con el mismo split de Tra
     \caption{Resultados Modelo de XGBoost}
 \end{figure}
 
-Este resultado junto al del modelo de predicción de ratios de pases nos llevó a buscar una mejor representación vectorial de los jugadores. En la sección de Player2Vec se explica el modelo utilizado para obtener un vector de representación (embedding $E$) de cada jugador. Con este embedding por construimos una red neuronal, el modelo resultante $f(E_{J}, \text{partido})$ dado el embedding de los jugadores y el partido predice los ratios de transición entre jugadores y el estado de disparo al arco. 
-
+Este resultado junto al del modelo de predicción de ratios de pases nos llevó a buscar una mejor representación vectorial de los jugadores. En la sección de Player2Vec se explica el modelo utilizado para obtener un vector de representación (embedding E) de cada jugador. Con este embedding entrenamos una red neuronal, para obtener un modelo resultante f (EJ , partido) que dado el embedding de los jugadores y el partido, predice los ratios de transición entre jugadores y el estado de disparo al arco.
 \newpage
 
 # **Análisis de las distribuciones de los $r(J, S)$**
@@ -448,7 +447,7 @@ El siguiente gráfico muestra la distribución del PSL de un equipo de ejemplo o
 
 ## Comparar el impacto sobre el PSL de dos jugadores en una formación
 
-Para comparar el PSL de dos jugadores en una formación, se propone un análisis de sensibilidad que consiste en evaluar el impacto en la distribución del PSL al reemplazar a un jugador por otro en la formación. El proceso para ello es el siguiente: 
+Para comparar el PSL de dos jugadores en una formación, se propone un análisis que consiste en evaluar el impacto en la distribución del PSL al reemplazar a un jugador por otro en la formación. El proceso para ello es el siguiente: 
 
 Se define la Formación $L_{A}$ = $\{J_1, J_2, \dots, J_{11}$ como la formación original del equipo $A$, donde alguno de los jugadores $J_i$ es el jugador a "original". 
 
@@ -476,7 +475,7 @@ Se realizó el proceso de Monte Carlo para estimar la distribución del PSL de c
     \caption{Ejemplo de dos distribuciones de PSL de dos formaciones distintas}
 \end{figure}
 
-Una posible comparación entre las distribuciones de PSL de dos formaciones es "a ojo" observando las funciones de densidad de probabilidad. En este caso puntual se puede observar como el equipo con Agüero tiene una distribución de PSL más sesgada a la izquierda que el equipo con Giroud.
+Una posible comparación entre las distribuciones de PSL de dos formaciones es "a ojo" observando las funciones de densidad de probabilidad. En este caso puntual se puede observar como el equipo con Agüero tiene una distribución de PSL más desplazada a izquierda que el equipo con Giroud.
 
 En un enfoque más numérico, se puede realizar una comparación por momentos de las distribuciones de PSL de dos formaciones. Se propone comparar la media y la varianza de las distribuciones $\hat{f}^{1000}_{PSL}(L_{MC})$ y $\hat{f}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$ ya que el método de Monte Carlo nos permite obtener una muestra significativa de las distribuciones. Al no ser distribuciones normales, la skewness y la kurtosis nos proveen información adicional sobre la forma de la distribución.
 

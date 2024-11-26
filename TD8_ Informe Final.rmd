@@ -74,7 +74,6 @@ Este trabajo no hubiera sido posible sin la ayuda de los profesores Gustavo Vulc
 
 **Ignacio Pardo quiere agradecer** a su familia, amigos, colegas y jefe (Darío Mischener) por su apoyo y acompañamiento durante el transcurso de su carrera universitaria.
 
-
 # **Introducción** {#introducción}
 
 <!-- Presenta el tema del trabajo, su contexto y la importancia. Aquí se debe captar el interés del lector, explicando brevemente los aspectos más importantes que se desarrollarán. -->
@@ -802,9 +801,11 @@ Donde $D_{KL}(p||q)$ es la divergencia de Kullback-Leibler entre las distribucio
 
 ## Datos
 
-Para entrenar el modelo, se utilizó un dataset de eventos de partidos de la temporada 2012/13 de la EPL. Se separó la temporada en dos mitades (190 partidos cada una). Con la primera mitad, se construyó un grafo de la red de jugadores $G_{\text{Half}}$ y se obtuvieron los embeddings de los jugadores con Player2Vec `(dimensions=64, window=30, num_walks=500, walk_length=40)`. Con la segunda mitad, se obtuvieron las distribuciones de ratios de transición de los jugadores.
+Para entrenar el modelo, se utilizó un dataset de eventos de partidos de la temporada 2012/13 de la EPL. Se separó la temporada en dos mitades (190 partidos cada una). Con la primera mitad, se construyó un grafo de la red de jugadores $G_{\text{First Half}}$ y se obtuvieron los embeddings de los jugadores con Player2Vec `(dimensions=64, window=30, num_walks=500, walk_length=40)`. Con la segunda mitad, se obtuvieron las distribuciones de ratios de transición de los jugadores.
 
-Luego, de la segunda mitad se obtuvieron las medias y varianzas de las distribuciones de ratios de transición de los jugadores. Un 80\% de los datos se utilizó para entrenar el modelo y un 20\% para test.
+Luego, de la segunda mitad de la temporada se obtuvieron las medias y varianzas de las distribuciones de ratios de transición de los jugadores. Un 80\% de los datos se utilizó para entrenar el modelo y un 20\% para test.
+
+Especificamente los 521 jugadores de la temporada 2012/13 de la EPL se dividieron en 416 para entrenamiento y 105 para test.
 
 <!-- X_train.shape, X_val.shape, X_test.shape
 (torch.Size([332, 64]), torch.Size([84, 64]), torch.Size([105, 64])) -->
@@ -840,9 +841,9 @@ La función de pérdida utilizada fue la Divergencia de Jensen-Shannon (JSD) ent
 
 ## Entrenamiento
 
-Para entrenar el modelo, se utilizó el optimizador SGD (Stochastic Gradient Descent) con una tasa de aprendizaje (lr) de 0.005, un momentum de 0.9 y un weight decay de 0.0005 para prevenir el sobreajuste.
+Para entrenar el modelo inicialmente, se utilizó el optimizador SGD (Stochastic Gradient Descent) con una tasa de aprendizaje (lr) de `0.005`, un momentum de `0.9` y un weight decay de `0.0005` para prevenir el sobreajuste.
 
-Además, se utilizó un scheduler de tasa de aprendizaje (scheduler) con una estrategia de StepLR, que reduce la tasa de aprendizaje en un factor de 0.1 cada 100 épocas. El entrenamiento se llevó a cabo durante un máximo de 10,000 épocas, con un mecanismo de early stopping para detener el entrenamiento si no se observaban mejoras en el rendimiento del modelo en el conjunto de validación durante un número determinado de épocas consecutivas.
+Además, se utilizó un scheduler de tasa de aprendizaje (scheduler) con una estrategia de StepLR, que reduce la tasa de aprendizaje en un factor de `0.1` cada 100 épocas. El entrenamiento se llevó a cabo durante un máximo de 10,000 épocas, con un mecanismo de early stopping para detener el entrenamiento si no se observaban mejoras en el rendimiento del modelo en el conjunto de validación durante un número determinado de épocas consecutivas.
 
 ## Resultados iniciales
 
@@ -860,7 +861,7 @@ El modelo base se entrenó con los hiperparámetros y arquitectura mencionados a
 \caption{Resultados del Modelo Base}
 \begin{tabular}{|c|c|c|}
 \hline
-\textbf{Métrica} & \textbf{Entrenamiento} & \textbf{Validación} \\
+\textbf{Métrica} & \textbf{Entrenamiento} & \textbf{Test} \\
 \hline
 Loss & 0.01068 & 0.01505 \\
 \hline
@@ -1001,16 +1002,16 @@ Asumiendo que las distribuciones de ratios de transición de los jugadores en la
 \begin{center}
 \begin{tabular}{|c|c|c|}
 \hline
-\textbf{Modelo} & \textbf{Priors} \\
+\textbf{Priors} & \textbf{Modelo} & \textbf{Modelo Tuned} \\
 \hline
-\colorbox{yellow}{$0.014493$} & 0.0353 \\
+0.0353 & 0.01505 & \colorbox{yellow}{$0.014493$} \\
 \hline
 \end{tabular}
 \end{center}
 \end{table}
 ```
 
-Por lo que se puede observar, el modelo logra una mejora significativa en la capacidad predictiva de las distribuciones de ratios de transición de los jugadores en comparación con asumir igualdad de distribuciones entre las dos mitades de la temporada. En concreto, nuestro modelo logra reducir la pérdida en un $\sim 58.94\%$ en comparación con los priors.
+Por lo que se puede observar, el modelo logra una mejora significativa en la capacidad predictiva de las distribuciones de ratios de transición de los jugadores en comparación con asumir igualdad de distribuciones entre las dos mitades de la temporada. En concreto, nuestro modelo logra reducir la pérdida en un $\sim 58.99\%$ en comparación con los priors.
 
 \newpage
 

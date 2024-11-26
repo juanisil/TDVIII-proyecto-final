@@ -233,7 +233,7 @@ class EPL_Data:
 
         return self.player_kdes
 
-    def build_transition_prob_dataset(self, n_matches=None):
+    def build_transition_prob_dataset(self, n_matches=None, matches=None):
         """Build the Transition Probability Dataset"""
 
         trans_prob_dataset = []
@@ -241,6 +241,9 @@ class EPL_Data:
         for pi, partido in enumerate(self.partidos):
             if n_matches is not None and pi >= n_matches:
                 break
+            if matches is not None and pi not in matches:
+                continue
+
             match_id = partido["match_id"].values[0]
             for ti, equipo in enumerate(separar_partido_en_equipo_pov(partido)):
                 for li, lineup in enumerate(
@@ -350,43 +353,69 @@ class RandomVariablePSL:
             Dict[int, Dict[str, gaussian_kde]]: Dictionary with player IDs as keys and dictionaries of KDEs as values
         """
 
-        return {
-            (player_id, prob): (
-                {
-                    "mean": (
-                        probs[probs > 0].mean()
-                        if probs[probs > 0].shape[0] > 0
-                        else None
-                    ),
-                    "std": (
-                        probs[probs > 0].std()
-                        if probs[probs > 0].shape[0] > 0
-                        else None
-                    ),
-                    "min": (
-                        probs[probs > 0].min()
-                        if probs[probs > 0].shape[0] > 0
-                        else None
-                    ),
-                    "max": (
-                        probs[probs > 0].max()
-                        if probs[probs > 0].shape[0] > 0
-                        else None
-                    ),
-                }
-                if (probs := tp_ds[tp_ds["player_id"] == player_id][prob]).shape[0] > 3
-                and probs[probs > 0].shape[0] > 3
-                else 0
-            )
-            for player_id in player_ids
+        # return {
+        #     (player_id, prob): (
+        #         {
+        #             "mean": (
+        #                 probs[probs > 0].mean()
+        #                 if probs[probs > 0].shape[0] > 0
+        #                 else None
+        #             ),
+        #             "std": (
+        #                 probs[probs > 0].std()
+        #                 if probs[probs > 0].shape[0] > 0
+        #                 else None
+        #             ),
+        #             "min": (
+        #                 probs[probs > 0].min()
+        #                 if probs[probs > 0].shape[0] > 0
+        #                 else None
+        #             ),
+        #             "max": (
+        #                 probs[probs > 0].max()
+        #                 if probs[probs > 0].shape[0] > 0
+        #                 else None
+        #             ),
+        #         }
+        #         if (probs := tp_ds[tp_ds["player_id"] == player_id][prob]).shape[0] > 3
+        #         and probs[probs > 0].shape[0] > 3
+        #         else 0
+        #     )
+        #     for player_id in player_ids
+        #     for prob in [
+        #         "losses_prob",
+        #         "gains_prob",
+        #         "shots_prob",
+        #         "avg_pass_to_prob",
+        #         "avg_pass_from_prob",
+        #     ]
+        #     if player_id != 0
+        # }
+
+        stats = {}
+
+        for player_id in player_ids:
+            if player_id == 0:
+                continue
             for prob in [
                 "losses_prob",
                 "gains_prob",
                 "shots_prob",
                 "avg_pass_to_prob",
                 "avg_pass_from_prob",
-            ]
-        }
+            ]:
+                probs = tp_ds[tp_ds["player_id"] == player_id][prob]
+                if probs.shape[0] > 0:
+                    stats[(player_id, prob)] = {
+                        "mean": probs.mean(),
+                        "std": probs.std(),
+                        "min": probs.min(),
+                        "max": probs.max(),
+                    }
+                else:
+                    stats[(player_id, prob)] = 0
+
+        return stats
 
     @staticmethod
     def probability_psl_greater_than(psls, psls_2, n_kde_samples=10000):

@@ -759,11 +759,11 @@ Con el modelo planteado de Grafos de Lineups por Equipos y Partidos se puede rep
 
 Otra cuestión considerada para expandir es ademas de tener un nodo general por jugador conectado a sus instancias en cada lineup, se podría tener un nodo que represente a un jugador en un equipo, de forma tal que el jugador real esta conectado a su nodo "Jugador en Equipo" y este nodo a su vez conectado a "Jugador en Lineup de Partido de Equipo". Esto permitiría poder evaluar el rendimiento de un jugador en un equipo en particular y como este se comporta en distintos contextos.
 
-En el paper de *Soccer Networks* donde se plantea el PSL definen una serie de coeficientes $h$, $a$, $\omega$, como la performance de un equipo al jugar de local, al jugar de visitante, y la performance ponderada de todos los otros equipos al jugar de visitante respectivamente. Se podría escalar por ejemplo los ratios de transición entre jugadores y el estado de disparo al arco en función de estos coeficientes para obtener una mejor representación de la performance de un jugador en un partido en particular.
+En el paper de *Soccer Networks* donde se plantea el PSL definen una serie de coeficientes $h$, $a$, $\omega$, como la performance de un equipo al jugar de local, al jugar de visitante, y la performance ponderada de todos los otros equipos al jugar de visitante respectivamente. Se podrían escalar los ratios de transición entre jugadores y el estado de disparo al arco en función de estos coeficientes para obtener una mejor representación de la performance de un jugador en un partido en particular.
 
 \newpage
 
-# **Modelo predictivo de Distribuciones de** $r(U, V)$ {#modelo-predictivo}
+# **Modelo predictivo de Distribuciones de Ratios de Transición** ($r(U, V)$) {#modelo-predictivo}
 
 El trabajo de Player2Vec nos permite obtener embeddings de jugadores que capturan las relaciones entre ellos en un espacio vectorial. A partir de estos embeddings, se propone un modelo predictivo dede las distribuciones de $r(U, V)$.
 
@@ -806,6 +806,26 @@ Para entrenar el modelo, se utilizó un dataset de eventos de partidos de la tem
 
 Luego, de la segunda mitad se obtuvieron las medias y varianzas de las distribuciones de ratios de transición de los jugadores. Un 80\% de los datos se utilizó para entrenar el modelo y un 20\% para test.
 
+<!-- X_train.shape, X_val.shape, X_test.shape
+(torch.Size([332, 64]), torch.Size([84, 64]), torch.Size([105, 64])) -->
+
+```{=latex}
+\begin{table}
+\caption{Datos de Entrenamiento y Test}
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Conjunto} & \textbf{Tamaño} \\
+\hline
+Entrenamiento & 416 \\
+Test & 104 \\
+Total & 521 \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+```
+
 ## Implementación
 
 El modelo se implementó en PyTorch. Se utilizó una red neuronal con la siguiente arquitectura:
@@ -826,9 +846,14 @@ Además, se utilizó un scheduler de tasa de aprendizaje (scheduler) con una est
 
 ## Resultados iniciales
 
-El modelo base se entrenó con los hiperparámetros y arquitectura mencionados anteriormente, su entrenamiento finalizó en el epoch $5244$.
+El modelo base se entrenó con los hiperparámetros y arquitectura mencionados anteriormente, su entrenamiento finalizó en el epoch $2250$.
 
 ![Resultados del Modelo Base](recursos_pdf/graficos/p2v_dist_model_oos_190_for_graph_190_for_model_64_10000_0.005_StepLR.png)
+
+<!-- 
+  test_loss	0.01505
+  train_loss	0.01068
+-->
 
 ```{=latex}
 \begin{table}
@@ -837,19 +862,38 @@ El modelo base se entrenó con los hiperparámetros y arquitectura mencionados a
 \hline
 \textbf{Métrica} & \textbf{Entrenamiento} & \textbf{Validación} \\
 \hline
-Loss & 0.00664 & 0.01167 \\
+Loss & 0.01068 & 0.01505 \\
 \hline
 \end{tabular}
 \end{table}
 ```
 
-El modelo base obtuvo un rendimiento aceptable en el conjunto de entrenamiento, con una pérdida de 0.00664, pero casi el doble en el conjunto de validación, con una pérdida de 0.01167. Esto puede ser un indicador de sobreajuste, por lo que se procedió a realizar un proceso de tuning de hiperparámetros y arquitectura con validación cruzada.
+El modelo base obtuvo un rendimiento aceptable en el conjunto de entrenamiento, con una pérdida de $0.01068$,
+pero casi el 50\% mas en el conjunto de validación, con una pérdida de $0.01505$. Esto puede ser un indicador de sobreajuste, por lo que se procedió a realizar un proceso de tuning de hiperparámetros y arquitectura con validación cruzada.
 
 ## Tuning de Hiperparámetros y Arquitectura con Validación Cruzada
 
 Para mejorar el rendimiento del modelo, se realizó un proceso de tuning de hiperparámetros y arquitectura con validación cruzada. Se evaluaron distintas combinaciones de hiperparámetros y arquitecturas de red neuronal, y se seleccionó la que mejor rendimiento presentó en el conjunto de validación.
 
 Del 80\% de los datos de entrenamiento, se separó un 20\% para validación para hacer holdout CV.
+
+```{=latex}
+\begin{table}
+\caption{Split Datos de Entrenamiento, Validación y Test}
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Conjunto} & \textbf{Tamaño} \\
+\hline
+Entrenamiento & 332 \\
+Validación & 84 \\
+Test & 105 \\
+Total & 521 \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+```
 
 Con la librería `Hyperopt` [@bergstra_2015_hyperopt], se realizó una búsqueda de hiperparámetros bayesina. Se evaluaron distintas combinaciones de hiperparámetros, y se seleccionó la que mejor rendimiento presentó en el conjunto de validación.
 
@@ -886,22 +930,24 @@ Además se implementó una clase de Red Neuronal paramétrica para poder explora
 La busqueda de hiperparámetros se realizó con 1000 iteraciones. La mejor combinación de hiperparámetros y arquitectura de red neuronal encontrada fue la siguiente:
 
 - Tasa de aprendizaje: 0.01
-- Momentum: 0.99
-- Weight decay: 0.0005
+- Momentum: 0.9
+- Weight decay: 0.0001
 - Optimizador: `AdamW`
 - Scheduler: `CosineAnnealingLR`
-- Early stopping window: 50
+  - T_max: 200
 - Arquitectura de red neuronal:
   - Activación: LeakyReLU
   - Dropout: 0.3
-  - Número de capas: 6
-  - Tamaños de capas ocultas: (1024, 1024, 32, 128, 128, 1024)
+  - Número de capas: 8
+  - Tamaños de capas ocultas: (1024, 256, 64, 256, 256, 16, 32, 512)
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{recursos_pdf/graficos/p2v_dist_model_tuned_H.pdf}
   \caption{Arquitectura del Modelo Tuned}
 \end{figure}
+
+(0.004966359119862318, 0.008916404098272324, 0.014493363909423351)
 
 ```{=latex}
 \begin{table}
@@ -912,14 +958,14 @@ La busqueda de hiperparámetros se realizó con 1000 iteraciones. La mejor combi
 \toprule
  & Train loss & Val loss & Test loss \\
 \midrule
-0 & 0.003932 & 0.004977 & 0.008988 \\
+0 & 0.004966 & 0.008916 & 0.014493 \\
 \bottomrule
 \end{tabular}
 \end{center}
 \end{table}
 ```
 
-El modelo final seleccionado obtuvo un rendimiento aceptable en el conjunto de validación, con una pérdida de $0.004977$, aún mejor que la perdida de Train del modelo base. Se procedió a evaluar el modelo en el conjunto de testeo y se obtuvo una pérdida de $0.008988$.
+El modelo final seleccionado obtuvo un rendimiento aceptable en el conjunto de validación, con una pérdida de $0.008916$, aún mejor que la perdida de Train del modelo base. Se procedió a evaluar el modelo en el conjunto de testeo y se obtuvo una pérdida de $0.014493$.
 
 ![Resultados del Modelo Tuned](recursos_pdf/graficos/p2v_dist_model_oos_190_for_graph_190_for_model_64_5000_0.01_CosineAnnealingLR_tuned_eval_test_loss.png)
 
@@ -941,7 +987,30 @@ Macbook Pro M1 2020
 
 El entrenamiento del modelo final tomó tan solo 30 segundos a lo largo de los 115 epochs que duró el entrenamiento por el mecanismo de early stopping.
 
-La busqueda de hiperparametros de 1000 iteraciones tomó al rededor de 5hs en la misma máquina.
+La busqueda de hiperparametros de 1000 iteraciones tomó al rededor de 7hs en la misma máquina.
+
+## Comparación contra priors
+
+Para evaluar la capacidad predictiva de nuestro modelo, comparamos los resultados obtenidos con los priors de las distribuciones de ratios de transición de los jugadores. Los priors se obtuvieron a partir de las distribuciones de ratios de transición de los jugadores en la primera mitad de la temporada 2012/13 de la EPL.
+
+Asumiendo que las distribuciones de ratios de transición de los jugadores en la segunda mitad de la temporada son similares a las de la primera mitad, evaluamos su capacidad predictiva con la misma función de pérdida JSD ponderada, obteniendo los siguientes resultados:
+
+```{=latex}
+\begin{table}
+\caption{Resultados del Modelo vs Priors}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Modelo} & \textbf{Priors} \\
+\hline
+\colorbox{yellow}{$0.014493$} & 0.0353 \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+```
+
+Por lo que se puede observar, el modelo logra una mejora significativa en la capacidad predictiva de las distribuciones de ratios de transición de los jugadores en comparación con asumir igualdad de distribuciones entre las dos mitades de la temporada. En concreto, nuestro modelo logra reducir la pérdida en un $\sim 58.94\%$ en comparación con los priors.
 
 \newpage
 

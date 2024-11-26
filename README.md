@@ -19,3 +19,33 @@ El proyecto está dividido las siguientes carpetas principales:
 - `tests/`: Archivos de tests unitarios y de integración sobre el código en la carpeta `src/`.
 - `SampleData/`: Datos de OPTA de la English Premier League 2012/2013.
 - `gui/`: Interfaz gráfica para la exploración de la investigación.
+
+## Source Code
+
+- `src/event_processing.py`: Procesamiento de eventos de partidos de futbol del Excel
+- `src/excel_xml_util.py`: Modulo para trabajar con archivos XML de OPTA en Pandas
+- `src/futbol_types.py`: Definición de tipos de datos para el análisis de futbol
+- `src/match_data_extraction.py`: Módulo para extraer eventos y datos de los partidos
+
+- `src/epl_player_data_utils.py`: Datos extra de jugadores de la EPL por ID de OPTA.
+
+- `src/utils_CTMC.py`: Funciones para calcular el modelo de transición de estados de un equipo en un partido de futbol.
+
+- `src/bayesian_PSL.py`: Clases para el análisis bayesiano del PSL.
+
+- `src/Player2Vec.py`: Player2Vec a partir de Node2Vec sobre Grafo Full de Transición de Estados de Jugadores
+- `src/p2v_dist.py`: Player2Vec to Player Stats Distribution Model
+- `src/p2v_dist.py`: Modelo Predictivo de Distribuciones de Ratios de Transición
+
+## Algunos Notebooks
+
+- `exploratory/emb_viz.ipynb`: Visualización de embeddings de jugadores con Player2Vec.
+- `exploratory/dataset_exp.ipynb`: Breve exploración del dataset de OPTA.
+- `exploratory/p2v_dist_model_oos.ipynb`: Modelo Predictivo de Distribuciones de Ratios de Transición, con Validación Out-of-Sample. `src/p2v_dist.py`.
+- `exploratory/OPTA_XML_Read.ipynb`: Lectura de datos de OPTA en formato XML.
+- `exploratory/player_exp.ipynb`: Exploración de datos de jugadores. Cálculo de Opta Points como ejemplo.
+- `exploratory/player_q_dist.ipynb`: Análisis de la distribución de los ratios de transición de jugadores.
+- `exploratory/psl_grad.ipynb`: Test de Sensitividad de la función PSL.
+- `exploratory/PSL_StastsBomb.ipynb`: Cálculo de PSL con datos de StatsBomb.
+- `exploratory/PSL_sample_data.ipynb`: Cálculo de PSL con datos de OPTA.
+- `exploratory/case_study.ipynb`: Caso de estudio de jugadores de la EPL (OPTA).

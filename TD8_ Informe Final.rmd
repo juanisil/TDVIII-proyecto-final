@@ -51,7 +51,7 @@ abstract: |
     Este desarrollo se centra en el fútbol, un deporte en el cual los análisis previos se han concentrado, en su mayoría, en predecir resultados de partidos y mejorar el rendimiento de los equipos. Sin embargo, este trabajo propone un enfoque diferente al analizar el impacto de los jugadores sobre la posesión de balón y los disparos del equipo desde una perspectiva probabilística.
 
     A partir de la métrica PSL propuesta en el paper "Soccer Networks" [@huang_soccer_networks], planteamos un proceso para comparar el impacto que tienen los jugadores sobre la performance del equipo. Logramos formular una metodología para estudiar la distribución de la performance de un equipo. Luego, proponemos una serie de métodos y métricas para comparar el rendimiento de dos formaciones de jugadores.
-    Además, desarrollamos una forma de representación vectorial (Embeddings) de los jugadores, llamada Player2Vec, un modelo de Machine Learning tambien basado sobre el modelo de redes de jugadores planteado en el mismo paper "Soccer Networks". Esto último nos permite desarrollar modelos predictivos sobre el rendimiento de los jugadores en un equipo.
+    Además, desarrollamos una forma de representación vectorial (Embeddings) de los jugadores, llamada Player2Vec, un modelo de Machine Learning también basado sobre el modelo de redes de jugadores planteado en el mismo paper "Soccer Networks". Esto último nos permite desarrollar modelos predictivos sobre el rendimiento de los jugadores en un equipo.
     \newpage
 ---
 
@@ -80,13 +80,13 @@ Este trabajo no hubiera sido posible sin la ayuda de los profesores Gustavo Vulc
 
 A diferencia de otros deportes como el béisbol o el basketball, el fútbol ha sido tradicionalmente menos propenso a la aplicación de técnicas avanzadas de análisis de datos y aprendizaje automático. Sin embargo, en los últimos años ha habido un crecimiento significativo en el uso de herramientas analíticas para evaluar el rendimiento de los jugadores y los equipos.
 
-En la última década el análisis del futbol ha evolucionado hacia una perspectiva cada vez más matemática y sofisticada. El desarrollo que más impacto tuvo sin dudas es el de la métrica de Expected Goals (**xG**) que permiten evaluar la calidad de las oportunidades de gol de un equipo. El uso de **xG** en el análisis de partidos y jugadores ha permitido una mayor capacidad predictiva y una mejor comprensión del rendimiento de los equipos.
+En la última década el análisis del fútbol ha evolucionado hacia una perspectiva cada vez más matemática y sofisticada. El desarrollo que más impacto tuvo sin dudas es el de la métrica de Expected Goals (**xG**) que permiten evaluar la calidad de las oportunidades de gol de un equipo. El uso de **xG** en el análisis de partidos y jugadores ha permitido una mayor capacidad predictiva y una mejor comprensión del rendimiento de los equipos.
 
 El trabajo en desarrollo "Soccer Networks" [@huang_soccer_networks] propone un modelo de red de jugadores para calcular la probabilidad de disparar al arco antes de perder el balón (**PSL**), lo cual demuestran tiene alta correlación con el rendimiento del equipo y una gran importancia al nivel del **xG**.
 
-Este trabajo profundiza en el análisis de la métrica **PSL** y propone un analisis probabilistico sobre las componentes del modelo de redes de jugadores y su injerencia en el rendimiento de los jugadores y consecuentemente del equipo. Finalmente, proponemos una metodología para comparar el rendimiento de jugadores y formaciones de jugadores en base a la métrica **PSL**.
+Este trabajo profundiza en el análisis de la métrica **PSL** y propone un análisis probabilístico sobre las componentes del modelo de redes de jugadores y su injerencia en el rendimiento de los jugadores y consecuentemente del equipo. Finalmente, proponemos una metodología para comparar el rendimiento de jugadores y formaciones de jugadores en base a la métrica **PSL**.
 
-# **Motivación Justificación del tema** {#motivación-justificación-del-tema}
+# **Motivación** {#motivación}
 
 <!-- Explica **por qué el tema elegido es relevante**, tanto a nivel académico como práctico. Debe argumentar la importancia del trabajo para el campo de estudio o la sociedad. Similar a lo que se completó en el formulario de licitación de proyectos iniciales. -->
 
@@ -94,7 +94,7 @@ El fútbol es uno de los deportes más populares y seguidos en todo el mundo. La
 
 ## Relevancia Académica
 
-Desde una perspectiva académica, el análisis del rendimiento de los jugadores de fútbol ha sido un área de interés creciente en los últimos años. La aplicación de técnicas avanzadas de análisis de datos, aprendizaje automático y modelos probabilísticos ha permitido una comprensión más profunda del impacto de los jugadores en el rendimiento del equipo. Algunos ejemplos del estado del arte incluyen el modelo para maximizar la posesión esperada propuesto en el artículo de Rahimian et al. (2023) [@rahimian_2023] y el modelo de redes de jugadores para calcular la probabilidad de disparar al arco antes de perder el balón (PSL) presentado en el trabajo de Huang et al.[@huang_soccer_networks].
+Desde una perspectiva académica, el análisis del rendimiento de los jugadores de fútbol ha sido un área de interés creciente en los últimos años. La aplicación de técnicas avanzadas de análisis de datos, aprendizaje automático y modelos probabilísticos ha permitido una comprensión más profunda del impacto de los jugadores en el rendimiento del equipo. Algunos ejemplos del estado del arte incluyen el modelo para maximizar la posesión esperada propuesto en el artículo de [@rahimian_2023] y el modelo de redes de jugadores para calcular la probabilidad de disparar al arco antes de perder el balón (PSL) presentado en el trabajo de Huang et al.[@huang_soccer_networks].
 
 Este trabajo se enmarca en esta línea de investigación, contribuyendo al desarrollo de nuevas metodologías y herramientas para evaluar y comparar el rendimiento de los jugadores.
 
@@ -106,12 +106,12 @@ En el ámbito práctico, la capacidad de identificar a los mejores jugadores tie
 
 ## Objetivo General
 
-El objetivo principal de este proyecto es desarrollar y aplicar modelos avanzados de análisis de datos y probabilísticos, para mejorar la evaluación, comparación y selección de jugadores de fútbol. Esto permitirá a los equipos tomar decisiones más informadas y estratégicas, optimizando su rendimiento y aumentando sus probabilidades de éxito en competiciones. Mas concretamente, este trabajo busca responder la pregunta del titulo "¿Cómo encontrar al jugador ideal para tu equipo de fútbol?".
+El objetivo principal de este proyecto es desarrollar y aplicar modelos avanzados de análisis de datos y probabilísticos, para mejorar la evaluación, comparación y selección de jugadores de fútbol. Esto permitirá a los equipos tomar decisiones más informadas y estratégicas, optimizando su rendimiento y aumentando sus probabilidades de éxito en competiciones. Más concretamente, este trabajo busca responder la pregunta del título "¿Cómo encontrar al jugador ideal para tu equipo de fútbol?".
 
 ## Objetivos Específicos
 
 1. **Desarrollar un Modelo de Evaluación del Rendimiento de Jugadores**:
-   - Analisar las componentes del modelo de red de jugadores.
+   - Analizar las componentes del modelo de red de jugadores.
    - Explotar el modelo PSL para estimar el impacto de los jugadores en el rendimiento del equipo.
    - Crear una representación vectorial de cada jugador para poder utilizarlas en modelos predictivos.
 
@@ -134,7 +134,7 @@ El objetivo principal de este proyecto es desarrollar y aplicar modelos avanzado
 
 # **Definición del problema** {#definición-del-problema}
 
-A partir de la pregunta de la investigación, se plantea el problema de encontrar el jugador ideal para un equipo de fútbol. En un comienzo nos encontramos planteando como definir _performance_ de un jugador y cómo compararla con otros jugadores. Surgió la necesidad de encontrar una métrica evaluar el impacto de un jugador en el rendimiento de un equipo y como definir estos agentes. Además es necesario poder representar concretamente a un Jugdaor $J$.
+A partir de la pregunta de la investigación, se plantea el problema de encontrar el jugador ideal para un equipo de fútbol. En un comienzo nos encontramos planteando cómo definir _performance_ de un jugador y cómo compararla con otros jugadores. Surgió la necesidad de encontrar una métrica para evaluar el impacto de un jugador en el rendimiento de un equipo y cómo definir estos agentes. Además es necesario poder representar concretamente a un Jugador $J$.
 
 ## PSL como métrica de Performance 
 
@@ -144,7 +144,7 @@ $$
     xG(A) = P(A) \cdot PSL(A) \cdot SA(A)
 $$
 
-Donde $A$ es el equipo, $P(A)$ es la posesión del balón, $PSL(A)$ es la probabilidad patear al arco antes de perder el balón y $SA(A)$ es la probabilidad de que un disparo al arco se convierta en gol. A diferencia de la posesión del balón y la probabilidad de convertir un disparo en gol, $PSL(A)$ no es una métrica comúnmente utilizada en el análisis de fútbol ni existen modelos que la calculen. El paper plantea un modelo de red de jugadores que permite calcular $PSL(A)$ para cada equipo.
+Donde $A$ es el equipo, $P(A)$ es la posesión del balón, $PSL(A)$ es la probabilidad de patear al arco antes de perder el balón y $SA(A)$ es la probabilidad de que un disparo al arco se convierta en gol. A diferencia de la posesión del balón y la probabilidad de convertir un disparo en gol, $PSL(A)$ no es una métrica comúnmente utilizada en el análisis de fútbol ni existen modelos que la calculen. El paper plantea un modelo de red de jugadores que permite calcular $PSL(A)$ para cada equipo.
 
 ## Modelo de Red de Jugadores
 
@@ -156,7 +156,7 @@ Utilizando Cadenas de Markov de Tiempo Continuo (CTMC) se puede calcular la prob
     \caption{Modelo de Red de Jugadores}
 \end{figure}
 
-El grafo presentado en la figura representa el modelo de red de jugadores. Cada nodo representa un estado y cada arista representa una transición entre estados. El nodo verde representa el estado de disparo al arco, el rojo la pérdida del balón y el azul la ganancia del balón por parte de un jugador. Los ejes entre los nodos se representan con una matriz de adyasencia $R$ donde cada valor $r(U, V)$ representa la ratio de transición entre los estados $U$ y $V$. 
+El grafo presentado en la figura representa el modelo de red de jugadores. Cada nodo representa un estado y cada arista representa una transición entre estados. El nodo verde representa el estado de disparo al arco, el rojo la pérdida del balón y el azul la ganancia del balón por parte de un jugador. Los ejes entre los nodos se representan con una matriz de adyacencia $R$ donde cada valor $r(U, V)$ representa la ratio de transición entre los estados $U$ y $V$. 
 
 $$
     R = \begin{pmatrix}
@@ -168,8 +168,7 @@ $$
         0 & 0 & \dots & 0 & 0 & 1 \\
     \end{pmatrix}
 $$
-
-A partir de la matriz de ratio de acción sobre tiempo jugado $R$ (ganancias, pases a otro jugador, disparos o pérdidas) se puede obtener la matriz de transición de estados $Q$ para el CMTC de normalizar las filas de $R$:
+A partir de $R$, la matriz de ratio de acción sobre tiempo jugado (ganancias, pases, disparos o pérdidas), se puede obtener la matriz de transición de estados $Q$ al normalizar sus filas.
 
 Para cada par de estados $U$ y $V$ se define $q(U, V) = \frac{r(U, V)}{\sum_{i=1}^{14} r(U, i)}$
 
@@ -192,21 +191,21 @@ $$
 
 Siendo $T$ las probabilidades de transición de los estados transitorios, $X$ las probabilidades de transición de los estados transitorios a los estados absorbentes e $I$ la matriz identidad.
 
-A partir de este modelo en el paper se evaluó para una temporada de la Premier League (EPL 2012/13) la diferencia entre los PSL de cada equipo y luego de forma empírica se demuestra como el $PSL(A)$ tiene alta correlación positiva con el rendimiento del equipo por sobre el contrincante. Finalmente hayamos una métrica significativa de rendimiento de un equipo en la métrica $PSL$. Sin embargo, da a lugar a la investigacion de como se puede aplicar esta métrica a nivel de jugador y como se puede comparar el rendimiento de jugadores en distintos equipos.
+A partir de este modelo en el paper se evaluó para una temporada de la Premier League (EPL 2012/13) [@opta] la diferencia entre los PSL de cada equipo y luego de forma empírica se demuestra como el $PSL(A)$ tiene alta correlación positiva con el rendimiento del equipo por sobre el contrincante. Finalmente hallamos una métrica significativa de rendimiento de un equipo en la métrica $PSL$. Sin embargo, da a lugar a la investigación de cómo se puede aplicar esta métrica a nivel de jugador y cómo se puede comparar el rendimiento de jugadores en distintos equipos.
 
 Para evaluar el impacto de un jugador $J$ se debe, o bien conocer la probabilidad de transición entre $J$ y los otros 13 estados (10 jugadores, Ganancia, Pérdida y Disparo) o bien lograr estimar la probabilidad de transición entre $J$ y los otros 13 estados.
 
-En estre trabajo se propone un método probabilistico bayesiano para hayar la Distribución del PSL dada la distribución de probabilidades de transición entre cada uno de los 11 jugadores y los otros 13 estados.
+En este trabajo se propone un método probabilístico bayesiano para hallar la Distribución del PSL dada la distribución de probabilidades de transición entre cada uno de los 11 jugadores y los otros 13 estados.
 
 ## Modelo Predictivo de probabilidades de transición
 
-En un comienzo se planteó desarrollar un modelo predictivo para estimar las ratios de transición entre los estados. Optamos por buscar predecir los ratios $r$ y no las probabilidades de transición $q$ ya que la normalización no es igual en cada instancia de $R$. Mas concretamente buscamos estimar la función $f$ que mapea los estados $U$ y $V$ a la ratio de transición $r(U, V)$.
+En un comienzo se planteó desarrollar un modelo predictivo para estimar las ratios de transición entre los estados. Optamos por buscar predecir los ratios $r$ y no las probabilidades de transición $q$ ya que la normalización no es igual en cada instancia de $R$. Más concretamente buscamos estimar la función $f$ que mapea los estados $U$ y $V$ al ratio de transición $r(U, V)$.
 
 $$
     \hat{r}(U, V) = f(U, V, \theta)
 $$
 
-Comenzamos armando un modelo para predecir unicamente los ratios de pases $r(J_i, J_j)$ entre un jugador $J_i$ y otro jugador $J_j$. Lo que correspondereia a los siguientes valores de la matriz $R$:
+Comenzamos armando un modelo para predecir únicamente los ratios de pases $r(J_i, J_j)$ entre un jugador $J_i$ y otro jugador $J_j$. Lo que correspondería a los siguientes valores de la matriz $R$:
 
 $$
     R = \begin{pmatrix}
@@ -220,15 +219,15 @@ $$
 $$
 
 
-Para poder utilizar un modelo de machine learning tradicional necestiamos de poder representar a cada jugador $J$ de forma vectorial. Armamos un vector de métricas agregadas para un jugador al momento del partido a predecir. Estas métricas incluyen la cantidad de pases, disparos, goles, pérdidas, etc. sobre el total de tiempo jugado, ademas de el equipo en el que juega.
+Para poder utilizar un modelo de machine learning tradicional necesitamos poder representar a cada jugador $J$ de forma vectorial. Armamos un vector de métricas agregadas para un jugador al momento del partido a predecir. Estas métricas incluyen la cantidad de pases, disparos, goles, pérdidas, etc. sobre el total de tiempo jugado, además de el equipo en el que juega.
 
 $$
     J = [\text{Passes/90}, \text{Shots/90}, \text{Goals/90}, \text{Losses/90}, \text{Time Played}, \text{Team ID}]
 $$
 
-Para el modelo predictivo comenzamos utilizando un modelo de XGBoost para la regresión pero rápidamente observamos que por la naturelza de arbol al predecir con la media de las observaciones por hoja las predicciones resultaban casi discretas, por lo que viramos a explorar un modelo de regresión lineal para predecir los ratios de pases entre jugadores.
+Para el modelo predictivo comenzamos utilizando un modelo de XGBoost para la regresión pero rápidamente observamos que por la naturaleza de árbol al predecir con la media de las observaciones por hoja las predicciones resultaban casi discretas, por lo que viramos a explorar un modelo de regresión lineal para predecir los ratios de pases entre jugadores.
 
-Para validar elegimos separar de forma temporal los 380 partidos de la temporada 2012/13 de la EPL: los primeros 269 partidos de entrenamiento; los últimos 111 de test ($\mu + 2/3 \sigma$). Ademas para construir el dataset, elegimos agarrar parejas de jugadores de los partidos de Train y removerlos de los mismos para poder en Test predecir ratios de transición entre jugadores que no se vieron en Train.
+Para validar elegimos separar de forma temporal los 380 partidos de la temporada 2012/13 de la EPL: los primeros 269 partidos de entrenamiento; los últimos 111 de test ($\mu + 2/3 \sigma$). Además para construir el dataset, elegimos agarrar parejas de jugadores de los partidos de Train y removerlos de los mismos para poder en Test predecir ratios de transición entre jugadores que no se vieron en Train.
 
 Luego de entrenar el modelo, para cada instancia de test obtuvimos la matriz de ratios de transición $R$ y calculamos el PSL real, para luego predecir la matriz de transición $\hat{R}$ y calcular el PSL predicho. Finalmente calculamos el coeficiente de correlación de Pearson entre el PSL real y el PSL predicho. 
 
@@ -241,12 +240,12 @@ En el siguiente gráfico podemos observar como a pesar de predecir muy pobre los
     \caption{Resultados Modelo de Regresión Lineal}
 \end{figure}
 
-El modelo planteado no es capaz de predecir los ratios de transición, y a pesar de que desarrollamos otros modelos como XGBoost para regressión, Redes Neuronales y Redes Neuronales Probabilisticas (PNNs) no es posible predecir los ratios de transición entre los estados a partir de las métricas de los jugadores. Esto se debe principalmente a la cantidad de datos y la poca relación entre ellos. Al evaluar como resolver la predicción de los $r(J_i, J_j)$ decidimos observar como cada ratio de transición afecta al PSL.
+El modelo planteado no es capaz de predecir los ratios de transición, y a pesar de que desarrollamos otros modelos como XGBoost para regresión, Redes Neuronales y Redes Neuronales Probabilísticas (PNNs) no es posible predecir los ratios de transición entre los estados a partir de las métricas de los jugadores. Se debe a que los ratios de transición pueden variar mucho entre partidos para un mismo jugador.. Al evaluar como resolver la predicción de los $r(J_i, J_j)$ decidimos observar como cada ratio de transición afecta al PSL.
 
 ## Test de Sensibilidad sobre PSL
 
-Para entender mejor la relación entre los ratios de transición y el PSL, se implementó el modelo en una librería de auto-diferenciación (pytorch) y se obtuvo el gradiente de PSL empíricamente. Esto nos permitió entender que estados tienen mayor influencia en la métrica que estamos analizando.
-Pudimos observar que las transiciones de Jugador a Shot son las que mas inciden sobre el PSL, seguido por las transiciones entre jugadores, tal como se observa en la figura. 
+Para entender mejor la relación entre los ratios de transición y el PSL, se implementó el modelo en una librería de auto-diferenciación (pytorch) y se obtuvo el gradiente de PSL empíricamente respecto a los ratios de transición. Esto nos permitió entender qué estados tienen mayor influencia en la métrica que estamos analizando.
+Pudimos observar que las transiciones de Jugador a Shot son las que más inciden sobre el PSL, seguido por las transiciones entre jugadores, tal como se observa en la figura. 
 
 ![Gradiente del PSL](recursos_pdf/graficos/psl_gradient.jpeg)
 
@@ -267,9 +266,9 @@ $$
     \end{pmatrix}
 $$
 
-Para el vector de los jugadores $J$ se agregó tambien la posición en la que juega (Arquero, Defensor, Mediocampista, Delantero) one-hot-encoded.
+Para el vector de los jugadores $J$ se agregó también la posición en la que juega (Arquero, Defensor, Mediocampista, Delantero) one-hot-encoded.
 
-Luego se entrenó un modelo de XGBoost para Regresión con el mismo split de Train y Test. Se logró obtener un mejor resultado sobre la predicciones de Train en comparación al modelo anterior, sin embargo al evaluar en Test. Se obtuvo un coeficiente de correlación de Pearson de $0.95$ entre los $r(J_i, S)$ y los $\hat{r}(J_i, S)$ en Train, pero de $0.08$ en Test.
+Luego se entrenó un modelo de XGBoost para Regresión con el mismo split de Train y Test. Se logró obtener un mejor resultado sobre la predicciones de Train en comparación al modelo anterior. Se obtuvo un coeficiente de correlación de Pearson de $0.95$ entre los $r(J_i, S)$ y los $\hat{r}(J_i, S)$ en Train, pero de $0.08$ en Test.
 
 <!-- ![Resultados Modelo de XGBoost](recursos_pdf/graficos/xgb_shots.png) -->
 \begin{figure}
@@ -281,7 +280,7 @@ Este resultado junto al del modelo de predicción de ratios de pases nos llevó 
 
 \newpage
 
-# **Analisis de las distribuciones de los $r(J, S)$**
+# **Análisis de las distribuciones de los $r(J, S)$**
 
 En un esfuerzo de comprender mejor el modelo de ratios de transición entre jugadores y el estado de disparo al arco, se decidió analizar las distribuciones de los $r(J, S)$ para cada jugador en la temporada 2012/13 de la EPL. 
 
@@ -293,11 +292,7 @@ Se observó que las distribuciones de los ratios de transición entre jugadores 
     \caption{Distribución de todos los $r(J, S)$}
 \end{figure}
 
-Además, se observó que la distribución de los $r(J, S)$ de cada jugador no nescesariamente sigue una distribución normal ni similar a la de otros jugadores.
-
-Para el siguiente analisis se ajustaron las distribuciones de los $r(J, S)$ de cada jugador a una distribución de probabilidad beta y se obtuvieron los parámetros $\alpha$ y $\beta$ de cada jugador. 
-
-Inicialmente presentamos la distribución de dos jugadores a modo de ejemplo: **Sergio Agüero** y **Robin van Persie**
+Además, se observó que la distribución de los $r(J, S)$ de cada jugador no necesariamente sigue una distribución normal ni similar a la de otros jugadores. Para el siguiente análisis se ajustaron las distribuciones de los $r(J, S)$ de cada jugador a una distribución de probabilidad beta y se obtuvieron los parámetros $\alpha$ y $\beta$ de cada jugador. Inicialmente presentamos la distribución de dos jugadores a modo de ejemplo: **Sergio Agüero** y **Robin van Persie**
 
 <!-- ![Distribución de los $r(J, S)$ de Sergio Agüero y Robin van Persie](recursos_pdf/graficos/Sergio_Aguero_Robin_van_Persie_shots_prob_beta_binomial.png) -->
 \begin{figure}
@@ -336,7 +331,7 @@ Luego se analizó la distribución de los $r(J, S)$ de los 10 jugadores con mayo
 
 ## Comparación de las distribuciones de los $r(J, S)$
 
-A partir de la distribución ajustada de un jugador, podemos luego hayar por ejemplo jugadores similares en base a la distribución de los $r(J, S)$ utilizando la divergencia de Kullback-Leibler (KL). 
+A partir de la distribución ajustada de un jugador, podemos luego hallar jugadores similares en base a la distribución de los $r(J, S)$ utilizando la divergencia de Kullback-Leibler (KL). 
 
 En el siguiente gráfico se observa la distribución de los $r(J, S)$ de jugadores similares a él en la temporada 2012/13 de la EPL. Además se presentan solapados en otra figura.
 
@@ -352,7 +347,7 @@ En el siguiente gráfico se observa la distribución de los $r(J, S)$ de jugador
     \caption{Distribución de los $r(J, S)$ de jugadores similares a Sergio Agüero Superpuestos}
 \end{figure}
 
-Finalmente podemos agregar la condición de _misma posición_ al comparar dos jugadores, en el caso de Agüero de Delantero (F por Forward) y hayar nuevamente jugadores aún mas similares a el. 
+Finalmente podemos agregar la condición de _misma posición_ al comparar dos jugadores, en el caso de Agüero de Delantero (F por Forward) y hallar nuevamente jugadores aún más similares a él. 
 
 <!-- ![Distribución de los $r(J, S)$ de jugadores similares a Sergio Agüero de la misma posición](recursos_pdf/graficos/Sergio_Aguero_and_similar_players_same_position_shots_prob_beta_binomial.png) -->
 \begin{figure}
@@ -380,17 +375,17 @@ Como un extra, este sistema de clustering nos permite hallar rápido jugadores s
 
 # **Estimación de la Distribución del PSL**
 
-A partir de los resultados obtenidos en el análisis de las distribuciones de los $r(J, S)$, se propone un utilizar estas como priors para cada jugador, es decir, se asume que la distribución de los $r(J, S)$ de un jugador es la distribución a priori de la variable aleatoria $r(J, S)$ para ese jugador, lo mismo para los $r(J_i, J_j)$, los $r(J, L)$ y los $r(J, G)$.
+A partir de los resultados obtenidos en el análisis de las distribuciones de los $r(J, S)$, se propone un utilizar estas como priors para cada jugador, es decir, se asume que la distribución de los $r(J, S)$ de un jugador es la distribución _a-priori_ de la variable aleatoria $r(J, S)$ para ese jugador, lo mismo para los $r(J_i, J_j)$, los $r(J, L)$ y los $r(J, G)$.
 
-De esta forma, cada jugador $J$ tiene una distribución a priori para cada uno de los 14 estados, considerando esto, podemos reformular la matriz de ratios de transición como una matriz de variables aleatorias donde cada una se distribuye según la distribución a priori del jugador correspondiente.
+De esta forma, cada jugador $J$ tiene una distribución _a-priori_ para cada uno de los 14 estados. Considerando esto, podemos reformular la matriz de ratios de transición como una matriz de variables aleatorias donde cada una se distribuye según la distribución _a-priori_ del jugador correspondiente.
 
 ## Variables Aleatorias para los $r(U, V)$ y PSL por Priors
 
-Para actualizar la notación, sean $r_{J, V}$ la variable aleatoria que representa la ratio de transición entre el jugador $J$ y el estado $V$, esto incluye $r_{J, S}$, $r_{J, L}$ y tambien $r_{G, J}$, asi como los $r_{J_i, J_j}$ para $i, j \in [1, 11]$.
+Para actualizar la notación, sean $r_{J, V}$ la variable aleatoria que representa la ratio de transición entre el jugador $J$ y el estado $V$, esto incluye $r_{J, S}$, $r_{J, L}$ y también $r_{G, J}$, asi como los $r_{J_i, J_j}$ para $i, j \in [1, 11]$.
 
-Luego $r_{J, V} \sim F_x$ la distribución a priori de la variable aleatoria $r_{J, V}$.
+Luego $r_{J, V} \sim F_x$ la distribución _a-priori_ de la variable aleatoria $r_{J, V}$.
 
-Para generalizar el analisis de distribuciones planteadas en la sección anterior, se propone utilizar una distribución KDE (Kernel Density Estimation) a partir de los histogramas de los $r(J, V)$ para modelar sus distribuciones, ya que no todos los ratios de transición siguen una distribución beta tan bien como los $r(J, S)$.
+Para generalizar el análisis de distribuciones planteadas en la sección anterior, se propone utilizar una distribución KDE (Kernel Density Estimation) a partir de los histogramas de los $r(J, V)$ para modelar sus distribuciones, ya que no todos los ratios de transición siguen una distribución beta tan bien como los $r(J, S)$.
 
 Finalmente obtenemos, para una formación dada de 11 jugadores, una matriz de variables aleatorias $\mathbf{R}$.
 
@@ -405,7 +400,7 @@ $$
     \end{pmatrix}
 $$
 
-Para mejor claridad, la siguiente vizualiación muestra la matriz de variables aleatorias $\mathbf{R}$ para un equipo de ejemplo. En cada posición se observa la distribución a priori de la variable aleatoria correspondiente.
+Para mejor claridad, la siguiente visualización muestra la matriz de variables aleatorias $\mathbf{R}$ para un equipo de ejemplo. En cada posición se observa la distribución _a-priori_ de la variable aleatoria correspondiente.
 
 <!-- ![Matriz de Variables Aleatorias $\mathbf{R}$](recursos_pdf/graficos/f9090710-1703-476a-b906-8fddde8ae6d6.png) -->
 \begin{figure}
@@ -415,25 +410,25 @@ Para mejor claridad, la siguiente vizualiación muestra la matriz de variables a
 
 ## Proceso de Monte Carlo para estimar la distribución del PSL
 
-Dado un equipo $A$ con una formación de 11 jugadores $L_A$, se busca estimar la distribución del PSL de ese equipo a partir de las distribuciones a prior de los $r(U, V)$ de cada jugador. Para ello, se propone un proceso de Monte Carlo para muestrear de las distribuciones a priori de los $r(U, V)$.
+Dado un equipo $A$ con una formación de 11 jugadores $L_{A}$, se busca estimar la distribución del PSL de ese equipo a partir de las distribuciones _a-priori_ de los $r(U, V)$ de cada jugador. Para ello, se propone un proceso de Monte Carlo para muestrear de las distribuciones _a-priori_ de los $r(U, V)$.
 
-De la formación $L_A$ podemos construir la matriz de variables aleatorias $\mathbf{R}$ a partir de las distribuciones a priori de los $r(U, V)$ de cada jugador.
+De la formación $L_{A}$ podemos construir la matriz de variables aleatorias $\mathbf{R}$ a partir de las distribuciones _a-priori_ de los $r(U, V)$ de cada jugador.
 
-Definimos $\hat{f}^{N}_{PSL}(L_A)$ como la función distribución de probabilidad empírica de los $PSL_i$ para la formación $L_A$ en base a $N$ simulaciones.
+Definimos $\hat{f}^{N}_{PSL}(L_{A})$ como la función distribución de probabilidad empírica de los $PSL_i$ para la formación $L_{A}$ en base a $N$ simulaciones.
 
-El proceso de Monte Carlo para estimar la distribución del PSL de la formación $L_A$ es el siguiente:
+El proceso de Monte Carlo para estimar la distribución del PSL de la formación $L_{A}$ es el siguiente:
 
 ```{=latex}
 \begin{algorithm}[H]
 \caption{Simulación del PSL del equipo $A$}\label{alg:cap}
 \SetAlgoLined
 \KwIn{Número de simulaciones $N$}
-\KwIn{Formación $L_A$ = $\{J_1, J_2, \dots, J_{11}\}$}
+\KwIn{Formación $L_{A}$ = $\{J_1, J_2, \dots, J_{11}\}$}
 \KwOut{Distribución del PSL del equipo $A$}
-$\mathbf{R} \gets$ Construir la matriz de variables aleatorias a partir de las distribuciones a priori de los $r(U, V)$ de cada jugador\;
+$\mathbf{R} \gets$ Construir la matriz de variables aleatorias a partir de las distribuciones a-priori de los $r(U, V)$ de cada jugador\;
 $PSL_i \gets 0$ para $i = 1, 2, \dots, N$\;
 \For{$i = 1$ \KwTo $N$}{
-    $R \gets $ Muestrear de la matriz $\mathbf{R}$ distribuciones a priori de los $r(U, V)$\;
+    $R \gets $ Muestrear de la matriz $\mathbf{R}$ distribuciones a-priori de los $r(U, V)$\;
     $Q \gets$ Normalizar las filas de $R$\;
     $PSL_i \gets PSL(Q)$\;
 }
@@ -443,7 +438,7 @@ Estimar la distribución del PSL del equipo $A$ a partir de las $N$ observacione
 
 A partir de esta distribución del PSL, se puede realizar comparaciones entre diferentes formaciones de 11 jugadores.
 
-El siguiente gráfico muestra la distribución del PSL de un equipo de ejemplo obtenida a partir de 1000 simulaciones del proceso de Monte Carlo para la formación mas utilizada en la temporada 2012/13 de la EPL del equipo Manchester City.
+El siguiente gráfico muestra la distribución del PSL de un equipo de ejemplo obtenida a partir de 1000 simulaciones del proceso de Monte Carlo para la formación más utilizada en la temporada 2012/13 de la EPL del equipo Manchester City.
 
 <!-- ![Distribución del PSL del equipo Manchester City](recursos_pdf/graficos/sergio_aguero_psl_distribution.png) -->
 \begin{figure}
@@ -455,11 +450,11 @@ El siguiente gráfico muestra la distribución del PSL de un equipo de ejemplo o
 
 Para comparar el PSL de dos jugadores en una formación, se propone un análisis de sensibilidad que consiste en evaluar el impacto en la distribución del PSL al reemplazar a un jugador por otro en la formación. El proceso para ello es el siguiente: 
 
-Se define la Formación $L_A$ = $\{J_1, J_2, \dots, J_{11}$ como la formación original del equipo $A$, donde alguno de los jugadores $J_i$ es el jugador a "original". 
+Se define la Formación $L_{A}$ = $\{J_1, J_2, \dots, J_{11}$ como la formación original del equipo $A$, donde alguno de los jugadores $J_i$ es el jugador a "original". 
 
 Se define el jugador $J'$ a comparar con $J_i$ y la formación $L'_A$ = $\{J_1, J_2, \dots, J_{11}\}$ como la formación con el jugador $J'$ en lugar de $J_i$.
 
-Luego, se puede computar $\hat{f}^{N}_{PSL}(L_A)$ y $\hat{f}^{N}_{PSL}(L'_A)$ para comparar las distribuciones del PSL de las formaciones $L_A$ y $L'_A$.
+Luego, se puede computar $\hat{f}^{N}_{PSL}(L_{A})$ y $\hat{f}^{N}_{PSL}(L'_A)$ para comparar las distribuciones del PSL de las formaciones $L_{A}$ y $L'_A$.
 
 ## Comparación de Distribuciones de PSL
 
@@ -481,9 +476,9 @@ Se realizó el proceso de Monte Carlo para estimar la distribución del PSL de c
     \caption{Ejemplo de dos distribuciones de PSL de dos formaciones distintas}
 \end{figure}
 
-Una posible comparación entre las distribuciones de PSL de dos formaciones es "a ojo" observando las funciones de densidad de probabilidad. En este caso puntual se puede observar como el equipo con Agüero tiene una distribución de PSL mas sesgada a la izquierda que el equipo con Giroud.
+Una posible comparación entre las distribuciones de PSL de dos formaciones es "a ojo" observando las funciones de densidad de probabilidad. En este caso puntual se puede observar como el equipo con Agüero tiene una distribución de PSL más sesgada a la izquierda que el equipo con Giroud.
 
-En un enfoque mas númerico, se puede realizar una comparación por momentos de las distribuciones de PSL de dos formaciones. Se propone comparar la media y la varianza de las distribuciones $\hat{f}^{1000}_{PSL}(L_{MC})$ y $\hat{f}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$ ya que el método de Monte Carlo nos permite obtener una muestra significativa de las distribuciones. Al no ser distribuciones normales, la skewness y la kurtosis nos proveen información adicional sobre la forma de la distribución.
+En un enfoque más numérico, se puede realizar una comparación por momentos de las distribuciones de PSL de dos formaciones. Se propone comparar la media y la varianza de las distribuciones $\hat{f}^{1000}_{PSL}(L_{MC})$ y $\hat{f}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$ ya que el método de Monte Carlo nos permite obtener una muestra significativa de las distribuciones. Al no ser distribuciones normales, la skewness y la kurtosis nos proveen información adicional sobre la forma de la distribución.
 
 <!-- Tabla Comparativa -->
 ```{=latex}
@@ -493,7 +488,7 @@ En un enfoque mas númerico, se puede realizar una comparación por momentos de 
 \begin{center}
 \begin{tabular}{llllll}
 \toprule
-Jugador & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
+Jugador & Media & Varianza & Desvío Estándar & Skewness & Kurtosis \\
 \midrule
 Aguero & 0.130861 & 0.041160 & 0.001694 & 0.554998 & 0.362611 \\
 Giroud & 0.134403 & 0.043310 & 0.001876 & 0.580404 & 0.405658 \\
@@ -503,7 +498,7 @@ Giroud & 0.134403 & 0.043310 & 0.001876 & 0.580404 & 0.405658 \\
 \end{table}
 ```
 
-Para este caso de ejemplo, se observa que la media y la varianza de las distribuciones de PSL de la formación $L_{MC}$ y $L_{MC}^{\text{Giroud}}$ son similares, aunque mayores en la formación con Giroud. Además, el tercer momento (skewness) nos confirma lo observado "a ojo" en las funciones de densidad de probabilidad, la distribución de PSL de la formación con Agüero es mas sesgada a la izquierda que la de la formación con Giroud. Por último el cuarto momento (kurtosis) nos indíca que la $\hat{f}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$ tiene colas mas pesadas que la $\hat{f}^{1000}_{PSL}(L_{MC})$.
+Para este caso de ejemplo, se observa que la media y la varianza de las distribuciones de PSL de la formación $L_{MC}$ y $L_{MC}^{\text{Giroud}}$ son similares, aunque mayores en la formación con Giroud. Además, el tercer momento (skewness) nos confirma lo observado "a ojo" en las funciones de densidad de probabilidad, la distribución de PSL de la formación con Agüero es más sesgada a la izquierda que la de la formación con Giroud. Por último el cuarto momento (kurtosis) nos indica que la $\hat{f}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$ tiene colas más pesadas que la $\hat{f}^{1000}_{PSL}(L_{MC})$.
 
 ### Dominancia Probabilística
 
@@ -551,21 +546,21 @@ En la siguiente figura se observa la comparación de las CDFs de las distribucio
     \caption{Comparación de CDFs de las distribuciones de PSL de las formaciones $L_{MC}$ y $L_{MC}^{\text{Giroud}}$}
 \end{figure}
 
-Nuevamente "a ojo" se puede analisar la relación entre las distribuciones $\hat{F}^{1000}_{PSL}(L_{MC})$ y $\hat{F}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$, en este caso podemos ver como la CDF de la formación con Agüero es menor a la de la formación con Giroud en la mayoría de los puntos, lo que indica que la formación con Agüero tiene un PSL menor que la formación con Giroud en la mayoría de los casos. 
+Nuevamente "a ojo" se puede analizar la relación entre las distribuciones $\hat{F}^{1000}_{PSL}(L_{MC})$ y $\hat{F}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$, en este caso podemos ver como la CDF de la formación con Agüero es menor a la de la formación con Giroud en la mayoría de los puntos, lo que indica que la formación con Agüero tiene un PSL menor que la formación con Giroud en la mayoría de los casos. 
 
 ### Dominancia Estocástica
 
-Mas formalmente se puede evaluar la dominancia estocástica entre las CDFs $\hat{F}^{1000}_{PSL}(L_{MC})$ y $\hat{F}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$. La dominancia estocástica es una relación de orden entre dos funciones de distribución acumulada que indica si una distribución es mayor que la otra en todos los puntos.
+Más formalmente se puede evaluar la dominancia estocástica entre las CDFs $\hat{F}^{1000}_{PSL}(L_{MC})$ y $\hat{F}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$. La dominancia estocástica es una relación de orden entre dos funciones de distribución acumulada que indica si una distribución es mayor que la otra en todos los puntos.
 
-Especificamente, podemos ver que apartir del umbral resaltado en verde en la figura ($x = 0.05346757$), $\hat{F}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$ tiene **dominancia estocástica** *parcial* sobre $\hat{F}^{1000}_{PSL}(L_{MC})$ [@gustavo_NYU; @bawa_1982_stochastic].
+Especificamente, podemos ver que a partir del umbral resaltado en verde en la figura ($x = 0.05346757$), $\hat{F}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$ tiene **dominancia estocástica** *parcial* sobre $\hat{F}^{1000}_{PSL}(L_{MC})$ [@gustavo_NYU; @bawa_1982_stochastic].
 
 ### Conclusiones sobre la Comparación de Distribuciones de PSL
 
-Dependiendo el grado de rigurosidad provista por una comparación previa, recomendamos contemplar algúno de los consecuentes métodos presentados para comparar distribuciones de PSL. En este caso de ejemplo, se observó que la formación con Giroud tiene dominancia probabilística sobre la formación con Agüero aunque no se puede afirmar que tiene dominancia estocástica.
+Dependiendo el grado de rigurosidad provista por una comparación previa, recomendamos contemplar alguno de los consecuentes métodos presentados para comparar distribuciones de PSL. En este caso de ejemplo, se observó que la formación con Giroud tiene dominancia probabilística sobre la formación con Agüero aunque no se puede afirmar que tiene dominancia estocástica.
 
 La comparación por momentos es una forma rápida y sencilla de comparar distribuciones de PSL, sin embargo, no siempre refleja la relación entre las distribuciones. La dominancia probabilística es una métrica intuitiva que nos permite evaluar la probabilidad de que una muestra de una distribución sea mayor que una muestra de la otra distribución. Por último, la dominancia estocástica es una relación de orden más rigurosa que nos permite evaluar si una distribución es mayor que la otra en todos los puntos.
 
-El campo de estudio sobre la Dominancia Estocástica es amplio y complejo, en esta investigación se presentó una humilde introducción al tema y se propuso un método para evaluar la dominancia, por lo que se recomienda profundizar en el tema para una mejor comprensión a la hora de tomar desiciones basado en comparación de CDFs. Recomendamos la publicación "Stochastic Dominance: A Research Bibliography" [@bawa_1982_stochastic] que contiene al rededor de 400 referencias sobre el tema.
+El campo de estudio sobre la Dominancia Estocástica es amplio y complejo, en esta investigación se presentó una humilde introducción al tema y se propuso un método para evaluar la dominancia, por lo que se recomienda profundizar en el tema para una mejor comprensión a la hora de tomar decisiones basado en comparación de CDFs. Recomendamos la publicación "Stochastic Dominance: A Research Bibliography" [@bawa_1982_stochastic] que contiene alrededor de 400 referencias sobre el tema.
 
 \newpage
 
@@ -639,7 +634,7 @@ $$
     r(J_i, J_i^{L, T, M}) = \frac{\text{Time Played}_{J_i^{L, T, M}}}{\text{Time Played}_{J_i}}
 $$
 
-La siguiente figura es una visualización de una instancia de un Equipo en un Partido con sus lineups. En este caso el equipo hizo dos cambios en el partido ($J_4$ por $J_{12}$ y $J_2$ por $J_{13}$). Se puede observar como los jugador reales $J_4$ y $J_{12}$ se encuentran representados por el mismo nodo $J_4^{L, T, M}$ y lo mismo para $J_2$ y $J_{13}$ con $J_2^{L, T, M}$ para sus respectivos lineups. El resto de los nodos de jugadores reales mantienen su identidad en los grafos de lineups.
+La siguiente figura es una visualización de una instancia de un Equipo en un Partido con sus lineups. En este caso el equipo hizo dos cambios en el partido ($J_4$ por $J_{12}$ y $J_2$ por $J_{13}$). Se puede observar como los jugadores reales $J_4$ y $J_{12}$ se encuentran representados por el mismo nodo $J_4^{L, T, M}$ y lo mismo para $J_2$ y $J_{13}$ con $J_2^{L, T, M}$ para sus respectivos lineups. El resto de los nodos de jugadores reales mantienen su identidad en los grafos de lineups.
 
 <!-- ![Grafo de Jugadores](recursos_pdf/graficos/G_TM.png) -->
 \begin{figure}
@@ -703,11 +698,11 @@ $$
 \end{aligned}
 $$
 
-La cantidad de random walks $k$ asi como los otros hiperparametros del modelo de Node2Vec fueron seleccionados de forma empírica observando el resultado de los embeddings obtenidos.
+La cantidad de random walks $k$ así como los otros hiperparametros del modelo de Node2Vec fueron seleccionados de forma empírica observando el resultado de los embeddings obtenidos.
 
 ## Visualización y Exploración de los Embeddings
 
-Para comenzar a explorar el espacio vectoriál generado por Player2Vec, se ajustó un modelo inicialmente a partir siguientes hiperparametros:
+Para comenzar a explorar el espacio vectorial generado por Player2Vec, se ajustó un modelo inicialmente a partir siguientes hiperparametros:
 
 - Dimensión de embeddings: 3
 - Longitud de caminata: 16 nodos
@@ -731,18 +726,18 @@ Para poder visualizar de forma más clara los embeddings de los jugadores, se re
 \end{figure}
 
 
-En la figura de los componentes principales se observa como los jugadores de un mismo equipo se encuentran cercanos en el espacio vectorial, lo que indica que los embeddings resultantes de este modelo capturan las relaciones entre los jugadores de un mismo equipo.
+En la figura de los componentes principales se observa cómo los jugadores de un mismo equipo se encuentran cercanos en el espacio vectorial, lo que indica que los embeddings resultantes de este modelo capturan las relaciones entre los jugadores de un mismo equipo.
 
-Ademas se observa como en este espacio las direcciones en las que se representan a los equipos divergen de forma clara, lo que indica que los embeddings capturan unicamente las diferencias entre los equipos y no las similitudes. Buscan cierta ortogonalidad entre los equipos que no logra existir en este espacio de 3 dimensiones.
+Además se observa como en este espacio las direcciones en las que se representan a los equipos divergen de forma clara, lo que indica que los embeddings capturan únicamente las diferencias entre los equipos y no las similitudes. Buscan cierta ortogonalidad entre los equipos que no logra existir en este espacio de 3 dimensiones.
 
-Para explotar aún mas las relaciones a aprender por el modelo, se ajustó un segundo modelo con las siguientes características:
+Para explotar aún más las relaciones a aprender por el modelo, se ajustó un segundo modelo con las siguientes características:
 
 - Dimensión de embeddings: 64
 - Longitud de caminata: 40 nodos
 - Número de caminatas: 500
 - Tamaño de ventana: 30 nodos
 
-Luego para explorar los embeddings resultantes se realizó nuevamente un analisis de componentes principales para reducir la dimensionalidad de los embeddings a 2 dimensiones.
+Luego para explorar los embeddings resultantes se realizó nuevamente un análisis de componentes principales para reducir la dimensionalidad de los embeddings a 2 dimensiones.
 
 <!-- ![Embeddings de Jugadores en 64D - PCA a 2D](recursos_pdf/graficos/players_64_2d.png) -->
 \begin{figure}
@@ -756,7 +751,7 @@ En esta figura resultante se puede observar como la direccionalidad de los equip
 
 Con el modelo planteado de Grafos de Lineups por Equipos y Partidos se puede representar no solo una temporada de una liga, como es nuestro caso, sino que se puede extender a múltiples temporadas y ligas. Esto permitiría poder comparar jugadores de distintas ligas y temporadas, y poder evaluar el rendimiento de un jugador en distintos contextos.
 
-Otra cuestión considerada para expandir es ademas de tener un nodo general por jugador conectado a sus instancias en cada lineup, se podría tener un nodo que represente a un jugador en un equipo, de forma tal que el jugador real esta conectado a su nodo "Jugador en Equipo" y este nodo a su vez conectado a "Jugador en Lineup de Partido de Equipo". Esto permitiría poder evaluar el rendimiento de un jugador en un equipo en particular y como este se comporta en distintos contextos.
+Otra cuestión considerada para expandir es además de tener un nodo general por jugador conectado a sus instancias en cada lineup, se podría tener un nodo que represente a un jugador en un equipo, de forma tal que el jugador real está conectado a su nodo "Jugador en Equipo" y este nodo a su vez conectado a "Jugador en Lineup de Partido de Equipo". Esto permitiría poder evaluar el rendimiento de un jugador en un equipo en particular y como este se comporta en distintos contextos.
 
 En el paper de *Soccer Networks* donde se plantea el PSL definen una serie de coeficientes $h$, $a$, $\omega$, como la performance de un equipo al jugar de local, al jugar de visitante, y la performance ponderada de todos los otros equipos al jugar de visitante respectivamente. Se podrían escalar los ratios de transición entre jugadores y el estado de disparo al arco en función de estos coeficientes para obtener una mejor representación de la performance de un jugador en un partido en particular.
 
@@ -764,12 +759,12 @@ En el paper de *Soccer Networks* donde se plantea el PSL definen una serie de co
 
 # **Modelo predictivo de Distribuciones de Ratios de Transición** ($r(U, V)$) {#modelo-predictivo}
 
-El trabajo de Player2Vec nos permite obtener embeddings de jugadores que capturan las relaciones entre ellos en un espacio vectorial. A partir de estos embeddings, se propone un modelo predictivo dede las distribuciones de $r(U, V)$.
+El trabajo de Player2Vec nos permite obtener embeddings de jugadores que capturan las relaciones entre ellos en un espacio vectorial. A partir de estos embeddings, se propone un modelo predictivo de las distribuciones de $r(U, V)$.
 
 ## Definición
 
 Dado un jugador $J_i$, se obtiene su embedding $E(J_i)$ a partir del modelo de Player2Vec. 
-Para este $J_i$, se busca predecir los estadisticos Media y Varianza de las distribuciones de ratios de transición de $J_i$.
+Para este $J_i$, se busca predecir los estadísticos Media y Varianza de las distribuciones de ratios de transición de $J_i$.
 
 - $r(\text{Gain}, J_i)$
 - $r(J_i, \text{Shot})$
@@ -791,7 +786,7 @@ $$
 \end{aligned}
 $$
 
-La función de perdida a minimizar es una ponderación de la Divergencia de Jensen-Shannon (JSD) entre la distribución real y la predicha para cada estadístico.
+La función de pérdida a minimizar es una ponderación de la Divergencia de Jensen-Shannon (JSD) entre la distribución real y la predicha para cada estadístico.
 
 $$
 JSD(p || q) = \frac{1}{2} D_{KL}(p||m) + \frac{1}{2} D_{KL}(q||m)
@@ -837,7 +832,7 @@ El modelo se implementó en PyTorch. Se utilizó una red neuronal con la siguien
   \caption{Arquitectura del Modelo Base}
 \end{figure}
 
-La función de pérdida utilizada fue la Divergencia de Jensen-Shannon (JSD) entre las distribuciones reales y predichas ponderando las 5 distribuciones a estimar. Se utilizó la implementación de Divergencia de Kullback-Leibler de PyTorch `nn.KLDivLoss` en la implementación del modulo `JSD` hayado en el foro de PyTorch[@alexneakamenipytorchforums_2022_jensen] y este luego se utilizó para la función de pérdida en el entrenamiento del modelo.
+La función de pérdida utilizada fue la Divergencia de Jensen-Shannon (JSD) entre las distribuciones reales y predichas ponderando las 5 distribuciones a estimar. Se utilizó la implementación de Divergencia de Kullback-Leibler de PyTorch `nn.KLDivLoss` en la implementación del módulo `JSD` hallado en el foro de PyTorch[@alexneakamenipytorchforums_2022_jensen] y este luego se utilizó para la función de pérdida en el entrenamiento del modelo.
 
 ## Entrenamiento
 
@@ -896,7 +891,7 @@ Total & 521 \\
 \end{table}
 ```
 
-Con la librería `Hyperopt` [@bergstra_2015_hyperopt], se realizó una búsqueda de hiperparámetros bayesina. Se evaluaron distintas combinaciones de hiperparámetros, y se seleccionó la que mejor rendimiento presentó en el conjunto de validación.
+Con la librería `Hyperopt` [@bergstra_2015_hyperopt], se realizó una búsqueda de hiperparámetros bayesiana. Se evaluaron distintas combinaciones de hiperparámetros, y se seleccionó la que mejor rendimiento presentó en el conjunto de validación.
 
 \subsection{Espacio de Hiperparámetros}
 
@@ -928,7 +923,7 @@ Además se implementó una clase de Red Neuronal paramétrica para poder explora
 
 ## Resultados del Tuning de Hiperparámetros
 
-La busqueda de hiperparámetros se realizó con 1000 iteraciones. La mejor combinación de hiperparámetros y arquitectura de red neuronal encontrada fue la siguiente:
+La búsqueda de hiperparámetros se realizó con 1000 iteraciones. La mejor combinación de hiperparámetros y arquitectura de red neuronal encontrada fue la siguiente:
 
 - Tasa de aprendizaje: 0.01
 - Momentum: 0.9
@@ -966,7 +961,7 @@ La busqueda de hiperparámetros se realizó con 1000 iteraciones. La mejor combi
 \end{table}
 ```
 
-El modelo final seleccionado obtuvo un rendimiento aceptable en el conjunto de validación, con una pérdida de $0.008916$, aún mejor que la perdida de Train del modelo base. Se procedió a evaluar el modelo en el conjunto de testeo y se obtuvo una pérdida de $0.014493$.
+El modelo final seleccionado obtuvo un rendimiento aceptable en el conjunto de validación, con una pérdida de $0.008916$, aún mejor que la pérdida de Train del modelo base. Se procedió a evaluar el modelo en el conjunto de testeo y se obtuvo una pérdida de $0.014493$.
 
 ![Resultados del Modelo Tuned](recursos_pdf/graficos/p2v_dist_model_oos_190_for_graph_190_for_model_64_5000_0.01_CosineAnnealingLR_tuned_eval_test_loss.png)
 
@@ -986,9 +981,9 @@ Macbook Pro M1 2020
 - Python 3.10.14
 - PyTorch 2.2.2 MPS (Metal Performance Shaders)
 
-El entrenamiento del modelo final tomó tan solo 30 segundos a lo largo de los 115 epochs que duró el entrenamiento por el mecanismo de early stopping.
+El entrenamiento del modelo final tomó tan sólo 30 segundos a lo largo de los 115 epochs que duró el entrenamiento por el mecanismo de early stopping.
 
-La busqueda de hiperparametros de 1000 iteraciones tomó al rededor de 7hs en la misma máquina.
+La búsqueda de hiperparametros de 1000 iteraciones tomó alrededor de 7hs en la misma máquina.
 
 ## Comparación contra priors
 
@@ -1019,9 +1014,11 @@ Por lo que se puede observar, el modelo logra una mejora significativa en la cap
 
 Para evaluar la capacidad de nuestro modelo en escenarios reales, desarrollamos un caso de estudio basado en las transferencias más importantes en términos de precio y relevancia mediática de los próximos dos mercados de fichajes dentro de la Premier League. Nos limitamos a transferencias internas de esta liga debido a la falta de datos disponibles sobre otras competiciones. Este ejercicio busca medir qué tan bien nuestras métricas y simulaciones pueden justificar o desaconsejar dichas transferencias en función de su impacto en el rendimiento del equipo.
 
-En este apartado, profundizaremos en el análisis de dos casos específicos: la transferencia de Danny Welbeck al Arsenal y la de James Milner al Liverpool. Finalmente, presentaremos una tabla resumen con seis transferencias clave, acompañadas de las recomendaciones de nuestro modelo.
+En este apartado, profundizaremos en el análisis de dos casos específicos: la transferencia de Danny Welbeck al Arsenal (septiembre de 2014) y la de James Milner al Liverpool (julio de 2015). Finalmente, presentaremos una tabla resumen con seis transferencias clave, acompañadas de las recomendaciones de nuestro modelo.
 
 Para comparar las distribuciones de PSL de los jugadores involucrados en las transferencias, utilizamos las métricas de comparación de distribuciones presentadas anteriormente: comparación de momentos, dominancia probabilística y dominancia estocástica.
+
+Todo este análisis se realizó asumiendo que las distribuciones de ratios de transición de los jugadores se mantienen, ya que no se cuenta con datos de otras temporadas, por lo que la validación es teórica y contra hechos reales de las próximas temporadas.
 
 ## Caso de Estudio 1: Danny Welbeck al Arsenal
 
@@ -1043,7 +1040,7 @@ Los resultados obtenidos son los siguientes:
 \begin{center}
 \begin{tabular}{llllll}
 \toprule
-Jugador & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
+Jugador & Media & Varianza & Desvío Estándar & Skewness & Kurtosis \\
 \midrule
 Theo Walcott  &  0.137735 &  0.043914 &         0.001928 &  0.547502 &  0.421810 \\
 Danny Welbeck &  0.129325 &  0.038815 &         0.001507 &  0.761120 &  0.773602 \\
@@ -1068,7 +1065,7 @@ Danny Welbeck &  0.129325 &  0.038815 &         0.001507 &  0.761120 &  0.773602
 \begin{center}
 \begin{tabular}{llllll}
 \toprule
-Jugador & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
+Jugador & Media & Varianza & Desvío Estándar & Skewness & Kurtosis \\
 \midrule
 Olivier Giroud &  0.134801 &  0.042535 &         0.001809 &  0.587343 &  0.777267 \\
 Danny Welbeck  &  0.128931 &  0.040130 &         0.001610 &  0.700550 &  1.325063 \\
@@ -1086,7 +1083,7 @@ Asimismo, podemos concluir que la formación con Walcott domina estocásticament
 
 Todas estas métricas se repiten a favor de la formación con Giroud, $X_{L_{AR2}}$, en comparación con $X_{L_{AR2}^{\text{Welbeck}}}$.
 
-Por lo tanto, podemos concluir que, según nuestro modelo, la transferencia de Danny Welbeck al Arsenal no es recomendable porque su inclusión en lugar de Theo Walcott o Olivier Giroud disminuiría el PSL del equipo y empeoraria la performance del mismo.
+Por lo tanto, podemos concluir que, según nuestro modelo, la transferencia de Danny Welbeck al Arsenal no es recomendable porque su inclusión en lugar de Theo Walcott o Olivier Giroud disminuiría el PSL del equipo y empeoraría la performance del mismo.
 
 \newpage
 
@@ -1111,7 +1108,7 @@ Los resultados obtenidos luego de la simulación son los siguientes:
 \begin{center}
 \begin{tabular}{llllll}
 \toprule
-Jugador & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
+Jugador & Media & Varianza & Desvío Estándar & Skewness & Kurtosis \\
 \midrule
 Steven Gerrard &  0.130349 &  0.038290 &         0.001466 &  0.748219 &  0.862186 \\
 James Milner   &  0.139559 &  0.043333 &         0.001878 &  0.703642 &  0.712261 \\
@@ -1135,7 +1132,7 @@ James Milner   &  0.139559 &  0.043333 &         0.001878 &  0.703642 &  0.71226
 \begin{center}
 \begin{tabular}{llllll}
 \toprule
-Jugador & Media & Varianza & Desvio Estándar & Skewness & Kurtosis \\
+Jugador & Media & Varianza & Desvío Estándar & Skewness & Kurtosis \\
 \midrule
 Stewart Downing &  0.117987 &  0.033518 &         0.001123 &  0.696171 &  1.087000 \\
 James Milner    &  0.127622 &  0.038303 &         0.001467 &  0.651483 &  0.768572 \\
@@ -1173,7 +1170,7 @@ Las recomendaciones se clasificaron en:
 \begin{center}
 \begin{tabular}{lllll}
 \toprule
-Jugador & Posición & Equipo Origen & Equipo Destino & Recomedación \\
+Jugador & Posición & Equipo Origen & Equipo Destino & Recomendación \\
 \midrule
 James Milner & Mediocampista & Manchester City & Liverpool & Recomendable \\
 Andros Townsend & Mediocampista & Tottenham & Newcastle & Recomendable \\

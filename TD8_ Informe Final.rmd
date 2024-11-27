@@ -68,7 +68,13 @@ knitr::opts_chunk$set(echo = TRUE, fig.pos = "H", out.extra = "")
 knitr::opts_chunk$set(fig.pos = 'H')
 ```
 
+<!-- \tableofcontents -->
+
+\newpage
+\addtocontents{toc}{\protect\setcounter{tocdepth}{-1}}
 \tableofcontents
+\addtocontents{toc}{\protect\setcounter{tocdepth}{6}}
+\newpage
 
 \newpage
 \cleardoublepage
@@ -457,7 +463,7 @@ Estimar la distribución del PSL del equipo $A$ a partir de las $N$ observacione
 
 A partir de esta distribución del PSL, se puede realizar comparaciones entre diferentes formaciones de 11 jugadores.
 
-El siguiente gráfico en la figura \ref{fig:sergio_aguero_psl_distribution} muestra la distribución del PSL de un equipo de ejemplo obtenida a partir de 1000 simulaciones del proceso de Monte Carlo para la formación más utilizada en la temporada 2012/13 de la EPL del equipo Manchester City.
+El siguiente gráfico en la figura \ref{fig:sergio_aguero_psl_distribution} muestra la distribución del PSL de una formacíon de ejemplo obtenida a partir de 1000 simulaciones del proceso de Monte Carlo para la formación más utilizada en la temporada 2012/13 de la EPL del equipo Manchester City (10 Jugadores del MCI + Sergio Agüero usado como ejemplo).
 
 <!-- ![Distribución del PSL del equipo Manchester City](recursos_pdf/graficos/sergio_aguero_psl_distribution.png) -->
 \begin{figure}

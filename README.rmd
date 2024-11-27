@@ -1,0 +1,93 @@
+---
+output:
+  md_document:
+    variant: markdown_github
+bibliography: recursos_pdf/bibliografia.bib
+csl: recursos_pdf/apa.csl
+nocite: '@*'
+---
+
+# Cómo encontrar el mejor jugador para tu Equipo de Fútbol
+
+## Integrantes
+
+- Tomás Glauberman - 21F78 | [tglauberman@mail.utdt.edu](mailto:tglauberman@mail.utdt.edu)
+- Ignacio Pardo - 21R1160 | [ipardo@mail.utdt.edu](mailto:ipardo@mail.utdt.edu)
+- Juan Ignacio Silvestri - 21Q111 | [jsilvestri@mail.utdt.edu](mailto:jsilvestri@mail.utdt.edu)
+
+## Descripción
+
+Código fuente del proyecto final de la Licenciatura en Tecnología Digital de la Universidad Torcuato Di Tella.
+
+## Estructura
+
+El proyecto está dividido las siguientes carpetas principales:
+
+- `src/`: Código "en producción" del proyecto. Incluye un módulo de Python con funciones y clases que se utilizan en el análisis de datos.
+- `exploratory/`: Notebooks de Jupyter y otros archivos de exploración de datos.
+- `tests/`: Archivos de tests unitarios y de integración sobre el código en la carpeta `src/`.
+- `SampleData/`: Datos de OPTA de la English Premier League 2012/2013.
+- `gui/`: Interfaz gráfica para la exploración de la investigación.
+
+## Source Code
+
+- `src/event_processing.py`: Procesamiento de eventos de partidos de futbol del Excel
+- `src/excel_xml_util.py`: Modulo para trabajar con archivos XML de OPTA en Pandas
+- `src/futbol_types.py`: Definición de tipos de datos para el análisis de futbol
+- `src/match_data_extraction.py`: Módulo para extraer eventos y datos de los partidos
+
+- `src/epl_player_data_utils.py`: Datos extra de jugadores de la EPL por ID de OPTA.
+
+- `src/utils_CTMC.py`: Funciones para calcular el modelo de transición de estados de un equipo en un partido de futbol.
+
+- `src/bayesian_PSL.py`: Clases para el análisis bayesiano del PSL.
+
+- `src/Player2Vec.py`: Player2Vec a partir de Node2Vec sobre Grafo Full de Transición de Estados de Jugadores
+- `src/p2v_dist.py`: Player2Vec to Player Stats Distribution Model
+- `src/p2v_dist.py`: Modelo Predictivo de Distribuciones de Ratios de Transición
+
+## Algunos Notebooks
+
+- `exploratory/emb_viz.ipynb`: Visualización de embeddings de jugadores con Player2Vec.
+- `exploratory/dataset_exp.ipynb`: Breve exploración del dataset de OPTA.
+- `exploratory/p2v_dist_model_oos.ipynb`: Modelo Predictivo de Distribuciones de Ratios de Transición, con Validación Out-of-Sample. `src/p2v_dist.py`.
+- `exploratory/OPTA_XML_Read.ipynb`: Lectura de datos de OPTA en formato XML.
+- `exploratory/player_exp.ipynb`: Exploración de datos de jugadores. Cálculo de Opta Points como ejemplo.
+- `exploratory/player_q_dist.ipynb`: Análisis de la distribución de los ratios de transición de jugadores.
+- `exploratory/psl_grad.ipynb`: Test de Sensitividad de la función PSL.
+- `exploratory/PSL_StastsBomb.ipynb`: Cálculo de PSL con datos de StatsBomb.
+- `exploratory/PSL_sample_data.ipynb`: Cálculo de PSL con datos de OPTA.
+- `exploratory/case_study.ipynb`: Caso de estudio de jugadores de la EPL (OPTA).
+
+## Usage
+
+El proyecto requiere Python 3.10.14 y las dependencias listadas en `requirements.txt`.
+En el archivo Makefile se encuentran los comandos para instalar las dependencias, correr los tests y correr la interfaz gráfica de exploración de la investigación.
+
+Para instalar las dependencias necesarias, ejecutar el siguiente comando:
+
+```bash
+make install
+```
+
+Alternativamente se puede crear un entorno de Conda con las dependencias necesarias ejecutando el siguiente comando:
+
+```bash
+make create_conda_env
+```
+
+Para correr los tests unitarios y de integración, ejecutar el siguiente comando:
+
+```bash
+make test
+```
+
+Para correr la interfaz gráfica de exploración de la investigación, ejecutar el siguiente comando:
+
+```bash
+make viz
+```
+
+## Referencias
+
+<div id="refs"></div>

@@ -1,5 +1,7 @@
 # Cómo encontrar el mejor jugador para tu Equipo de Fútbol
 
+[GH Pages](https://juanisil.github.io/TDVIII-proyecto-final/)
+
 ## Integrantes
 
 -   Tomás Glauberman - 21F78 \| <tglauberman@mail.utdt.edu>

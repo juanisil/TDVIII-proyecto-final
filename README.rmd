@@ -43,8 +43,15 @@ El proyecto está dividido las siguientes carpetas principales:
 - `src/bayesian_PSL.py`: Clases para el análisis bayesiano del PSL.
 
 - `src/Player2Vec.py`: Player2Vec a partir de Node2Vec sobre Grafo Full de Transición de Estados de Jugadores
-- `src/p2v_dist.py`: Player2Vec to Player Stats Distribution Model
+
+
 - `src/p2v_dist.py`: Modelo Predictivo de Distribuciones de Ratios de Transición
+
+Usage of `Player2Vec`:
+
+```bash
+python src/Player2Vec.py --model_path "player2vec.model" --output_path "player2vec.model" --dimensions 3 --walk_length 16 --num_walks 200 --p 1 --q 1 --workers 4 --window 12 --min_count 1 --batch_words 4 --epl_data_path "../SampleData/epl.xlsx" --players_path "../SampleData/players.json" --r_storage_path "R_storage.npy"
+```
 
 ## Algunos Notebooks
 

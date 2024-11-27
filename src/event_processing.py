@@ -8,17 +8,19 @@ from src.futbol_types import Temporada, Partido, EventosLineup
 
 
 def leer_excel(path: str) -> Temporada:
-    """Lee un archivo Excel con eventos de partidos de futbol
+    """
+    Lee un archivo Excel con eventos de partidos de futbol.
 
     Args:
-        path (str): Ruta al archivo Excel
+        path (str): Ruta al archivo Excel.
 
     Returns:
-        Temporada: Eventos de todos los partidos de una temporada
-        Columns: ['season_id', 'match_id', 'home_team_id', 'home_team_name',
+        Temporada: Eventos de todos los partidos de una temporada.
+
+    Columns: ['season_id', 'match_id', 'home_team_id', 'home_team_name',
                   'away_team_id', 'away_team_name', 'id', 'event_id', 'date', 'time',
                   'period_id', 'min', 'sec', 'team_id', 'player_id', 'playerName',
-                  'playerPosition', 'x', 'y', 'type', 'description', 'outcome']
+                  'playerPosition', 'x', 'y', 'type', 'description', 'outcome'].
     """
 
     # Fix for the "synchVertical" property in the Excel files

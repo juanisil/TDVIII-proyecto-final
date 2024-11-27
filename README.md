@@ -50,8 +50,6 @@ El proyecto está dividido las siguientes carpetas principales:
 -   `src/Player2Vec.py`: Player2Vec a partir de Node2Vec sobre Grafo
     Full de Transición de Estados de Jugadores
 
--   `src/p2v_dist.py`: Player2Vec to Player Stats Distribution Model
-
 -   `src/p2v_dist.py`: Modelo Predictivo de Distribuciones de Ratios de
     Transición
 

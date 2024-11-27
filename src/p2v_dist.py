@@ -36,33 +36,43 @@ class JSD(nn.Module):
 
 
 class custom_loss(nn.Module):
-    """
-    Custom loss function to calculate the Jensen-Shannon Divergence between the predicted and target distributions for the 5 features
+    """Custom loss function to calculate the Jensen-Shannon Divergence between the predicted and target distributions for the 5 features
     Ponderation of the JSD divergence of the mean and std of the 5 features
-        [
-        0 'losses_prob_mean',
-        1 'gains_prob_mean',
-        2 'shots_prob_mean',
-        3 'avg_pass_to_prob_mean',
-        4 'avg_pass_from_prob_mean',
-        5 'losses_prob_std',
-        6 'gains_prob_std',
-        7 'shots_prob_std',
-        8 'avg_pass_to_prob_std',
-        9 'avg_pass_from_prob_std'
-        ]
     """
 
-    # 0, 5 -> losses mean, std
-    # 1, 6 -> gains mean, std
-    # 2, 7 -> shots mean, std
-    # 3, 8 -> avg pass to mean, std
-    # 4, 9 -> avg pass from mean, std
     def __init__(self):
         super(custom_loss, self).__init__()
         self.jsd = JSD()
 
     def forward(self, y_pred, y_true):
+        """
+        y_pred: torch.tensor
+            Tensor of shape (batch_size, 10)
+        y_true: torch.tensor
+            Tensor of shape (batch_size, 10)
+        """
+        
+        """
+            [
+                0 'losses_prob_mean',
+                1 'gains_prob_mean',
+                2 'shots_prob_mean',
+                3 'avg_pass_to_prob_mean',
+                4 'avg_pass_from_prob_mean',
+                5 'losses_prob_std',
+                6 'gains_prob_std',
+                7 'shots_prob_std',
+                8 'avg_pass_to_prob_std',
+                9 'avg_pass_from_prob_std'
+            ]
+        """
+
+        # 0, 5 -> losses mean, std
+        # 1, 6 -> gains mean, std
+        # 2, 7 -> shots mean, std
+        # 3, 8 -> avg pass to mean, std
+        # 4, 9 -> avg pass from mean, std
+
         loss = 0
         for i in range(5):
             loss += self.jsd(y_pred[:, i], y_true[:, i]) + self.jsd(

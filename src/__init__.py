@@ -39,3 +39,11 @@ from src.utils_CTMC import (
     build_Q,
     psl_estimator,
 )
+
+from src.Player2Vec import Player2Vec, EPL_Graph
+
+from src.p2v_dist import (
+    p2v_dist_model,
+    custom_loss,
+    JSD
+)

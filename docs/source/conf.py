@@ -24,15 +24,13 @@ author = "Tomás Glauberman - Ignacio Pardo - Juan Ignacio Silvestri"
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = [
-    "sphinx.ext.autodoc",
-]
+extensions = ["sphinx.ext.autodoc", "sphinx_markdown_builder"]
 
 # Elimina autodoc_mock_imports si no es necesario
 # autodoc_mock_imports = ["src"]
 
 templates_path = ["_templates"]
-exclude_patterns = []
+exclude_patterns = ["build/*"]
 
 language = "es"
 

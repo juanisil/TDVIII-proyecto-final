@@ -9,3 +9,9 @@ viz:
 
 create_conda_env:
 	conda env create -f environment.yml
+
+build_docs:
+	cd docs && make html && make markdown
+
+web_docs:
+	open http://localhost:8000 && python3 -m http.server 8000 --directory docs/build/html

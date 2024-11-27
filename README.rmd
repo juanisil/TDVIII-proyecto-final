@@ -95,6 +95,22 @@ Para correr la interfaz gráfica de exploración de la investigación, ejecutar 
 make viz
 ```
 
+## Docs
+
+La documentación se encuentra en la carpeta `docs/`. Para generar la documentación, ejecutar el siguiente comando:
+
+```bash
+make build_docs
+```
+
+Y para visualizar la documentación, ejecutar el siguiente comando:
+
+```bash
+make web_docs
+```
+
+Se puede hallar la documentación en [este link](https://juanisil.github.io/TDVIII-proyecto-final/).
+
 ## Referencias
 
 <div id="refs"></div>

@@ -189,9 +189,9 @@ const Dashboard = () => {
         const player_image =
           player_images_dir + "p" + player.id + "_250x250.png";
         const team = teamsData.find((team) => team.fullName === player.team);
-        const team_image = team
-          ? `${team_images_dir}${team.fullName.replace(/ /g, "_")}.png`
-          : "";
+        const team_image = team?.web_image
+          ? team.web_image
+          : `${team_images_dir}${team.fullName.replace(/ /g, "_")}.png`;
         const dot_color = team ? hexstring2number(team.color) : 0x000000;
 
         const dot = new THREE.Mesh(
@@ -605,7 +605,7 @@ const Dashboard = () => {
         <Card className="rounded-lg border border-gray-200 bg-white shadow-lg">
           <CardHeader>
             <CardTitle>
-              {selectedDotData ? selectedDotData.title : "Select a dot"}
+              {selectedDotData ? selectedDotData.title : "Player2Vec Embeddings"}
               {selectedDotData && (
                 <span className="ml-2 text-sm text-gray-500">
                   {getCurrentDotIndex()}/{getTotalDotsWithTitle()}
@@ -617,7 +617,7 @@ const Dashboard = () => {
             <p className="mb-4 text-sm">
               {selectedDotData
                 ? selectedDotData.content
-                : "Click on a dot to view its information."}
+                : "Clickea en un punto o busca un jugador"}
             </p>
             {selectedDotData && (
               <div className="flex justify-end space-x-2">
@@ -658,7 +658,7 @@ const Dashboard = () => {
         <form onSubmit={handleQuestionSubmit} className="flex gap-2">
           <Input
             type="text"
-            placeholder="Ask a question"
+            placeholder="Buscar jugador... (ej. 'Agüero')"
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             className="h-12 flex-grow rounded-full border-gray-300 bg-white px-4 text-gray-900"

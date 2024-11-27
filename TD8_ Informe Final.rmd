@@ -56,7 +56,7 @@ abstract: |
 
     Este desarrollo se centra en el fútbol, un deporte en el cual los análisis previos se han concentrado, en su mayoría, en predecir resultados de partidos y mejorar el rendimiento de los equipos. Sin embargo, este trabajo propone un enfoque diferente al analizar el impacto de los jugadores sobre la posesión de balón y los disparos del equipo desde una perspectiva probabilística.
 
-    A partir de la métrica PSL propuesta en el paper *Soccer Networks* [@huang_soccer_networks], planteamos un proceso para comparar el impacto que tienen los jugadores sobre la performance del equipo. Logramos formular una metodología para estudiar la distribución de la performance de un equipo. Luego, proponemos una serie de métodos y métricas para comparar el rendimiento de dos formaciones de jugadores. Además, desarrollamos una forma de representación vectorial (Embeddings) de los jugadores, llamada Player2Vec, un modelo de Machine Learning también basado sobre el modelo de redes de jugadores planteado en el mismo paper del PSL. Esto último permite desarrollar modelos predictivos sobre el rendimiento de los jugadores en un equipo.
+    A partir de la métrica PSL propuesta en el paper *Soccer Networks* [@huang_soccer_networks] planteamos un proceso para comparar el impacto que tienen los jugadores sobre la performance del equipo. Logramos formular una metodología para estudiar la distribución de la performance de un equipo. Luego, proponemos una serie de métodos y métricas para comparar el rendimiento de dos formaciones de jugadores. Además, desarrollamos una forma de representación vectorial (Embeddings) de los jugadores, llamada Player2Vec, un modelo de Machine Learning también basado sobre el modelo de redes de jugadores planteado en el mismo paper del PSL. Esto último permite desarrollar modelos predictivos sobre el rendimiento de los jugadores en un equipo.
     \newpage
 ---
 
@@ -90,7 +90,7 @@ Este trabajo no hubiera sido posible sin la ayuda de los profesores Gustavo Vulc
 
 A diferencia de otros deportes como el béisbol o el basketball, el fútbol ha sido tradicionalmente menos propenso a la aplicación de técnicas avanzadas de análisis de datos y aprendizaje automático. Sin embargo, en los últimos años ha habido un crecimiento significativo en el uso de herramientas analíticas para evaluar el rendimiento de los jugadores y los equipos.
 
-En la última década el análisis del fútbol ha evolucionado hacia una perspectiva cada vez más matemática y sofisticada. El desarrollo que más impacto tuvo sin dudas es el de la métrica de Expected Goals (**xG**) [@green_2012], que permiten evaluar la calidad de las oportunidades de gol de un equipo. El uso de **xG** en el análisis de partidos y jugadores ha permitido una mayor capacidad predictiva y una mejor comprensión del rendimiento de los equipos. La industria que mas potenció este cambio fue la de las apuestas deportivas, que comenzó a utilizar modelos predictivos para estimar las probabilidades de los partidos. Ejemplos como Smartodds, StatsBomb y Opta Sports son claros ejemplos de como la analítica de datos ha impactado en la industria del fútbol. Mas específicamente, el Arsenal y el Brentford de la Premier League poseen sus propias empresas de analítica de datos; StatDNA y Smartodds [@tippett_2019, p. 37].
+En la última década el análisis del fútbol ha evolucionado hacia una perspectiva cada vez más matemática y sofisticada. El desarrollo que más impacto tuvo sin dudas es el de la métrica de Expected Goals (**xG**) [@green_2012], que permiten evaluar la calidad de las oportunidades de gol de un equipo. El uso de **xG** en el análisis de partidos y jugadores ha permitido una mayor capacidad predictiva y una mejor comprensión del rendimiento de los equipos. La industria que mas potenció este cambio fue la de las apuestas deportivas, que comenzó a utilizar modelos predictivos para estimar las probabilidades de los partidos. La aparición de empresas como StatsBomb y Opta Sports son claros ejemplos de como la analítica de datos ha crecido en importancia en la industria del fútbol. Tanto es asi que el Arsenal y el Brentford de la Premier League poseen sus propias empresas de analítica de datos; StatDNA y Smartodds [@tippett_2019, p. 37].
 
 El trabajo en desarrollo *Soccer Networks* [@huang_soccer_networks] propone un modelo de red de jugadores para calcular la probabilidad de disparar al arco antes de perder el balón (**PSL**), una métrica poca estudiada. En el paper se demuestra que el **PSL** tiene una alta correlación con el rendimiento del equipo y una gran importancia al nivel del **xG**.
 
@@ -116,9 +116,9 @@ Este trabajo se enmarca en esta línea de investigación, contribuyendo al desar
 
 En el ámbito práctico, la capacidad de identificar a los mejores jugadores tiene implicaciones directas en la toma de decisiones estratégicas y operativas de los equipos de fútbol. La correcta selección de jugadores puede mejorar significativamente el rendimiento del equipo, aumentar las probabilidades de éxito en competiciones y optimizar la inversión en fichajes. 
 
-El Brentford FC es un caso de ejemplo del impacto positivo que puede tener el análisis de datos en el fútbol. El club implementó un enfoque basado estadística para la identificación y selección de jugadores con alto potencial de rendimiento. El equipo para el 2014/2015 había ascendido a la EFL Championship desde la Ligue One (Tercera División de Inglaterra) por primera vez en 21 años, y en 2021, ascendió a la Premier League, su primera vez en 74 años.
+El Brentford FC es un caso de ejemplo del impacto positivo que puede tener el análisis de datos en el fútbol. El club implementó un enfoque basado estadística para la identificación y selección de jugadores con alto potencial de rendimiento. El equipo para el 2014/2015 había ascendido a la EFL Championship desde la Ligue One (Tercera División de Inglaterra) por primera vez en 21 años, y en 2021 ascendió a la Premier League luego de 74 años.
 
-Mas recientemente, el caso de estudio sobre el Real Racing Club de Santander de la Segunda División B de España presentado por la Facultad de Ciencias Exactas y Naturales, UBA en la 33rd European Conference on Operational Research es un nuevo ejemplo de cómo integrar el proceso actual de scouting con un modelo de aprendizaje supervisado [@brunetti_2024].
+Mas recientemente, el caso de estudio sobre el Real Racing Club de Santander de la Segunda División B de España presentado por la Facultad de Ciencias Exactas y Naturales, UBA en la 33rd European Conference on Operational Research es un nuevo caso de aplicación de la analítica de datos en el fútbol [@brunetti_2024]. El estudio muestra con su investigación cómo integrar el proceso actual de scouting con un modelo de aprendizaje supervisado.
 
 Partiendo de estos antecedentes, este trabajo busca proporcionar a los equipos de fútbol herramientas y metodologías para evaluar, comparar y seleccionar a los jugadores más adecuados para sus necesidades y estrategias específicas.
 
@@ -130,7 +130,7 @@ Partiendo de estos antecedentes, este trabajo busca proporcionar a los equipos d
 
 ## Objetivo General
 
-El objetivo principal de este proyecto es desarrollar y aplicar modelos avanzados de análisis de datos y probabilísticos, para mejorar la evaluación, comparación y selección de jugadores de fútbol. Esto permitirá a los equipos tomar decisiones más informadas y estratégicas, optimizando su rendimiento y aumentando sus probabilidades de éxito en competiciones. Más concretamente, este trabajo busca responder la pregunta del título "¿Cómo encontrar al jugador ideal para tu equipo de fútbol?".
+El objetivo principal de este proyecto es desarrollar y aplicar modelos avanzados de análisis de datos y probabilísticos, para mejorar la evaluación, comparación y selección de jugadores de fútbol. Esto permitirá a los equipos tomar decisiones más informadas y estratégicas, optimizando su rendimiento y aumentando sus probabilidades de éxito en competiciones. Más concretamente, este trabajo busca responder la pregunta del título "¿Cómo encontrar el mejor jugador para tu Equipo de Fútbol?".
 
 ## Objetivos Específicos
 
@@ -194,6 +194,18 @@ $$
         0 & 0 & \dots & 0 & 0 & 1 \\
     \end{pmatrix}
 $$
+
+Los ratios de transición posibles se calculan de la siguiente manera:
+
+$$
+\begin{aligned}
+  r(G, J_{i}) &= \frac{\text{Ganancias de }J_{i}}{\text{Tiempo Jugado por }J_{i}} \\
+  r(J_{i}, S) &= \frac{\text{Disparos al arco de }J_{i}}{\text{Tiempo Jugado por }J_{i}} \\
+  r(J_{i}, S) &= \frac{\text{Disparos al arco de }J_{i}}{\text{Tiempo Jugado por }J_{i}} \\
+  r(J_{i}, J_{j}) &= \frac{\text{Pases de }J_{i} \text{ al jugador }J_{j}}{\text{Tiempo jugado entre }J_{i} \text{ y }J_{j}} \\
+\end{aligned}
+$$
+
 A partir de $R$, la matriz de ratio de acción sobre tiempo jugado (ganancias, pases, disparos o pérdidas), se puede obtener la matriz de transición de estados $Q$ al normalizar sus filas.
 
 Para cada par de estados $U$ y $V$ se define $q(U, V) = \frac{r(U, V)}{\sum_{i=1}^{14} r(U, i)}$
@@ -219,7 +231,7 @@ Siendo $T$ las probabilidades de transición de los estados transitorios, $X$ la
 
 A partir de este modelo en el paper se evaluó para una temporada de la Premier League (EPL 2012/13) [@opta] la diferencia entre los PSL de cada equipo y luego de forma empírica se demuestra como el $PSL(A)$ tiene alta correlación positiva con el rendimiento del equipo por sobre el contrincante. Finalmente hallamos una métrica significativa de rendimiento de un equipo en la métrica $PSL$. Sin embargo, da a lugar a la investigación de cómo se puede aplicar esta métrica a nivel de jugador y cómo se puede comparar el rendimiento de jugadores en distintos equipos.
 
-Para evaluar el impacto de un jugador $J$ se debe, o bien conocer la probabilidad de transición entre $J$ y los otros 13 estados (10 jugadores, Ganancia, Pérdida y Disparo) o bien lograr estimar la probabilidad de transición entre $J$ y los otros 13 estados.
+Para evaluar el impacto de un jugador $J$ se debe conocer la probabilidad de transición entre $J$ y los otros 13 estados (10 jugadores, Ganancia, Pérdida y Disparo), o bien lograr estimar la probabilidad de transición entre $J$ y los otros 13 estados.
 
 En este trabajo se propone un método probabilístico bayesiano para hallar la Distribución del PSL dada la distribución de probabilidades de transición entre cada uno de los 11 jugadores y los otros 13 estados.
 
@@ -472,7 +484,7 @@ En la siguiente sección postulamos una serie de métodos y métricas para compa
 2. Dominancia Probabilística
 3. Dominancia Estocástica
 
-Para explicar la comparación de distribuciones de PSL, se propone un ejemplo de dos formaciones de 11 jugadores distintas, en una formación $L_{MC}$ se encuentran 10 jugadores del equipo Manchester City + Sergio Agüero y en la otra $L_{MC}^{\text{Giroud}}$ los mismos 10 jugadores + Olivier Giroud del equipo Arsenal.
+Para explicar la comparación de distribuciones de PSL, se propone un ejemplo de dos formaciones de 11 jugadores distintas, en una formación $L_{MC}$ se encuentran 10 jugadores del equipo Manchester City (MCI) + Sergio Agüero delantero del mismo equipo y en la otra $L_{MC}^{\text{Giroud}}$ los mismos 10 jugadores del MCI + Olivier Giroud delantero del equipo Arsenal.
 
 Se realizó el proceso de Monte Carlo para estimar la distribución del PSL de cada formación a partir de 1000 simulaciones. Luego en la figura \ref{fig:psl_dists_aguero_v_giroud} se puede observar las funciones de densidad de probabilidad aproximadas de las distribuciones del PSL de las formaciones $\hat{f}^{1000}_{PSL}(L_{MC})$ y $\hat{f}^{1000}_{PSL}(L_{MC}^{\text{Giroud}})$.
 
@@ -578,11 +590,15 @@ El campo de estudio sobre la Dominancia Estocástica es amplio y complejo, en es
 
 Para poder representar a cada jugador de forma vectorial, se desarrolló el modelo de Player2Vec que permite obtener un embedding de cada jugador en un espacio de $n$ dimensiones.
 
-Un embedding es una representación numérica de objetos en un espacio de $n$ dimensiones, donde propiedades o relaciones similares se preservan. En el contexto de jugadores, un embedding transforma las características de cada jugador en un vector de números, de tal manera que jugadores con comportamientos o atributos similares estén más cerca en este espacio vectorial. Esto facilita que modelos como redes neuronales aprendan patrones complejos a partir de estas representaciones compactas.
+Un embedding es una representación numérica de objetos en un espacio de $n$ dimensiones, donde propiedades o relaciones similares del dominio de los objetos se preservan en el espacio vectorial. En el contexto de jugadores, un embedding transforma las características de cada jugador en un vector, de tal manera que jugadores con comportamientos o atributos similares estén más cerca en este espacio vectorial. Esto facilita que modelos como redes neuronales aprendan patrones complejos a partir de estas representaciones compactas.
 
 ## Definición
 
-Player2Vec es una adaptación de Node2Vec para representar jugadores de fútbol en un espacio vectorial. En este caso, los nodos del grafo representan jugadores, y las aristas entre ellos reflejan la interacción entre los jugadores en partidos de fútbol. A partir de los datos de eventos de partidos (pases, disparos, goles, etc.), se construye un grafo donde los nodos son jugadores y las aristas representan la frecuencia de interacción entre ellos.
+Player2Vec es un modelo para representar jugadores de fútbol en un espacio vectorial. Este modelo hace uso de Node2Vec, que es en sí una adaptación de Word2Vec, una técnica de NLP que permite representar palabras en un espacio vectorial [@grover_2016_node2vec; @mikolov_2013_word2vec].
+
+Node2Vec es un algoritmo que aprende representaciones vectoriales (embeddings) para nodos en un grafo, preservando tanto las relaciones locales como las globales entre ellos. Utiliza técnicas de random walks para capturar el contexto de cada nodo, balanceando entre explorar nodos cercanos y lejanos. Estos embeddings son útiles para tareas de machine learning sobre grafos, ya que capturan de forma eficiente las interacciones entre nodos en el grafo.
+
+En este caso, los nodos del grafo representan jugadores, y las aristas entre ellos reflejan la interacción entre los jugadores en partidos de fútbol. A partir de los datos de eventos de partidos (pases, disparos, goles, etc.), se construye un grafo donde los nodos son jugadores y las aristas representan la frecuencia de interacción entre ellos.
 
 ## Modelado de la EPL 2012/13 como Grafo
 
@@ -619,19 +635,18 @@ En la figura \ref{fig:G_LTM} se visualiza un ejemplo de un grafo de lineup $G^{L
   \caption{Grafo de Lineup}\label{fig:G_LTM}
 \end{figure}
 
-Luego sean:
-- $J_i \mid i \in [0, 522]$ los jugadores reales de la temporada 2012/13 de la EPL
+Luego sean $J_i \mid i \in [0, 521]$ los jugadores reales de la temporada 2012/13 de la EPL
 
 Se construye el grafo de la red de jugadores $G_{\text{EPL-12/13}}$ como la unión de todos los grafos de lineup $G^{L, T, M}$.
 
 $$
 \begin{aligned}
    G_{\text{Full}} &= (V, E) = \bigcup_{L, T, M} G^{L, T, M} \\
-   V &= \{J_1, J_2, \dots, J_{522}, Gain, Loss, Shot\} \\
+   V &= \{J_1, J_2, \dots, J_{521}, Gain, Loss, Shot\} \\
     & \cup 
     \bigcup_{L, T, M} \{J_1^{L, T, M}, J_2^{L, T, M}, \dots, J_{11}^{L, T, M}, G^{L, T, M}, L^{L, T, M}, S^{L, T, M}\} \\
    E &= \bigcup_{L, T, M} E^{L, T, M} \\
-   & \cup \{(J_i, J_j^{L, T, M}, r(J_i, J_j^{L, T, M})) \mid i \in [0, 522], j \in [1, 11], L, T, M\} \\
+   & \cup \{(J_i, J_j^{L, T, M}, r(J_i, J_j^{L, T, M})) \mid i \in [0, 521], j \in [1, 11], L, T, M\} \\
     & \cup \{(Gain, Gain^{L, T, M}, 1) \mid L, T, M\} \\
     & \cup \{(Loss^{L, T, M}, Loss, 1) \mid L, T, M\} \\
     & \cup \{(Shot^{L, T, M}, Shot, 1) \mid L, T, M\}
@@ -670,7 +685,7 @@ El algoritmo en concreto para construir el grafo de la red de jugadores $G_{\tex
 \SetAlgoLined
 \KwIn{Datos de eventos de partidos de la temporada 2012/13 de la EPL}
 \KwOut{Grafo de la red de jugadores $G_{\text{Full}}$}
-$V \gets \{J_1, J_2, \dots, J_{522}, Gain, Loss, Shot\}$\;
+$V \gets \{J_1, J_2, \dots, J_{521}, Gain, Loss, Shot\}$\;
 $E \gets \emptyset$\;
 \For{partido $M$}{
     \For{lineup $L$ del partido $M$}{
@@ -691,11 +706,7 @@ A partir de calcular las matrices de ratios $R^{L, T, M}$ para cada lineup $L$ d
 
 Para obtener los embeddings de los jugadores, se utilizó la librería `node2vec` en Python, que implementa el algoritmo homónimo. Se configuró el modelo con  una longitud de caminata de 16 nodos, 200 caminatas y un tamaño de ventana de 12 nodos. Se entrenaron 2 modelos de embeddings, uno con 64 dimensiones para utilizar en modelos de Deep Learning y otro con 3 dimensiones.
 
-Para cada uno de los 37521 nodos se obtuvo un embedding, de los cuales nos quedamos solo con los 522 embeddings de los jugadores reales, estos finalmente son la representación vectorial de cada jugador en el espacio de embeddings.
-
-Este modelo hace uso de Node2Vec, que es en sí una adaptación de Word2Vec, una técnica de NLP que permite representar palabras en un espacio vectorial [@grover_2016_node2vec; @mikolov_2013_word2vec]. 
-
-Node2Vec es un algoritmo que aprende representaciones vectoriales (embeddings) para nodos en un grafo, preservando tanto las relaciones locales como las globales entre ellos. Utiliza técnicas de random walks para capturar el contexto de cada nodo, balanceando entre explorar nodos cercanos y lejanos. Estos embeddings son útiles para tareas de machine learning sobre grafos, ya que capturan de forma eficiente las interacciones entre nodos en el grafo.
+Para cada uno de los 37521 nodos se obtuvo un embedding, de los cuales nos quedamos solo con los 521 embeddings de los jugadores reales, estos finalmente son la representación vectorial de cada jugador en el espacio de embeddings.
 
 En el caso de Player2Vec, los $k$ random walks resultantes son una secuencia de jugadores y/o estados de juego en un partido de fútbol (Ganancia, Pérdida, Disparo). A modo ilustrativo los siguientes son posibles random walks obtenidos del grafo de la EPL 2012/13:
 
@@ -719,7 +730,7 @@ Para comenzar a explorar el espacio vectorial generado por Player2Vec, se ajust�
 - Número de caminatas: 200
 - Tamaño de ventana: 12 nodos
 
-Se entrenó el modelo y se obtuvieron los embeddings de los 522 jugadores de la temporada 2012/13 de la EPL. La siguiente visualización en la figura \ref{fig:players_3d} muestra los embeddings de los jugadores en un espacio de 3 dimensiones, el color corresponde al equipo en el que juega el jugador.
+Se entrenó el modelo y se obtuvieron los embeddings de los 521 jugadores de la temporada 2012/13 de la EPL. La siguiente visualización en la figura \ref{fig:players_3d} muestra los embeddings de los jugadores en un espacio de 3 dimensiones, el color corresponde al equipo en el que juega el jugador.
 
 <!-- ![Embeddings de Jugadores en 3D](recursos_pdf/graficos/players_3d.png) -->
 \begin{figure}
@@ -826,7 +837,7 @@ Especificamente los 521 jugadores de la temporada 2012/13 de la EPL se dividiero
 \textbf{Conjunto} & \textbf{Tamaño} \\
 \hline
 Entrenamiento & 416 \\
-Test & 104 \\
+Test & 105 \\
 Total & 521 \\
 \hline
 \end{tabular}
@@ -879,7 +890,7 @@ Loss & 0.01068 & 0.01505 \\
 ```
 
 El modelo base obtuvo un rendimiento aceptable en el conjunto de entrenamiento, con una pérdida de $0.01068$,
-pero casi el 50\% mas en el conjunto de validación, con una pérdida de $0.01505$. Esto puede ser un indicador de sobreajuste, por lo que se procedió a realizar un proceso de tuning de hiperparámetros y arquitectura con validación cruzada.
+pero casi el 50\% mas en el conjunto de test, con una pérdida de $0.01505$. Esto puede ser un indicador de sobreajuste, por lo que se procedió a realizar un proceso de tuning de hiperparámetros y arquitectura con validación cruzada.
 
 ## Tuning de Hiperparámetros y Arquitectura con Validación Cruzada
 
@@ -929,11 +940,9 @@ El espacio de hiperparámetros que se exploró fue el siguiente:
         \item ExponentialLR con gamma \{0.1, 0.05, 0.01\}
         \item CosineAnnealingLR con T\_max \{50, 100, 200\}
     \end{itemize}
-    \item \textbf{Early stopping}: \{True\}
-    \item \textbf{Early stopping window}: \{10, 20, 50, 100\}
 \end{itemize}
 
-Además se implementó una clase de Red Neuronal paramétrica para poder explorar distintas arquitecturas de red neuronal. 
+Además se implementó una clase de Red Neuronal paramétrica para poder explorar distintas arquitecturas de red neuronal. Se exploraron distintas combinaciones de cantidad de capas ocultas, tamaños de capas ocultas,activaciones y dropout.
 
 ## Resultados del Tuning de Hiperparámetros
 
@@ -957,8 +966,6 @@ La búsqueda de hiperparámetros se realizó con 1000 iteraciones. La mejor comb
   \caption{Arquitectura del Modelo Tuned}\label{fig:p2v_dist_model_tuned_H}
 \end{figure}
 
-(0.004966359119862318, 0.008916404098272324, 0.014493363909423351)
-
 ```{=latex}
 \begin{table}
 \caption{Resultados del Modelo}
@@ -978,8 +985,6 @@ La búsqueda de hiperparámetros se realizó con 1000 iteraciones. La mejor comb
 El modelo final seleccionado obtuvo un rendimiento aceptable en el conjunto de validación, con una pérdida de $0.008916$, aún mejor que la pérdida de Train del modelo base. Se procedió a evaluar el modelo en el conjunto de testeo y se obtuvo una pérdida de $0.014493$.
 
 ![Resultados del Modelo Tuned](recursos_pdf/graficos/p2v_dist_model_oos_190_for_graph_190_for_model_64_5000_0.01_CosineAnnealingLR_tuned_eval_test_loss.png)
-
-El modelo resultante logró generalizar mejor, posiblemente estemos presenciando un caso de overfitting del conjunto de validación, ya que la pérdida en el conjunto de testeo es mayor que en el de validación, sin embargo los resultados obtenidos son satisfactorios.
 
 ## Hardware y Tiempos de Entrenamiento
 
@@ -1105,7 +1110,7 @@ Por lo tanto, podemos concluir que, según nuestro modelo, la transferencia de D
 
 ## Caso de Estudio 2: James Milner al Liverpool
 
-Para analizar la transferencia de James Milner(Mediocampista) utilizamos la misma metodología que en el caso anterior. Evaluamos el impacto en el PSL del equipo simulando su inclusión en lugar de los principales mediocampistas titulares. Para ello, consideramos dos escenarios: en el primero, Milner reemplaza a Steven Gerrard creando la formación $L_{LIV1}^{\text{Milner}}$ cuya distribución es $X_{L_{LIV1}^{\text{Milner}}} \sim \hat{f}^{1000}_{PSL}(L_{LIV1}^{\text{Milner}})$. Y en el segundo, a Stewart Downing creando la formación $L_{LIV2}^{\text{Milner}}$ cuya distribución es $X_{L_{LIV2}^{\text{Milner}}} \sim \hat{f}^{1000}_{PSL}(L_{LIV2}^{\text{Milner}})$.
+Para analizar la transferencia de James Milner (Mediocampista) utilizamos la misma metodología que en el caso anterior. Evaluamos el impacto en el PSL del equipo simulando su inclusión en lugar de los principales mediocampistas titulares. Para ello, consideramos dos escenarios: en el primero, Milner reemplaza a Steven Gerrard creando la formación $L_{LIV1}^{\text{Milner}}$ cuya distribución es $X_{L_{LIV1}^{\text{Milner}}} \sim \hat{f}^{1000}_{PSL}(L_{LIV1}^{\text{Milner}})$. Y en el segundo, a Stewart Downing creando la formación $L_{LIV2}^{\text{Milner}}$ cuya distribución es $X_{L_{LIV2}^{\text{Milner}}} \sim \hat{f}^{1000}_{PSL}(L_{LIV2}^{\text{Milner}})$.
 
 Los resultados obtenidos luego de la simulación son los siguientes:
 
@@ -1161,9 +1166,9 @@ James Milner    &  0.127622 &  0.038303 &         0.001467 &  0.651483 &  0.7685
 Como se puede observar, ambas distribuciones con Milner, $X_{L_{LIV1}^{\text{Milner}}}$ y $X_{L_{LIV2}^{\text{Milner}}}$, presentan una mayor media en PSL en comparación con  $X_{L_{LIV1}}$ y $X_{L_{LIV2}}$ respectivamente.
 Además, al observar "a ojo" las PDFs de $X_{L_{LIV1}^{\text{Milner}}}$ y $X_{L_{LIV2}^{\text{Milner}}}$, notamos un mayor sesgo hacia la derecha que las originales, lo que indica que las formaciones con Milner poseen un PSL superior en la mayoría de los casos.
 
-Dado que $P(X_{L_{LIV1}^{\text{Milner}}} > X_{L_{LIV1}}) = 0.56$ y $P(X_{L_{LIV2}} > X_{L_{LIV2}^{\text{Milner}}}) = 0.57$, implica que las formaciones con Milner tienen dominancia probabilística sobre las formaciones originales.
+Dado que $P(X_{L_{LIV1}^{\text{Milner}}} > X_{L_{LIV1}}) = 0.56$ y $P(X_{L_{LIV2}^{\text{Milner}}} > X_{L_{LIV2}}) = 0.57$, implica que las formaciones con Milner tienen dominancia probabilística sobre las formaciones originales.
 
-También notamos que las CDFs de $X_{L_{LIV1}^{\text{Milner}}}$ y $X_{L_{LIV2}^{\text{Milner}}}$ son mayores que las originales en todos los puntos a partir del umbral de 0.06, lo que indica que las formaciones con Milner dominan estocásticamente a las formaciones originales.
+También notamos que las CDFs de $X_{L_{LIV1}^{\text{Milner}}}$ y $X_{L_{LIV2}^{\text{Milner}}}$ son mayores que las originales en todos los puntos a partir del umbral de 0.06, lo que indica que las formaciones con Milner dominan estocásticamente de forma parcial a las formaciones originales.
 
 Por lo tanto, podemos concluir que, según nuestro modelo, la transferencia de James Milner al Liverpool es recomendable porque su inclusión en lugar de Steven Gerrard o Stewart Downing mejoraría el PSL del equipo y aumentaría la performance del mismo.
 

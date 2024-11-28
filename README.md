@@ -1,5 +1,8 @@
 # Cómo encontrar el mejor jugador para tu Equipo de Fútbol
 
+[Link al repo de GitHub:
+https://github.com/juanisil/TDVIII-proyecto-final](https://github.com/juanisil/TDVIII-proyecto-final)
+
 ## Integrantes
 
 -   Tomás Glauberman - 21F78 \| <tglauberman@mail.utdt.edu>
@@ -153,9 +156,10 @@ racing de santander case study*. 33rd European Conference on Operational
 Research.
 <https://ic.fcen.uba.ar/uploads/files/Euro%202024%20-%20Data%20Science%20models%20for%20Football%20Scouting%20The%20Racing%20de%20Santander%20case%20study%20-%20REVISED.pdf>
 
-*Danny welbeck - evolución del valor de mercado*. (2020).
-Transfermarkt.com.ar.
-<https://www.transfermarkt.com.ar/danny-welbeck/marktwertverlauf/spieler/67063>
+Chen, T., & Guestrin, C. (2016). XGBoost: A scalable tree boosting
+system. *Proceedings of the 22nd ACM SIGKDD International Conference on
+Knowledge Discovery and Data Mining - KDD ’16*, 785–794.
+<https://doi.org/10.1145/2939672.2939785>
 
 Green, S. (2012). *Assessing the performance of premier league
 goalscorers*. Stats Perform.
@@ -167,8 +171,9 @@ for networks*. arXiv.org. <https://arxiv.org/abs/1607.00653>
 Huang, E., Segarra, S., Gallino, S., & Ribeiro, A. (n.d.). *How to find
 the right player for your soccer team?*
 
-*James milner - stats by club*. (2023). Transfermarkt.com.
-<https://www.transfermarkt.com/james-milner/leistungsdatenverein/spieler/3333>
+Kullback, S., & Leibler, R. A. (1951). On information and sufficiency.
+*The Annals of Mathematical Statistics*, *22*, 79–86.
+<https://doi.org/10.1214/aoms/1177729694>
 
 Mikolov, T., Chen, K., Corrado, G., & Dean, J. (2013). *Efficient
 estimation of word representations in vector space*. arXiv.org.
@@ -188,6 +193,14 @@ Science & Coaching*, 174795412311544.
 
 Tippett, J. (2019). *The expected goals philosophy: A game-changing way
 of analysing football*. Independently Published.
+
+Transfermarkt.com.ar. (2024a). *Danny welbeck - evolución del valor de
+mercado*. Transfermarkt.com.ar.
+<https://www.transfermarkt.com.ar/danny-welbeck/marktwertverlauf/spieler/67063>
+
+Transfermarkt.com.ar. (2024b). *James milner - stats by club*.
+Transfermarkt.com.
+<https://www.transfermarkt.com/james-milner/leistungsdatenverein/spieler/3333>
 
 Vulcano, G. (n.d.). *Decision under risk - module IV - NYU stern -
 master of science in business analytics*.

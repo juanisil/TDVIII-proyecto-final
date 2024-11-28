@@ -9,6 +9,8 @@ nocite: '@*'
 
 # Cómo encontrar el mejor jugador para tu Equipo de Fútbol
 
+[Link al repo de GitHub: https://github.com/juanisil/TDVIII-proyecto-final](https://github.com/juanisil/TDVIII-proyecto-final)
+
 ## Integrantes
 
 - Tomás Glauberman - 21F78 | [tglauberman@mail.utdt.edu](mailto:tglauberman@mail.utdt.edu)

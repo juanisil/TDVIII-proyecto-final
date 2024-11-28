@@ -354,7 +354,11 @@ Luego se analizó la distribución de los $r(J, S)$ de los 10 jugadores con mayo
 
 ## Comparación de las distribuciones de los $r(J, S)$
 
-A partir de la distribución ajustada de un jugador, podemos hallar jugadores similares en base a la distribución de los $r(J, S)$ utilizando la divergencia de Kullback-Leibler (KL). 
+A partir de la distribución ajustada de un jugador, podemos hallar jugadores similares en base a la distribución de los $r(J, S)$ utilizando la divergencia de Kullback-Leibler (KL) [@kullback_1951]. La divergencia KL es una medida de la diferencia entre dos distribuciones de probabilidad. Para dos distribuciones de probabilidad $P$ y $Q$, la divergencia KL se define como:
+
+$$
+    D_{KL}(P||Q) = \sum_{i} P(i) \log \left( \frac{P(i)}{Q(i)} \right)
+$$
 
 En la figura \ref{fig:Similar_to_Sergio_Aguero_shots_prob_beta_binomial} se observa la distribución de los $r(J, S)$ de jugadores similares a él en la temporada 2012/13 de la EPL. Además se presentan solapados en la figura \ref{fig:Sergio_Aguero_and_similar_players_shots_prob_beta_binomial}.
 

@@ -1075,7 +1075,6 @@ Danny Welbeck &  0.129325 &  0.038815 &         0.001507 &  0.761120 &  0.773602
 \end{table}
 ```
 
-
 <!-- ![Comparación de CDFs y PDFs de Welbeck y Giroud](recursos_pdf/graficos/Welbeck_Giroud.png) -->
 \begin{figure}
   \includegraphics{recursos_pdf/graficos/Welbeck_Giroud.png}
@@ -1110,6 +1109,41 @@ Todas estas métricas se repiten a favor de la formación con Giroud, $X_{L_{AR2
 
 Por lo tanto, podemos concluir que, según nuestro modelo, la transferencia de Danny Welbeck al Arsenal no es recomendable porque su inclusión en lugar de Theo Walcott o Olivier Giroud disminuiría el PSL del equipo y empeoraría la performance del mismo.
 
+### Comparación con la Realidad
+
+<!-- Appearances: Welbeck made 126 appearances for Arsenal across all competitions.
+Goals: He scored a total of 32 goals, averaging approximately 0.25 goals per game.
+Assists: He provided 13 assists, contributing to the team's overall attacking play.
+Notable Matches: His debut came against Manchester City, where he scored his first goal in a 3–0 victory over Aston Villa shortly after joining. He also scored a hat-trick in a UEFA Champions League match against Galatasaray, showcasing his potential as a key player for the Gunners23.
+Injury Challenges
+Welbeck's time at Arsenal was significantly impacted by injuries.
+He suffered a serious knee injury that sidelined him for extended periods, including missing the entire second half of the 2015 season and parts of subsequent seasons. These injuries limited his ability to maintain consistent form and playing time24.
+Impact on Team Success
+Despite his injury struggles, Welbeck played crucial roles in important matches:
+He scored the winning goal against Manchester United in the FA Cup quarter-finals in 2015, helping Arsenal progress to the later stages of the tournament.
+He was part of the squad that won the FA Cup in 2017, contributing to Arsenal's success during his tenure23.
+
+Performance at Arsenal
+Initial Impact: Welbeck started strong, scoring his first goal shortly after joining and netting a hat-trick against Galatasaray in the Champions League, which showcased his potential as a key player for the team13. His ability to combine effectively with teammates, particularly Mesut Özil, highlighted his strengths in creating scoring opportunities1.
+Injury Issues: However, his time at Arsenal was marred by significant injury problems. He missed substantial portions of multiple seasons due to knee injuries, which limited his contributions and consistency on the pitch3. This recurring issue prevented him from establishing himself as a regular starter and hindered his overall impact on the team's success.
+Comparison with Manchester United
+At Manchester United, Welbeck had a promising start, contributing to the team's successes, including winning the League Cup and FIFA Club World Cup. He was known for his versatility and work rate but often played second fiddle to more established strikers like Wayne Rooney and Robin van Persie. His time at United was characterized by:
+Development: He developed as a player under Sir Alex Ferguson, gaining valuable experience through loan spells and eventually becoming a part of the first team.
+Limited Goalscoring: While he showed flashes of brilliance, his goalscoring record was inconsistent, leading to mixed opinions about his finishing ability.
+-->
+
+La transferencia de Danny Wellbeck al Arsenal del 2014 fue una complicada de evaluar. Por un lado se puede ver que Welbeck tuvo un impacto positivo en el equipo, siendo parte de la plantilla que ganó la FA Cup en 2017 y anotando goles importantes en partidos claves. Sus estadísticas en el Arsenal fueron de 32 goles en 126 partidos (7.006 minútos), con un promedio aproximado de 0.25 goles por partido. Sin embargo, su tiempo en el Arsenal estuvo marcado por lesiones que lo dejaron fuera de juego por largos periodos, lo que limitó su capacidad para mantener una forma y tiempo de juego consistentes.
+
+Se puede considerar también su valor de mercado en el momento de la transferencia, que fue de 20 millones de libras esterlinas, como un indicador de su potencial y calidad como jugador. De la misma forma, podemos observar en la figura \ref{fig:Welbeck_Market_Value} que durante su tiempo en el Arsenal, su valor de mercado fue disminuyendo luego de un año transcurrido en el club, lo que podría ser un indicador de su rendimiento decreciente, posiblemente debido a las lesiones [@danny_transfermarkt]. Su valor de mercado al momento de su transferencia de salida del Arsenal fue de 9 millones de libras esterlinas.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{recursos_pdf/graficos/evolucion_valor_mercado_wellbeck.png}
+  \caption{Valor de Mercado de Danny Welbeck en el Arsenal - Fuente: Transfermarkt}\label{fig:Welbeck_Market_Value}
+\end{figure}
+
+Nuestro modelo, puramente por rendimiento en la temporada 2012/13, no pudo prever el impacto positivo que tendría Welbeck en el Arsenal, ya que su inclusión en lugar de Walcott o Giroud disminuiría el PSL del equipo. En cuanto a la comparación con la realidad, se puede observar que Welbeck tuvo un impacto positivo en el equipo, pero sus lesiones limitaron su capacidad para mantener una forma y tiempo de juego consistentes, lo que podría haber afectado su rendimiento y el del equipo.
+
 <!-- \newpage -->
 
 ## Caso de Estudio 2: James Milner al Liverpool
@@ -1117,7 +1151,6 @@ Por lo tanto, podemos concluir que, según nuestro modelo, la transferencia de D
 Para analizar la transferencia de James Milner (Mediocampista) utilizamos la misma metodología que en el caso anterior. Evaluamos el impacto en el PSL del equipo simulando su inclusión en lugar de los principales mediocampistas titulares. Para ello, consideramos dos escenarios: en el primero, Milner reemplaza a Steven Gerrard creando la formación $L_{LIV1}^{\text{Milner}}$ cuya distribución es $X_{L_{LIV1}^{\text{Milner}}} \sim \hat{f}^{1000}_{PSL}(L_{LIV1}^{\text{Milner}})$. Y en el segundo, a Stewart Downing creando la formación $L_{LIV2}^{\text{Milner}}$ cuya distribución es $X_{L_{LIV2}^{\text{Milner}}} \sim \hat{f}^{1000}_{PSL}(L_{LIV2}^{\text{Milner}})$.
 
 Los resultados obtenidos luego de la simulación son los siguientes:
-
 
 <!-- ![Comparación de CDFs y PDFs de Milner y Gerrard](recursos_pdf/graficos/Milner_Gerrard.png) -->
 \begin{figure}
@@ -1175,6 +1208,29 @@ Dado que $P(X_{L_{LIV1}^{\text{Milner}}} > X_{L_{LIV1}}) = 0.56$ y $P(X_{L_{LIV2
 También notamos que las CDFs de $X_{L_{LIV1}^{\text{Milner}}}$ y $X_{L_{LIV2}^{\text{Milner}}}$ son mayores que las originales en todos los puntos a partir del umbral de 0.06, lo que indica que las formaciones con Milner dominan estocásticamente de forma parcial a las formaciones originales.
 
 Por lo tanto, podemos concluir que, según nuestro modelo, la transferencia de James Milner al Liverpool es recomendable porque su inclusión en lugar de Steven Gerrard o Stewart Downing mejoraría el PSL del equipo y aumentaría la performance del mismo.
+
+### Comparación con la Realidad
+
+<!-- Partidos: Milner disputó un total de 332 partidos oficiales con el Liverpool.
+Goles: Anotó 26 goles durante su tiempo en el club.
+Asistencias: Proporcionó 46 asistencias, destacándose como un creador de juego clave.
+Títulos: Ganó múltiples trofeos, incluyendo:
+3 Premier League
+1 FA Cup
+1 EFL Cup
+1 UEFA Champions League -->
+
+James Milner tuvo una destacada carrera en el Liverpool, donde jugó desde 2015 hasta 2023. Su tiempo en el club se caracterizó por su versatilidad, liderazgo y contribuciones significativas tanto en el mediocampo como en la defensa. Milner disputó un total de 332 partidos oficiales con el Liverpool (19.048 minútos), anotando 26 goles y proporcionando 46 asistencias. Durante su tiempo en el club, Milner ganó múltiples trofeos, incluyendo 3 Premier League, 1 FA Cup, 1 EFL Cup, 1 UEFA Champions League y una medalla de Subcampeón de la Europa League [@milner_transfermarkt]. Su experiencia y profesionalismo lo convirtieron en un líder dentro y fuera del campo. Milner fue clave en momentos decisivos, como su actuación en la final de la Champions League de 2019, donde el Liverpool venció al Tottenham Hotspur.
+
+Nuevamente podemos observar que el valor de mercado de Milner en el momento de su transferencia al Liverpool en el 2015 era de 15 millones de libras esterlinas. En la figura \ref{fig:Milner_Market_Value} se puede observar que su valor de mercado se mantuvo estable durante sus primeros años en el club, lo que sugiere un rendimiento constante y de alto nivel. Durante su tiempo en el Liverpool, Milner fue un jugador clave [@milner_transfermarkt]. Su valor de mercado al momento de su transferencia de salida del Liverpool fue de 1.5 millones de libras esterlinas.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{recursos_pdf/graficos/evolucion_valor_mercado_milner.png}
+  \caption{Valor de Mercado de James Milner en el Liverpool - Fuente: Transfermarkt}\label{fig:Milner_Market_Value}
+\end{figure}
+
+Podemos comparar entonces nuestra simulación con la realidad y observar que nuestro modelo predijo correctamente que la inclusión de James Milner en lugar de Steven Gerrard o Stewart Downing mejoraría el PSL del equipo y aumentaría la performance del mismo. La transferencia de Milner al Liverpool fue recomendable según nuestro modelo, y su impacto en el equipo fue positivo, contribuyendo a los éxitos y títulos obtenidos por el club durante su tiempo en el mismo.
 
 ## Recomendaciones de Transferencias Clave
 

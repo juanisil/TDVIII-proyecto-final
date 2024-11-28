@@ -437,9 +437,9 @@ Para mejor claridad, la siguiente visualización muestra la matriz de variables 
   \caption{Matriz de Variables Aleatorias $\mathbf{R}$}\label{fig:8fddde8ae6d6}
 \end{figure}
 
-## Proceso de Monte Carlo para estimar la distribución del PSL
+## Método de Monte Carlo para estimar la distribución del PSL
 
-Dado un equipo $A$ con una formación de 11 jugadores $L_{A}$, se busca estimar la distribución del PSL de ese equipo a partir de las distribuciones _a-priori_ de los $r(U, V)$ de cada jugador. Para ello, se propone un proceso de Monte Carlo para muestrear de las distribuciones _a-priori_ de los $r(U, V)$ y estimar con ellas la distribución del PSL del equipo $A$.
+Dado un equipo $A$ con una formación de 11 jugadores $L_{A}$, se busca estimar la distribución del PSL de ese equipo a partir de las distribuciones _a-priori_ de los $r(U, V)$ de cada jugador. Para ello, se propone un método de Monte Carlo para muestrear de las distribuciones _a-priori_ de los $r(U, V)$ y estimar con ellas la distribución del PSL del equipo $A$.
 
 De la formación $L_{A}$ podemos construir la matriz de variables aleatorias $\mathbf{R}$ a partir de las distribuciones _a-priori_ de los $r(U, V)$ de cada jugador.
 

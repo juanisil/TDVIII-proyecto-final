@@ -53,6 +53,12 @@ El proyecto está dividido las siguientes carpetas principales:
 -   `src/p2v_dist.py`: Modelo Predictivo de Distribuciones de Ratios de
     Transición
 
+Usage of `Player2Vec`:
+
+``` bash
+python src/Player2Vec.py --model_path "player2vec.model" --output_path "player2vec.model" --dimensions 3 --walk_length 16 --num_walks 200 --p 1 --q 1 --workers 4 --window 12 --min_count 1 --batch_words 4 --epl_data_path "../SampleData/epl.xlsx" --players_path "../SampleData/players.json" --r_storage_path "R_storage.npy"
+```
+
 ## Algunos Notebooks
 
 -   `exploratory/emb_viz.ipynb`: Visualización de embeddings de
@@ -112,6 +118,24 @@ ejecutar el siguiente comando:
 make viz
 ```
 
+## Docs
+
+La documentación se encuentra en la carpeta `docs/`. Para generar la
+documentación, ejecutar el siguiente comando:
+
+``` bash
+make build_docs
+```
+
+Y para visualizar la documentación, ejecutar el siguiente comando:
+
+``` bash
+make web_docs
+```
+
+Se puede hallar la documentación en [este
+link](https://juanisil.github.io/TDVIII-proyecto-final/).
+
 ## Referencias
 
 Bawa, V. S. (1982). Stochastic dominance: A research bibliography.
@@ -129,6 +153,10 @@ racing de santander case study*. 33rd European Conference on Operational
 Research.
 <https://ic.fcen.uba.ar/uploads/files/Euro%202024%20-%20Data%20Science%20models%20for%20Football%20Scouting%20The%20Racing%20de%20Santander%20case%20study%20-%20REVISED.pdf>
 
+*Danny welbeck - evolución del valor de mercado*. (2020).
+Transfermarkt.com.ar.
+<https://www.transfermarkt.com.ar/danny-welbeck/marktwertverlauf/spieler/67063>
+
 Green, S. (2012). *Assessing the performance of premier league
 goalscorers*. Stats Perform.
 <https://www.statsperform.com/resource/assessing-the-performance-of-premier-league-goalscorers/>
@@ -138,6 +166,9 @@ for networks*. arXiv.org. <https://arxiv.org/abs/1607.00653>
 
 Huang, E., Segarra, S., Gallino, S., & Ribeiro, A. (n.d.). *How to find
 the right player for your soccer team?*
+
+*James milner - stats by club*. (2023). Transfermarkt.com.
+<https://www.transfermarkt.com/james-milner/leistungsdatenverein/spieler/3333>
 
 Mikolov, T., Chen, K., Corrado, G., & Dean, J. (2013). *Efficient
 estimation of word representations in vector space*. arXiv.org.

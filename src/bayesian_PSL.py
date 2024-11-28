@@ -8,7 +8,7 @@
 # pylint: disable=C0301
 # pylint: disable=W0612
 
-from src.utils_CTMC import build_Q, psl_estimator  # noqa: E402
+from src.utils_CTMC import build_Q, build_R, psl_estimator  # noqa: E402
 from src.match_data_extraction import (  # noqa: E402
     get_jugadores,
     get_lineup_duration,
@@ -37,14 +37,19 @@ from typing import List
 class EPL_Data:
     """Class to Encapsulate the different sources of EPL data"""
 
-    def __init__(self, epl_path, players_path, r_storage_path):
+    def __init__(self, epl_path, players_path, r_storage_path=None)
         self.epl_path = epl_path
         self.players_path = players_path
         self.r_storage_path = r_storage_path
 
         self.epl = leer_excel(self.epl_path)
         self.epl_player_data = EPLPlayerData(self.players_path)
-        self.R_storage = np.load(self.r_storage_path)
+        
+        if self.r_storage_path is None:
+            self.R_storage = np.load(self.r_storage_path)
+        else:
+            self.R_storage = np.zeros((len(separar_partidos(self.epl)), 2, 4, 15, 15))
+            self.build_R_storage()
 
         self.partidos = separar_partidos(self.epl)
 
@@ -61,6 +66,47 @@ class EPL_Data:
         self.size = 0
 
         self.calculate_size()
+
+    def build_R_storage(self):
+        """Build the R Storage"""
+
+        for pi, partido in enumerate(tqdm(self.partidos)):
+            try:
+                match_id = partido["match_id"].values[0]
+            except:
+                continue
+
+            for team_index, equipo in enumerate(separar_partido_en_equipo_pov(partido)):
+                lineups = separar_partido_del_equipo_en_lineups(equipo)
+
+                for lineup_index, lineup in enumerate(lineups):
+                    jugadores = get_jugadores(lineup)
+
+                    # Build the R matrix (14x14)
+                    R = build_R(lineup)
+
+                    # Indexes 1 through 11 are players, both columns and rows
+                    # Store the R matrix in the storage last 14x14 part of the 15x15 matrix,
+                    # Save the lineup index in the first column from 1 to 11
+                    # Also in the first row
+                    if len(jugadores) > 11:
+                        continue
+
+                    jugadores = np.array(jugadores)
+                    if len(jugadores) < 11:
+                        jugadores = np.pad(jugadores, (0, 11 - len(jugadores)))
+                    self.R_storage[pi, team_index, lineup_index, 1:, 1:] = R
+                    self.R_storage[pi, team_index, lineup_index, 0, 2:13] = jugadores
+                    self.R_storage[pi, team_index, lineup_index, 2:13, 0] = jugadores
+
+    def save_R_storage(self, path):
+        """Save the R Storage
+
+        Args:
+            path (str): Path to save the R Storage
+        """
+
+        np.save(path, self.R_storage)
 
     def get_epl(self):
         """Getter for the EPL DataFrame

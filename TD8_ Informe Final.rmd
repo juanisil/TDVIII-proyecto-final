@@ -22,7 +22,6 @@ toc:
   depth_to: 6
   ordered: false
 papersize: a4
-classoption: twoside
 header-includes: |
     \usepackage[linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
     \newcommand{\listofalgorithmes}{\tocfile{\listalgorithmcfname}{loa}}
@@ -56,7 +55,9 @@ abstract: |
 
     Este desarrollo se centra en el fútbol, un deporte en el cual los análisis previos se han concentrado, en su mayoría, en predecir resultados de partidos y mejorar el rendimiento de los equipos. Sin embargo, este trabajo propone un enfoque diferente al analizar el impacto de los jugadores sobre la posesión de balón y los disparos del equipo desde una perspectiva probabilística.
 
-    A partir de la métrica PSL propuesta en el paper *Soccer Networks* [@huang_soccer_networks] planteamos un proceso para comparar el impacto que tienen los jugadores sobre la performance del equipo. Logramos formular una metodología para estudiar la distribución de la performance de un equipo. Luego, proponemos una serie de métodos y métricas para comparar el rendimiento de dos formaciones de jugadores. Además, desarrollamos una forma de representación vectorial (Embeddings) de los jugadores, llamada Player2Vec, un modelo de Machine Learning también basado sobre el modelo de redes de jugadores planteado en el mismo paper del PSL. Esto último permite desarrollar modelos predictivos sobre el rendimiento de los jugadores en un equipo.
+    A partir de la métrica PSL propuesta en el paper *Soccer Networks* [@huang_soccer_networks] planteamos un proceso para comparar el impacto que tienen los jugadores sobre la performance del equipo. Logramos formular una metodología para estudiar la distribución de la performance de un equipo. Luego, proponemos una serie de métodos y métricas para comparar el rendimiento de dos formaciones de jugadores. Además, desarrollamos una forma de representación vectorial (Embeddings) de los jugadores, llamada Player2Vec, un modelo de Machine Learning también basado sobre el modelo de redes de jugadores planteado en el mismo paper del PSL. Esto último permite desarrollar modelos predictivos sobre el rendimiento de los jugadores en un equipo. Nuestro modelo final logra predecir la performance de los jugadores un 58.99% mejor que asumir las distribuciones previas como _priors_.
+
+    Palabras Clave: Fútbol, Análisis de Datos, Machine Learning, Redes de Jugadores, Embeddings , Expected Goals, Cadenas de Markov
     \newpage
     \section{Índice}
 ---
@@ -164,7 +165,7 @@ El objetivo principal de este proyecto es desarrollar y aplicar modelos avanzado
 
 # **Definición del problema** {#definición-del-problema}
 
-A partir de la pregunta de la investigación, se plantea el problema de encontrar el jugador ideal para un equipo de fútbol. En un comienzo nos encontramos planteando cómo definir la _performance_ de un jugador y cómo compararla con otros jugadores. Surgió la necesidad de encontrar una métrica para evaluar el impacto de un jugador en el rendimiento de un equipo y cómo definir estos agentes. Además es necesario poder representar concretamente a un Jugador $J$.
+A partir de la pregunta de la investigación, se plantea el problema de encontrar el jugador ideal para un equipo de fútbol. En un comienzo nos encontramos planteando cómo definir la _performance_ de un jugador y cómo compararla con otros jugadores. Surgió la necesidad de encontrar una métrica para evaluar el impacto de un jugador en el rendimiento de un equipo y cómo definir estos agentes. Además es necesario poder representar concretamente a un Jugador $J$ de forma vectorial para poder utilizarlo en modelos predictivos.
 
 ## PSL como métrica de Performance 
 
@@ -241,7 +242,7 @@ En este trabajo se propone un método probabilístico bayesiano para hallar la D
 
 ## Modelo Predictivo de probabilidades de transición
 
-En un comienzo se planteó desarrollar un modelo predictivo para estimar los ratios de transición entre los estados. Optamos por buscar predecir los ratios $r$ y no las probabilidades de transición $q$ ya que la normalización no es igual en cada instancia de $R$. Más concretamente buscamos estimar la función $f$ que mapea los estados $U$ y $V$ al ratio de transición $r(U, V)$.
+En un comienzo se planteó desarrollar un modelo predictivo para estimar los ratios de transición entre los estados. Optamos por buscar predecir los ratios $r$ y no las probabilidades de transición $q$ ya que al normalizar los ratios de transición se pierde información sobre la cantidad de acciones de un jugador, por lo que las mismas posiciones de las matrices $R$ y $Q$ no son comparables. Más concretamente buscamos estimar la función $f$ que mapea los estados $U$ y $V$ al ratio de transición $r(U, V)$.
 
 $$
     \hat{r}(U, V) = f(U, V, \theta)
@@ -267,7 +268,7 @@ $$
     J = [\text{Passes/90}, \text{Shots/90}, \text{Goals/90}, \text{Losses/90}, \text{Time Played}, \text{Team ID}]
 $$
 
-Para el modelo predictivo comenzamos utilizando un modelo de XGBoost para la regresión pero rápidamente observamos que por la naturaleza de árbol al predecir con la media de las observaciones por hoja las predicciones resultaban casi discretas, por lo que viramos a explorar un modelo de regresión lineal para predecir los ratios de pases entre jugadores.
+Para el modelo predictivo comenzamos utilizando un modelo de XGBoost para la regresión [@chen_2016_xgboost] pero rápidamente observamos que por la naturaleza de árbol al predecir con la media de las observaciones por hoja las predicciones resultaban casi discretas, por lo que viramos a explorar un modelo mas sencillo de regresión lineal para predecir los ratios de pases entre jugadores.
 
 Para validar elegimos separar de forma temporal los 380 partidos de la temporada 2012/13 de la EPL: los primeros 269 partidos de entrenamiento; los últimos 111 de test ($\mu + 2/3 \sigma$). Además para construir el dataset, elegimos agarrar parejas de jugadores de los partidos de Train y removerlos de los mismos para poder en Test predecir ratios de transición entre jugadores que no se vieron en Train.
 
@@ -399,11 +400,11 @@ Como un extra, este sistema de clustering nos permite hallar rápido jugadores s
 
 # **Estimación de la Distribución del PSL**
 
-A partir de los resultados obtenidos en el análisis de las distribuciones de los $r(J, S)$, se propone un utilizar estas como priors para cada jugador, es decir, se asume que la distribución de los $r(J, S)$ de un jugador es la distribución _a-priori_ de la variable aleatoria $r(J, S)$ para ese jugador, lo mismo para los $r(J_i, J_j)$, los $r(J, L)$ y los $r(J, G)$.
+A partir de los resultados obtenidos en el análisis de las distribuciones de los $r(J, S)$, se propone un utilizar estas como _priors_ para cada jugador, es decir, se asume que la distribución de los $r(J, S)$ de un jugador es la distribución _a-priori_ de la variable aleatoria $r(J, S)$ para ese jugador, lo mismo para los $r(J_i, J_j)$, los $r(J, L)$ y los $r(J, G)$.
 
 De esta forma, cada jugador $J$ tiene una distribución _a-priori_ para cada uno de los 14 estados. Considerando esto, podemos reformular la matriz de ratios de transición como una matriz de variables aleatorias donde cada una se distribuye según la distribución _a-priori_ del jugador correspondiente.
 
-## Variables Aleatorias para los $r(U, V)$ y PSL por Priors
+## Variables Aleatorias para los $r(U, V)$ y PSL por _priors_
 
 Para actualizar la notación, sean $r_{J, V}$ la variable aleatoria que representa el ratio de transición entre el jugador $J$ y el estado $V$, esto incluye $r_{J, S}$, $r_{J, L}$ y también $r_{G, J}$, asi como los $r_{J_i, J_j}$ para $i, j \in [1, 11]$.
 
@@ -434,7 +435,7 @@ Para mejor claridad, la siguiente visualización muestra la matriz de variables 
 
 ## Proceso de Monte Carlo para estimar la distribución del PSL
 
-Dado un equipo $A$ con una formación de 11 jugadores $L_{A}$, se busca estimar la distribución del PSL de ese equipo a partir de las distribuciones _a-priori_ de los $r(U, V)$ de cada jugador. Para ello, se propone un proceso de Monte Carlo para muestrear de las distribuciones _a-priori_ de los $r(U, V)$.
+Dado un equipo $A$ con una formación de 11 jugadores $L_{A}$, se busca estimar la distribución del PSL de ese equipo a partir de las distribuciones _a-priori_ de los $r(U, V)$ de cada jugador. Para ello, se propone un proceso de Monte Carlo para muestrear de las distribuciones _a-priori_ de los $r(U, V)$ y estimar con ellas la distribución del PSL del equipo $A$.
 
 De la formación $L_{A}$ podemos construir la matriz de variables aleatorias $\mathbf{R}$ a partir de las distribuciones _a-priori_ de los $r(U, V)$ de cada jugador.
 
@@ -671,7 +672,7 @@ La siguiente figura (\ref{fig:G_TM}) es una visualización de una instancia de u
   \caption{Grafo de Jugadores}\label{fig:G_TM}
 \end{figure}
 
-El grafo resultante de la composición de todos los grafos de lineup $G_{\text{Full}}$ se puede comprender mejor en la visualización presente en la figura \ref{fig:G_EPL_12_13}:
+El grafo resultante de la composición de todos los grafos de lineup $G_{\text{Full}}$ se puede comprender mejor en la visualización presente en la figura \ref{fig:G_EPL_12_13}, donde al igual que en la figura anterior (\ref{fig:G_LTM}), los nodos de jugadores reales se encuentran representados por los nodos de los lineups en los que participaron.
 
 <!-- ![Grafo de Jugadores Completo](recursos_pdf/graficos/G_EPL_12_13.png) -->
 \begin{figure}
@@ -679,7 +680,7 @@ El grafo resultante de la composición de todos los grafos de lineup $G_{\text{F
   \caption{Grafo de Jugadores Completo}\label{fig:G_EPL_12_13}
 \end{figure}
 
-Donde al igual que en la figura anterior (\ref{fig:G_LTM}), los nodos de jugadores reales se encuentran representados por los nodos de los lineups en los que participaron.
+\newpage
 
 El algoritmo en concreto para construir el grafo de la red de jugadores $G_{\text{Full}}$ es el siguiente:
 
@@ -742,7 +743,7 @@ Se entrenó el modelo y se obtuvieron los embeddings de los 521 jugadores de la 
   \caption{Embeddings de Jugadores en 3D}\label{fig:players_3d}
 \end{figure}
 
-Para poder visualizar de forma más clara los embeddings de los jugadores, se realizó un PCA para reducir la dimensionalidad de los embeddings a 2 dimensiones. La visualización presente en la figura \ref{fig:players_3d_2d} muestra los embeddings de los jugadores en un espacio de 2 dimensiones, el color corresponde al equipo en el que juega el jugador.
+Para poder visualizar de forma más clara los embeddings de los jugadores, se realizó un Análisis de Componentes Principales (PCA) para reducir la dimensionalidad de los embeddings a 2 dimensiones. La visualización presente en la figura \ref{fig:players_3d_2d} muestra los embeddings de los jugadores en un espacio de 2 dimensiones, el color corresponde al equipo en el que juega el jugador.
 
 <!-- ![Embeddings de Jugadores en 3D - PCA a 2D](recursos_pdf/graficos/players_3d_2d.png) -->
 \begin{figure}
@@ -1008,9 +1009,9 @@ El entrenamiento del modelo final tomó tan sólo 30 segundos a lo largo de los 
 
 La búsqueda de hiperparametros de 1000 iteraciones tomó alrededor de 7hs en la misma máquina.
 
-## Comparación contra priors
+## Comparación contra _priors_
 
-Para evaluar la capacidad predictiva de nuestro modelo, comparamos los resultados obtenidos con los priors de las distribuciones de ratios de transición de los jugadores. Los priors se obtuvieron a partir de las distribuciones de ratios de transición de los jugadores en la primera mitad de la temporada 2012/13 de la EPL.
+Para evaluar la capacidad predictiva de nuestro modelo, comparamos los resultados obtenidos con los _priors_ de las distribuciones de ratios de transición de los jugadores. Los _priors_ se obtuvieron a partir de las distribuciones de ratios de transición de los jugadores en la primera mitad de la temporada 2012/13 de la EPL.
 
 Asumiendo que las distribuciones de ratios de transición de los jugadores en la segunda mitad de la temporada son similares a las de la primera mitad, evaluamos su capacidad predictiva con la misma función de pérdida JSD ponderada, obteniendo los siguientes resultados:
 
@@ -1029,7 +1030,7 @@ Asumiendo que las distribuciones de ratios de transición de los jugadores en la
 \end{table}
 ```
 
-Por lo que se puede observar, el modelo logra una mejora significativa en la capacidad predictiva de las distribuciones de ratios de transición de los jugadores en comparación con asumir igualdad de distribuciones entre las dos mitades de la temporada. En concreto, nuestro modelo logra reducir la pérdida en un $\sim 58.99\%$ en comparación con los priors.
+Por lo que se puede observar, el modelo logra una mejora significativa en la capacidad predictiva de las distribuciones de ratios de transición de los jugadores en comparación con asumir igualdad de distribuciones entre las dos mitades de la temporada. En concreto, nuestro modelo logra reducir la pérdida en un $\sim 58.99\%$ en comparación con los _priors_.
 
 \newpage
 
@@ -1110,27 +1111,6 @@ Todas estas métricas se repiten a favor de la formación con Giroud, $X_{L_{AR2
 Por lo tanto, podemos concluir que, según nuestro modelo, la transferencia de Danny Welbeck al Arsenal no es recomendable porque su inclusión en lugar de Theo Walcott o Olivier Giroud disminuiría el PSL del equipo y empeoraría la performance del mismo.
 
 ### Comparación con la Realidad
-
-<!-- Appearances: Welbeck made 126 appearances for Arsenal across all competitions.
-Goals: He scored a total of 32 goals, averaging approximately 0.25 goals per game.
-Assists: He provided 13 assists, contributing to the team's overall attacking play.
-Notable Matches: His debut came against Manchester City, where he scored his first goal in a 3–0 victory over Aston Villa shortly after joining. He also scored a hat-trick in a UEFA Champions League match against Galatasaray, showcasing his potential as a key player for the Gunners23.
-Injury Challenges
-Welbeck's time at Arsenal was significantly impacted by injuries.
-He suffered a serious knee injury that sidelined him for extended periods, including missing the entire second half of the 2015 season and parts of subsequent seasons. These injuries limited his ability to maintain consistent form and playing time24.
-Impact on Team Success
-Despite his injury struggles, Welbeck played crucial roles in important matches:
-He scored the winning goal against Manchester United in the FA Cup quarter-finals in 2015, helping Arsenal progress to the later stages of the tournament.
-He was part of the squad that won the FA Cup in 2017, contributing to Arsenal's success during his tenure23.
-
-Performance at Arsenal
-Initial Impact: Welbeck started strong, scoring his first goal shortly after joining and netting a hat-trick against Galatasaray in the Champions League, which showcased his potential as a key player for the team13. His ability to combine effectively with teammates, particularly Mesut Özil, highlighted his strengths in creating scoring opportunities1.
-Injury Issues: However, his time at Arsenal was marred by significant injury problems. He missed substantial portions of multiple seasons due to knee injuries, which limited his contributions and consistency on the pitch3. This recurring issue prevented him from establishing himself as a regular starter and hindered his overall impact on the team's success.
-Comparison with Manchester United
-At Manchester United, Welbeck had a promising start, contributing to the team's successes, including winning the League Cup and FIFA Club World Cup. He was known for his versatility and work rate but often played second fiddle to more established strikers like Wayne Rooney and Robin van Persie. His time at United was characterized by:
-Development: He developed as a player under Sir Alex Ferguson, gaining valuable experience through loan spells and eventually becoming a part of the first team.
-Limited Goalscoring: While he showed flashes of brilliance, his goalscoring record was inconsistent, leading to mixed opinions about his finishing ability.
--->
 
 La transferencia de Danny Wellbeck al Arsenal del 2014 fue una complicada de evaluar. Por un lado se puede ver que Welbeck tuvo un impacto positivo en el equipo, siendo parte de la plantilla que ganó la FA Cup en 2017 y anotando goles importantes en partidos claves. Sus estadísticas en el Arsenal fueron de 32 goles en 126 partidos (7.006 minútos), con un promedio aproximado de 0.25 goles por partido. Sin embargo, su tiempo en el Arsenal estuvo marcado por lesiones que lo dejaron fuera de juego por largos periodos, lo que limitó su capacidad para mantener una forma y tiempo de juego consistentes.
 
@@ -1297,7 +1277,7 @@ En este trabajo, se presentó un modelo predictivo de distribuciones de ratios d
 
 Se validó y presentó un caso de estudio de dos transferencias clave en las temporadas posteriores de la Premier League, demostrando la capacidad del modelo para evaluar el impacto de las transferencias en el rendimiento de los equipos. A través de la metodólogía propuesta, se encontró que el modelo es capaz de identificar transferencias que mejoran o empeoran el PSL de los equipos, proporcionando recomendaciones útiles para la toma de decisiones en el mercado de fichajes.
 
-Los resultados obtenidos muestran que el modelo es capaz de predecir mejor que los priors las distribuciones de ratios de transición de los jugadores, lo que sugiere que puede ser una herramienta valiosa para la evaluación de transferencias en el fútbol profesional.
+Los resultados obtenidos muestran que el modelo es capaz de predecir mejor que los _priors_ las distribuciones de ratios de transición de los jugadores, lo que sugiere que puede ser una herramienta valiosa para la evaluación de transferencias en el fútbol profesional.
 
 \newpage
 

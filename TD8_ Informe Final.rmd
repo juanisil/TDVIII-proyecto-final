@@ -83,7 +83,7 @@ knitr::opts_chunk$set(fig.pos = 'H')
 
 # **Agradecimientos** {#agradecimientos}
 
-Este trabajo no hubiera sido posible sin la ayuda de los profesores Gustavo Vulcano (Escuela de Negocios, Universidad Torcuato Di Tella) y Santiago Gallino (The Wharton School, University of Pennsylvania). Además queremos agradecer a Ignacio Vigilante (TIC \- Escuela ORT) y Tomás Spognardi (Exactas \- UBA) por sus contribuciones al modelo de Player2Vec y al PSL Bayesiano respectivamente. Agradecemos también a nuestras familias, amigos, colegas y jefes por su apoyo y acompañamiento durante el transcurso de nuestras carreras universitarias.
+Este trabajo no hubiera sido posible sin la ayuda de los profesores Gustavo Vulcano (Escuela de Negocios, Universidad Torcuato Di Tella) y Santiago Gallino (The Wharton School, University of Pennsylvania), y de Agustín Gravano director de la Licenciatura en Tecnología Digital. Además queremos agradecer a Ignacio Vigilante (TIC \- Escuela ORT) y Tomás Spognardi (Exactas \- UBA) por sus contribuciones al modelo de Player2Vec y al PSL Bayesiano respectivamente. Agradecemos también a nuestras familias, amigos, colegas y jefes por su apoyo y acompañamiento durante el transcurso de nuestras carreras universitarias. Finalmente, agradecemos a la Universidad Torcuato Di Tella por abrirnos sus puertas y brindarnos la oportunidad de formarnos en un ambiente académico de excelencia.
 
 \newpage
 

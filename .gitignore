@@ -32,3 +32,5 @@ exploratory/subgraphs_R_Weighted.pkl
 /gui/p2v_viz/public/player_images
 /gui/p2v_viz/public/team_images
 /exploratory/wandb
+.Rproj.user
+TDVIII-proyecto-final.Rproj

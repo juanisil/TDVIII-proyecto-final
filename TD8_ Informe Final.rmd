@@ -10,10 +10,12 @@ author:
     - Juan Ignacio Silvestri^[21Q111 | [jsilvestri@mail.utdt.edu](mailto:jsilvestri@mail.utdt.edu)]
 date: "**CABA, Argentina. Diciembre 2024**"
 output:
-   pdf_document:
+    pdf_document:
       fig_caption: true
       number_sections: true
       extra_dependencies: ["float"]
+    bookdown::epub_book:
+      number_sections: true
 bibliography: ./recursos_pdf/bibliografia.bib
 csl: ./recursos_pdf/apa.csl
 nocite: '@*'
@@ -232,7 +234,7 @@ $$
     PSL(A) = [1, 0, ..., 0] \cdot (I - T)^{-1} \cdot X \cdot [0, 1]^T
 $$
 
-Siendo $T$ las probabilidades de transición de los estados transitorios, $X$ las probabilidades de transición de los estados transitorios a los estados absorbentes e $I$ la matriz identidad.
+Siendo $T$ las probabilidades de transición de los estados transitorios, $X$ las probabilidades de transición de los estados transitorios a los estados absorbentes e $I$ la matriz identidad [@ross_2019_introduction].
 
 A partir de este modelo en el paper *Soccer Networks* se evaluó para una temporada de la Premier League (EPL 2012/13) [@opta] la diferencia entre los PSL de cada equipo y luego de forma empírica se demuestra como el $PSL(A)$ tiene alta correlación positiva con el rendimiento del equipo por sobre el contrincante. Finalmente hallamos una métrica significativa de rendimiento de un equipo en la métrica $PSL$. Sin embargo, da a lugar a la investigación de cómo se puede aplicar esta métrica a nivel de jugador y cómo se puede comparar el rendimiento de jugadores en distintos equipos.
 

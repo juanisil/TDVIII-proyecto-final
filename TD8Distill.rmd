@@ -1,15 +1,16 @@
 ---
 title: "Cómo encontrar el mejor jugador para tu Equipo de Fútbol"
 subtitle: "Escuela de Negocios - Licenciatura en Tecnología Digital"
+description: "Tesis de Licenciatura en Tecnología Digital - Universidad Torcuato Di Tella"
 author:
-  - first_name: Tomás
-    last_name: Glauberman
-    email: tglauberman@mail.utdt.edu
-    affiliation: Universidad Torcuato Di Tella
   - first_name: Ignacio
     last_name: Pardo
     email: ipardo@mail.utdt.edu
     orcid_id: 0000-0001-8837-8099
+    affiliation: Universidad Torcuato Di Tella
+  - first_name: Tomás
+    last_name: Glauberman
+    email: tglauberman@mail.utdt.edu
     affiliation: Universidad Torcuato Di Tella
   - first_name: Juan Ignacio
     last_name: Silvestri
@@ -17,10 +18,20 @@ author:
     affiliation: Universidad Torcuato Di Tella
 date: "`r format(Sys.Date(), '%B %Y')`"
 repository_url: "https://github.com/juanisil/TDVIII-proyecto-final"
+# citation_url: "https://juanisil.github.io/TDVIII-proyecto-final/"
+preview: recursos_pdf/preview.png
 output:
   distill::distill_article:
     toc: true
     toc_depth: 2
+  bookdown::epub_book:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+    fig_caption: true
+knit: (function(inputFile, encoding){
+  rmarkdown::render(inputFile, encoding = encoding,
+  output_dir = here::here("docs"), output_format = "all") })
 bibliography: ./recursos_pdf/bibliografia.bib
 csl: ./recursos_pdf/apa.csl
 navbar:
@@ -1198,7 +1209,7 @@ Asumiendo que las distribuciones de ratios de transición de los jugadores en la
 
 | Priors | Modelo | Modelo Tuned |
 |--------|--------|--------------|
-| 0.0353 | 0.01505 | $\color{green}{0.014493}$ |
+| 0.0353 | 0.01505 | **0.014493** |
 
 Por lo que se puede observar, el modelo logra una mejora significativa en la capacidad predictiva de las distribuciones de ratios de transición de los jugadores en comparación con asumir igualdad de distribuciones entre las dos mitades de la temporada. En concreto, nuestro modelo logra reducir la pérdida en un $\sim 58.99\%$ en comparación con los _priors_.
 

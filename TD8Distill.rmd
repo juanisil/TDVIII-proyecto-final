@@ -64,6 +64,8 @@ header-includes: |
     \usepackage{xcolor}
 ---
 
+[Descargar PDF](https://raw.githubusercontent.com/juanisil/TDVIII-proyecto-final/refs/heads/main/TD8_-Informe-Final.pdf)
+
 # Abstract
 
 En la última década, el análisis deportivo ha evolucionado hacia una perspectiva cada vez más matemática y sofisticada. Aplicaciones como el uso de análisis espacial en Basketball [@goldsberry_2012_courtvision] y la investigación estadística del Brentford con Smartodds son ejemplos claros de la tendencia creciente en este campo. El béisbol, por mucho tiempo el deporte preferido para la analítica, ha experimentado una profunda transformación con la implementación de Sabermetrics [@baumer_2015_sabermetric]. La introducción de herramientas analíticas avanzadas ha producido resultados positivos para muchos equipos, lo que resalta el valor de estudiar métricas específicas dentro de cada deporte.
@@ -72,7 +74,7 @@ Este desarrollo se centra en el fútbol, un deporte en el cual los análisis pre
 
 A partir de la métrica PSL propuesta en el paper *Soccer Networks* [@huang_soccer_networks] planteamos un proceso para comparar el impacto que tienen los jugadores sobre la performance del equipo. Logramos formular una metodología para estudiar la distribución de la performance de un equipo. Luego, proponemos una serie de métodos y métricas para comparar el rendimiento de dos formaciones de jugadores. Además, desarrollamos una forma de representación vectorial (Embeddings) de los jugadores, llamada Player2Vec, un modelo de Machine Learning también basado sobre el modelo de redes de jugadores planteado en el mismo paper del PSL. Esto último permite desarrollar modelos predictivos sobre el rendimiento de los jugadores en un equipo. Nuestro modelo final logra predecir la performance de los jugadores un 58.99% mejor que asumir las distribuciones previas como _priors_.
 
-Palabras Clave: Fútbol, Análisis de Datos, Machine Learning, Redes de Jugadores, Embeddings , Expected Goals, Cadenas de Markov
+Palabras Clave: Fútbol, Análisis de Datos, Machine Learning, Redes de Jugadores, Embeddings, Expected Goals, Cadenas de Markov
 
 
 \newpage

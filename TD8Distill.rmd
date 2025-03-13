@@ -17,6 +17,8 @@ author:
     email: jsilvestri@mail.utdt.edu
     affiliation: Universidad Torcuato Di Tella
 date: "`r format(Sys.Date(), '%B %Y')`"
+params:
+  lang: es
 repository_url: "https://github.com/juanisil/TDVIII-proyecto-final"
 # citation_url: "https://juanisil.github.io/TDVIII-proyecto-final/"
 preview: recursos_pdf/preview.png

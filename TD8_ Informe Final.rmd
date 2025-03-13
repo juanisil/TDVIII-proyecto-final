@@ -826,6 +826,10 @@ $$
 
 Donde $D_{KL}(p||q)$ es la divergencia de Kullback-Leibler entre las distribuciones $p$ y $q$ y $m = \frac{p + q}{2}$.
 
+$$
+  \mathcal{L} = \frac{1}{5} \sum_{U \in \{Gain, J_i, J_j\}} \sum_{V \in \{J_i, Shot, Loss, J_j\} \setminus U} \text{JSD}(\mathcal{N}(\mu_{U, V}, \sigma_{U, V}) || \mathcal{N}(\mu_{U, V}^{pred}, \sigma_{U, V}^{pred}))
+$$
+
 ## Datos
 
 Para entrenar el modelo, se utilizó un dataset de eventos de partidos de la temporada 2012/13 de la EPL. Se separó la temporada en dos mitades (190 partidos cada una). Con la primera mitad, se construyó un grafo de la red de jugadores $G_{\text{First Half}}$ y se obtuvieron los embeddings de los jugadores con Player2Vec `(dimensions=64, window=30, num_walks=500, walk_length=40)`. Con la segunda mitad, se obtuvieron las distribuciones de ratios de transición de los jugadores.

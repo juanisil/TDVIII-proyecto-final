@@ -351,13 +351,7 @@ Player2Vec es un modelo para representar jugadores de fútbol en un espacio vect
 
 ## Modelado de la EPL 2012/13 como Grafo
 
-A partir de una formación de 11 (Lineup), para un equipo (Team), en un partido (Match), se construye el grafo de la red de jugadores. Llamemos a estos $G_{L, T, M}$ Grafo de Lineup.
-
-Sean:
-
-- $l \in L = \{0, 3\}$ las formaciones posibles (en la temporada 12/13 se permitían hasta 3 cambios de jugadores)
-- $t \in T = \{\text{Local}, \text{Visitante}\}$ los equipos que jugaron el partido.
-- $m \in M = \{1, 2, \dots, 380\}$ los partidos de la temporada 12/13 de la EPL
+A partir de una formación de 11 (Lineup), para un equipo (Team), en un partido (Match), se construye el grafo de la red de jugadores. Llamemos a estos $G_{L, T, M}$ Grafo de Lineup. Sean $l \in L = \{0, 3\}$ las formaciones posibles (en la temporada 12/13 se permitían hasta 3 cambios de jugadores), $t \in T = \{\text{Local}, \text{Visitante}\}$ los equipos que jugaron el partido y $m \in M = \{1, 2, \dots, 380\}$ los partidos de la temporada 12/13 de la EPL.
 
 $$
 \begin{aligned}
@@ -374,7 +368,7 @@ $$
 \end{aligned}
 $$
 
-Donde cada $J_i^{L, T, M} \mid i \in [1, 11]$ es un nodo que representa a un jugador en el lineup $L$ del equipo $T$ en el partido $M$. $Gain^{L, T, M}$ es el nodo que representa la ganancia del balón, $Loss^{L, T, M}$ la pérdida del balón y $Shot^{L, T, M}$ el disparo al arco en el lineup $L$ del equipo $T$ en el partido $M$.
+Donde cada $J_i^{L, T, M} \mid i \in [1, 11]$ es un nodo que representa a un jugador en el lineup $L$ del equipo $T$ en el partido $M$. $Gain^{L, T, M}$ es el nodo que representa la ganancia del balón, $Loss^{L, T, M}$ la pérdida del balón y $Shot^{L, T, M}$ el disparo al arco en el lineup $L$ del equipo $T$ en el partido $M$. Luego sean $J_i \mid i \in [0, 521]$ los jugadores reales de la temporada 2012/13 de la EPL. Se construye el grafo de la red de jugadores $G_{\text{EPL-12/13}}$ como la unión de todos los grafos de lineup $G^{L, T, M}$.
 
 <!-- 
 En la figura \ref{fig:G_LTM} se visualiza un ejemplo de un grafo de lineup $G^{L, T, M}$ genérico con los ejes $r(J_1^{L, T, M}, U)$ resaltados.
@@ -387,10 +381,6 @@ En la figura \ref{fig:G_LTM} se visualiza un ejemplo de un grafo de lineup $G^{L
   \caption{Grafo de Lineup}\label{fig:G_LTM}
 \end{figure}
 -->
-
-Luego sean $J_i \mid i \in [0, 521]$ los jugadores reales de la temporada 2012/13 de la EPL
-
-Se construye el grafo de la red de jugadores $G_{\text{EPL-12/13}}$ como la unión de todos los grafos de lineup $G^{L, T, M}$.
 
 $$
 \begin{aligned}
@@ -714,8 +704,6 @@ En este trabajo, se presentó un modelo predictivo de distribuciones de ratios d
 Se validó y presentó un caso de estudio de dos transferencias clave en las temporadas posteriores de la Premier League, demostrando la capacidad del modelo para evaluar el impacto de las transferencias en el rendimiento de los equipos. A través de la metodólogía propuesta, se encontró que el modelo es capaz de identificar transferencias que mejoran o empeoran el PSL de los equipos, proporcionando recomendaciones útiles para la toma de decisiones en el mercado de fichajes.
 
 Los resultados obtenidos muestran que el modelo es capaz de predecir mejor que los _priors_ las distribuciones de ratios de transición de los jugadores, lo que sugiere que puede ser una herramienta valiosa para la evaluación de transferencias en el fútbol profesional.
-
-
 
 # **Referencias bibliográficas** {#referencias-bibliográficas}
 
